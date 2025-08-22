@@ -89,7 +89,7 @@ use App\Http\Controllers\Perfil\{
 
 // ==================== ROTAS PÚBLICAS ====================
 Route::get('/', [painelController::class, 'index']);
-Route::get('login', [LoginController::class, 'login_view'])->name('login');
+//Route::get('login', [LoginController::class, 'login_view'])->name('login');
 
 // Cursos e Vagas
 Route::get('cursos-disponiveis', [TurmaController::class, 'turmasSite']); 
