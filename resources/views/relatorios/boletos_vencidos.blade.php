@@ -56,7 +56,7 @@
 		       			<td><a href="{{asset('/secretaria/atender').'/'.$boleto->aluno->id}}">{{$boleto->aluno->id}}</a></td>
 		       			<td>{{$boleto->aluno->nome}}</td>
 		       			@if(isset($boleto->aluno->telefones{0}))
-		       			<td>{{\App\Models\classes\Strings::formataTelefone($boleto->aluno->telefones{0}->valor)}}</td>
+		       			<td>{{\App\classes\Strings::formataTelefone($boleto->aluno->telefones{0}->valor)}}</td>
 		       			@else
 		       			<td>* Não informado.</td>
 		       			@endif

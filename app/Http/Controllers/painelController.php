@@ -251,7 +251,7 @@ class painelController extends Controller
         }
 
         $docente = \App\Models\Pessoa::withTrashed()->find($id);
-        $semestres = \App\Models\classes\Data::semestres();
+        $semestres = \App\classes\Data::semestres();
         
         return view('docentes.home')
             ->with('turmas',$turmas)

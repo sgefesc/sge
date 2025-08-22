@@ -439,7 +439,7 @@ class SecretariaController extends Controller
 
 		return view('secretaria.controle-alunos')
 			->with('r',$r)
-			->with('periodos',\App\Models\classes\Data::semestres())
+			->with('periodos',\App\classes\Data::semestres())
 			->with('inscricoes',$inscricoes);
 	}
 
@@ -460,7 +460,7 @@ class SecretariaController extends Controller
 
 		return view('secretaria.controle-cancelamento-alunos')
 			->with('r',$r)
-			->with('periodos',\App\Models\classes\Data::semestres())
+			->with('periodos',\App\classes\Data::semestres())
 			->with('inscricoes',$inscricoes);
 	}
 

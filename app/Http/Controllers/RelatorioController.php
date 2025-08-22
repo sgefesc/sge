@@ -171,7 +171,7 @@ class RelatorioController extends Controller
             ->with('locais',$locais)
             ->with('filtros',$_SESSION['filtro_turmas'])
             ->with('vagas',$total_vagas)
-            ->with('periodos',\App\Models\classes\Data::semestres())
+            ->with('periodos',\App\classes\Data::semestres())
             ->with('inscricoes',$total_inscricoes)
             ->with('porcentagem',$inscricoes_porcentagem);
 
@@ -385,7 +385,7 @@ class RelatorioController extends Controller
             ->with('filtros',$_SESSION['filtro_turmas'])
             ->with('vagas',$total_vagas)
             ->with('inscricoes',$total_inscricoes)
-            ->with('periodos',\App\Models\classes\Data::semestres());
+            ->with('periodos',\App\classes\Data::semestres());
     }
 
     /**
@@ -435,14 +435,14 @@ Event::where('status' , 0)
         }
         if(isset($request->periodos)){
             if(count($request->periodos)==1){
-                $intervalo = \App\Models\classes\Data::periodoSemestre($request->periodos[0]);
+                $intervalo = \App\classes\Data::periodoSemestre($request->periodos[0]);
                 $bolsas = $bolsas->whereBetween('created_at', $intervalo);
             }      
             else{
                 //Parameter Grouping
                 $bolsas = $bolsas->where(function ($query) use ($request){
                     foreach($request->periodos as $periodo){
-                        $intervalo = \App\Models\classes\Data::periodoSemestre($periodo);
+                        $intervalo = \App\classes\Data::periodoSemestre($periodo);
                         $query = $query->orWhereBetween('created_at', $intervalo);
                     }
                 });
@@ -472,7 +472,7 @@ Event::where('status' , 0)
                 ->with('programas',$programas)
                 ->with('descontos',$descontos)
                 ->with('bolsas', $bolsas)
-                ->with('periodos',\App\Models\classes\Data::semestres());
+                ->with('periodos',\App\classes\Data::semestres());
     }
     
 

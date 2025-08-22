@@ -17,7 +17,7 @@ class TurmaLog extends Model
     ];
 
     public function getPessoa(){
-        $pessoa = \App\Models\Models\Pessoa::withTrashed()->find($this->pessoa);
+        $pessoa = \App\Models\Pessoa::withTrashed()->find($this->pessoa);
         return $pessoa->nome_simples;
     }
 }

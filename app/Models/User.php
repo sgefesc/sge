@@ -6,6 +6,7 @@ namespace App\Models;;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\ControleAcessoRecurso;
 
 class User extends Authenticatable
 {
@@ -13,6 +14,13 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $table  = 'pessoas_dados_acesso'; 
+
+ 
+
+    public function getRecursosAttribute(){
+        return ControleAcessoRecurso::where('pessoa', $this->pessoa)->pluck('recurso')->toArray();
+    }
+ 
 
     /**
      * The attributes that are mass assignable.

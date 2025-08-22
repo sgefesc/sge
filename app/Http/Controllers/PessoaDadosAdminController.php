@@ -188,7 +188,7 @@ class PessoaDadosAdminController extends Controller
 			$telefone = \App\Models\PessoaDadosContato::where('pessoa',$pessoa->id)->where('dado',2)->orderByDesc('id')->first();
             $pessoa->carga = PessoaDadosAdministrativos::where('dado','carga_horaria')->where('pessoa',$pessoa->id)->first();
 			if($telefone)
-			 $pessoa->telefone = \App\Models\classes\Strings::formataTelefone($telefone->valor);
+			 $pessoa->telefone = \App\classes\Strings::formataTelefone($telefone->valor);
 			else
 			 $pessoa->telefone = "Necessita de atualização";	
 		}

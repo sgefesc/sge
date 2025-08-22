@@ -449,7 +449,7 @@ class CarneController extends Controller
 					continue;
 				}
 											
-				$data_util = new \App\Models\classes\Data(\App\Models\classes\Data::converteParaUsuario($boleto->vencimento));
+				$data_util = new \App\classes\Data(\App\classes\Data::converteParaUsuario($boleto->vencimento));
 
 				$lancamento->boleto = $boleto->id;
 				$lancamento->referencia = 'Parcela de '.$data_util->Mes().' - '.$lancamento->referencia;

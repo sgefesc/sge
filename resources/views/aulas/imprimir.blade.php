@@ -72,7 +72,7 @@
 				@foreach($conteudo->where('turma', $turma->id) as $cont)
 				<tr>
 					<td>{{$i++}}</td>
-					<td>{{\App\Models\classes\Data::converteParaUsuario($cont->data)}}</td>
+					<td>{{\App\classes\Data::converteParaUsuario($cont->data)}}</td>
 					<td>{{$cont->dado}}</td>
 					<td>{{$cont->valor}}</td>
 				</tr>

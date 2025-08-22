@@ -164,7 +164,7 @@
         <div class="row header">
         	<div class="col-xs-12">
 	        	<p class="data espacamento" style=""> 
-	        	São Carlos, {{date('d')}} de {{ (new \App\Models\classes\Data())->mes()}} de {{date('Y')}}
+	        	São Carlos, {{date('d')}} de {{ (new \App\classes\Data())->mes()}} de {{date('Y')}}
 				</p>
 				<p class="texto espacamento">
 					Prezado(a) Senhor(a) <strong>{{strtoupper($devedor->nome)}}</strong>

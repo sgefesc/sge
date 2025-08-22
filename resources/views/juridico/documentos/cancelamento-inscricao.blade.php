@@ -73,7 +73,7 @@
         	<div class="col-xs-12">
 
 	        	<p style="margin-top: 5%">
-	        		Eu, {{$pessoa->nome}}, alun{{\App\Models\Models\Pessoa::getArtigoGenero($pessoa->genero)}} regularmente matriculad{{\App\Models\Models\Pessoa::getArtigoGenero($pessoa->genero)}} nesta instituição no ano de {{date("Y")}}, venho pela presente, DECLARAR MINHA DESISTÊNCIA À VAGA, NAS TURMAS DOS CURSOS ABAIXO:
+	        		Eu, {{$pessoa->nome}}, alun{{\App\Models\Pessoa::getArtigoGenero($pessoa->genero)}} regularmente matriculad{{\App\Models\Pessoa::getArtigoGenero($pessoa->genero)}} nesta instituição no ano de {{date("Y")}}, venho pela presente, DECLARAR MINHA DESISTÊNCIA À VAGA, NAS TURMAS DOS CURSOS ABAIXO:
 		       </p>
 		       <ul>
 		       
@@ -84,7 +84,7 @@
 		       </ul>
 		       <p style="margin-top: 8%" align="center">
 
-		       São Carlos, {{$inscricao->updated_at->format('d')}} de {{(new \App\Models\classes\Data($inscricao->updated_at->format('d/n/Y')))->mes()}} de {{$inscricao->updated_at->format('Y')}}.
+		       São Carlos, {{$inscricao->updated_at->format('d')}} de {{(new \App\classes\Data($inscricao->updated_at->format('d/n/Y')))->mes()}} de {{$inscricao->updated_at->format('Y')}}.
 
 		       </p>
 		       <center>
@@ -129,7 +129,7 @@
 
 	        	<p style="margin-top: 0%">
 	        		<strong>PROTOCOLO DE CANCELAMENTO DE INSCRIÇÃO {{$inscricao->id}}</strong><br>
-	        		Eu, {{$pessoa->nome}}, alun{{\App\Models\Models\Pessoa::getArtigoGenero($pessoa->genero)}} regularmente matriculad{{\App\Models\Models\Pessoa::getArtigoGenero($pessoa->genero)}} nesta instituição no ano de {{date("Y")}}, venho pela presente, DECLARAR MINHA DESISTÊNCIA À VAGA, NAS TURMAS DOS CURSOS ABAIXO:
+	        		Eu, {{$pessoa->nome}}, alun{{\App\Models\Pessoa::getArtigoGenero($pessoa->genero)}} regularmente matriculad{{\App\Models\Pessoa::getArtigoGenero($pessoa->genero)}} nesta instituição no ano de {{date("Y")}}, venho pela presente, DECLARAR MINHA DESISTÊNCIA À VAGA, NAS TURMAS DOS CURSOS ABAIXO:
 		       </p>
 		       <ul>
 		       
@@ -137,7 +137,7 @@
 		       
 		       </ul>
 		       <p  align="center">
-		       		São Carlos, {{$inscricao->updated_at->format('d')}} de {{(new \App\Models\classes\Data($inscricao->updated_at->format('d/n/Y')))->mes()}} de {{$inscricao->updated_at->format('Y')}}.
+		       		São Carlos, {{$inscricao->updated_at->format('d')}} de {{(new \App\classes\Data($inscricao->updated_at->format('d/n/Y')))->mes()}} de {{$inscricao->updated_at->format('Y')}}.
 		       </p>
 		       <center>
 		       <p style="border-top: solid 1px black; width: 30%; margin-top: 5%" align="center" >

@@ -844,7 +844,7 @@ class BoletoController extends Controller
 
 		]);
 		$cpf_alt = preg_replace( '/[^0-9]/is', '', $request->cpf);
-		$cpf_alt_formated = \App\Models\classes\Strings::mask(str_pad($cpf_alt,11,'0'),"###.###.###-##");
+		$cpf_alt_formated = \App\classes\Strings::mask(str_pad($cpf_alt,11,'0'),"###.###.###-##");
 
 		if($cpf_alt == '' || $cpf_alt_formated == '')
 			return redirect('/meuboleto')->withErrors(["Desculpe, mas os dados fornecidos não são validos: ".$cpf_alt ]);

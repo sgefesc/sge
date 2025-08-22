@@ -95,7 +95,7 @@
                                    
                                     @foreach($inscricao->telefone as $telefone)
                                      
-                                   {{\App\Models\classes\Strings::formataTelefone($telefone->valor)}}| 
+                                   {{\App\classes\Strings::formataTelefone($telefone->valor)}}| 
                                     @endforeach
 
                                     

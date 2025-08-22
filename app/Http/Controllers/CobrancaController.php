@@ -80,7 +80,7 @@ class CobrancaController extends Controller
 					$endereco = \App\Models\PessoaDadosContato::where('pessoa',$boleto->pessoa)->where('dado',6)->orderByDesc('id')->first();
 					$cpf = \App\Models\PessoaDadosGerais::where('pessoa',$boleto->pessoa)->where('dado',3)->first();
 
-					if(isset($cpf->valor)==false || \App\Models\classes\Strings::validaCPF($cpf->valor) == false){
+					if(isset($cpf->valor)==false || \App\classes\Strings::validaCPF($cpf->valor) == false){
 						//die('cpf invalido');
 						NotificacaoController::notificarErro($pessoa->id,1);
 						continue;

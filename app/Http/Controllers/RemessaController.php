@@ -82,7 +82,7 @@ class RemessaController extends Controller
 	public function downloadRemessa($arquivo){
 		$arquivo='documentos/remessas/'.$arquivo;
 		$arquivo = str_replace('/','-.-', $arquivo);
-		return \App\Models\classes\Arquivo::download($arquivo);
+		return \App\classes\Arquivo::download($arquivo);
 
 	}
 	public function listarRemessas(){

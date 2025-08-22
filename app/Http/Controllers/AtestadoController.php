@@ -14,11 +14,11 @@ class AtestadoController extends Controller
 		$pessoa=\App\Models\Pessoa::find($id);
 		$pessoa=PessoaController::formataParaMostrar($pessoa);
 		if(isset($pessoa->telefone))
-			$pessoa->telefone=\App\Models\classes\Strings::formataTelefone($pessoa->telefone);
+			$pessoa->telefone=\App\classes\Strings::formataTelefone($pessoa->telefone);
 		if(isset($pessoa->telefone_alternativo))
-			$pessoa->telefone_alternativo=\App\Models\classes\Strings::formataTelefone($pessoa->telefone_alternativo);
+			$pessoa->telefone_alternativo=\App\classes\Strings::formataTelefone($pessoa->telefone_alternativo);
 		if(isset($pessoa->telefone_contato))
-			$pessoa->telefone_contato=\App\Models\classes\Strings::formataTelefone($pessoa->telefone_contato);
+			$pessoa->telefone_contato=\App\classes\Strings::formataTelefone($pessoa->telefone_contato);
 
 		return view('atestados.cadastrar-atestado',compact('pessoa'));
 	}
@@ -92,11 +92,11 @@ class AtestadoController extends Controller
 			$pessoa=\App\Models\Pessoa::find($atestado->pessoa);
 			$pessoa=PessoaController::formataParaMostrar($pessoa);
 			if(isset($pessoa->telefone))
-				$pessoa->telefone=\App\Models\classes\Strings::formataTelefone($pessoa->telefone);
+				$pessoa->telefone=\App\classes\Strings::formataTelefone($pessoa->telefone);
 			if(isset($pessoa->telefone_alternativo))
-				$pessoa->telefone_alternativo=\App\Models\classes\Strings::formataTelefone($pessoa->telefone_alternativo);
+				$pessoa->telefone_alternativo=\App\classes\Strings::formataTelefone($pessoa->telefone_alternativo);
 			if(isset($pessoa->telefone_contato))
-				$pessoa->telefone_contato=\App\Models\classes\Strings::formataTelefone($pessoa->telefone_contato);
+				$pessoa->telefone_contato=\App\classes\Strings::formataTelefone($pessoa->telefone_contato);
 
 			return view('atestados.editar-atestado')->with('atestado',$atestado)->with('pessoa',$pessoa);
 		}else
@@ -169,11 +169,11 @@ class AtestadoController extends Controller
 			$pessoa=\App\Models\Pessoa::find($atestado->pessoa);
 			$pessoa=PessoaController::formataParaMostrar($pessoa);
 			if(isset($pessoa->telefone))
-				$pessoa->telefone=\App\Models\classes\Strings::formataTelefone($pessoa->telefone);
+				$pessoa->telefone=\App\classes\Strings::formataTelefone($pessoa->telefone);
 			if(isset($pessoa->telefone_alternativo))
-				$pessoa->telefone_alternativo=\App\Models\classes\Strings::formataTelefone($pessoa->telefone_alternativo);
+				$pessoa->telefone_alternativo=\App\classes\Strings::formataTelefone($pessoa->telefone_alternativo);
 			if(isset($pessoa->telefone_contato))
-				$pessoa->telefone_contato=\App\Models\classes\Strings::formataTelefone($pessoa->telefone_contato);
+				$pessoa->telefone_contato=\App\classes\Strings::formataTelefone($pessoa->telefone_contato);
 			if(file_exists('documentos/atestados/'.$atestado->id.'.pdf')){
 				$arquivo = file_get_contents('documentos/atestados/'.$atestado->id.'.pdf');
 			}

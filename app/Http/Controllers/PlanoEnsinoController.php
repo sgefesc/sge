@@ -16,7 +16,7 @@ class PlanoEnsinoController extends Controller
     }
 
     public function create(){
-        $semestres = \App\Models\classes\Data::semestres();
+        $semestres = \App\classes\Data::semestres();
         $professores = PessoaDadosAdministrativos::getFuncionarios(['Educador','Educador de Parceria']);
         $programas = Programa::all()->sortBy('nome');
         return view('plano-ensino.cadastrar')

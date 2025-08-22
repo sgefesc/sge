@@ -41,7 +41,7 @@ class DiaNaoLetivoController extends Controller
     }
 
     public function cadastroAnual($ano = 2025){
-        $feriados_nacionais = \App\Models\classes\Data::diasFeriados($ano);
+        $feriados_nacionais = \App\classes\Data::diasFeriados($ano);
         $feriados_estaduais =  ['Revolução Constitucionalista' => $ano.'-'.'07-09'];
         $feriados_municipais = ['N.S. da Babilônia' => $ano.'-'.'08-15', 
                                 'Aniversário da cidade' => $ano.'-'.'11-04'];

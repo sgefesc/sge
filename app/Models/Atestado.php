@@ -42,7 +42,7 @@ class Atestado extends Model
 	 * @return bool vencido ou não
 	 */
 	public function verificaPorTurma(int $turma){
-		$turma = \App\Models\Models\Turma::find($turma);
+		$turma = \App\Models\Turma::find($turma);
 		if($turma == null)
 			return false;
 		if($this->calcularVencimento($turma->sala) < date('Y-m-d 23:23:59')){
@@ -57,7 +57,7 @@ class Atestado extends Model
 	}
 
 	public function getNome(){
-		return \App\Models\Models\Pessoa::getNome($this->pessoa);
+		return \App\Models\Pessoa::getNome($this->pessoa);
 	}
 
 	public function validar(){

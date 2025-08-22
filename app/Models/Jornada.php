@@ -22,15 +22,15 @@ class Jornada extends Model
 
 	public function getLocal()
 	{
-		$sala = \App\Models\Models\Sala::find($this->sala);
-		$local = \App\Models\Models\Local::find($sala->local);
+		$sala = \App\Models\Sala::find($this->sala);
+		$local = \App\Models\Local::find($sala->local);
 
 		return $local;
 
 	}
 	public function getPessoa(){
 
-		$pessoa = \App\Models\Models\Pessoa::withTrashed()->find($this->pessoa);
+		$pessoa = \App\Models\Pessoa::withTrashed()->find($this->pessoa);
 		return $pessoa;
 	}
 

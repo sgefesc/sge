@@ -25,14 +25,14 @@ class Matricula extends Model
 
     protected $appends=['valor'];
 	public function getValorAttribute($value){		
-		$valor = \App\Models\Models\Http\Controllers\ValorController::valorMatricula($this->id);
+		$valor = \App\Models\Http\Controllers\ValorController::valorMatricula($this->id);
 			return $valor;
 
 	}
 
 
 	public function getInscricoes($tipo = 'todas'){
-		$inscricoes= \App\Models\Models\Http\Controllers\InscricaoController::inscricoesPorMatricula($this->id,$tipo);
+		$inscricoes= \App\Models\Http\Controllers\InscricaoController::inscricoesPorMatricula($this->id,$tipo);
 		$this->inscricoes = $inscricoes;
 		return $inscricoes;
 	}
@@ -66,7 +66,7 @@ class Matricula extends Model
 		else
 			return null;
         if($bolsa){
-        	$tipo = \App\Models\Models\Desconto::find($bolsa->desconto);
+        	$tipo = \App\Models\Desconto::find($bolsa->desconto);
         	$bolsa->tipo = $tipo->first();
         }
         return $bolsa;
@@ -74,7 +74,7 @@ class Matricula extends Model
 
 
 	public function getDescontoAttribute($value){
-		$valor = \App\Models\Models\Http\Controllers\BolsaController::verificaBolsa($this->pessoa,$this->id);
+		$valor = \App\Models\Http\Controllers\BolsaController::verificaBolsa($this->pessoa,$this->id);
 		if($valor)
 			return $valor->desconto;
 		else
@@ -100,7 +100,7 @@ class Matricula extends Model
 		if($inscricoes->count())
 			return $inscricoes->first()->turma->programa;
 		else
-			return \App\Models\Models\Programa::find(1);
+			return \App\Models\Programa::find(1);
 	}
 
 	
@@ -124,7 +124,7 @@ class Matricula extends Model
 
 		//pega a quantidade de parcelas da turma
 		foreach($inscricoes as $inscricao){
-			$turma= \App\Models\Models\Turma::find($inscricao->turma->id); 
+			$turma= \App\Models\Turma::find($inscricao->turma->id); 
 			if($parcelas < $turma->getParcelas()){
 				$parcelas = $turma->getParcelas();
 			}

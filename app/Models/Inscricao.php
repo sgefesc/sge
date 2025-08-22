@@ -38,7 +38,7 @@ class Inscricao extends Model
 
 	}
 	public function getAtestado(){
-			$atestado = \App\Models\Models\Atestado::where('pessoa',$this->pessoa->id)->orderByDesc('id')->first();
+			$atestado = \App\Models\Atestado::where('pessoa',$this->pessoa->id)->orderByDesc('id')->first();
 		
 		
 
@@ -56,22 +56,22 @@ class Inscricao extends Model
 		$this->save();
 		switch($status){
 			case "pendente" :
-				\App\Models\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
+				\App\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
 				break;
 			case "regular": 
-				\App\Models\Models\Http\Controllers\TurmaController::modInscritos($this->turma->id);
-				\App\Models\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
+				\App\Models\Http\Controllers\TurmaController::modInscritos($this->turma->id);
+				\App\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
 				break;
 			case "finalizada": 
-				\App\Models\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
+				\App\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
 				break;
 			case "cancelada":
-				\App\Models\Models\Http\Controllers\TurmaController::modInscritos($this->turma->id);
-				\App\Models\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
+				\App\Models\Http\Controllers\TurmaController::modInscritos($this->turma->id);
+				\App\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
 				break;
 			case "transferida": 
-				\App\Models\Models\Http\Controllers\TurmaController::modInscritos($this->turma->id);
-				\App\Models\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
+				\App\Models\Http\Controllers\TurmaController::modInscritos($this->turma->id);
+				\App\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
 				break;
 		}
                     

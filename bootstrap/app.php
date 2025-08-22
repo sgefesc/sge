@@ -22,18 +22,18 @@ return Application::configure(basePath: dirname(__DIR__))
             
             \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
             \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-            \App\Models\Models\Http\Middleware\TrimStrings::class,
+            //\App\Models\Http\Middleware\TrimStrings::class,
             \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         );
 
         // 2. Middleware Groups
         $middleware->appendToGroup('web', [
-            //\App\Models\Models\Http\Middleware\EncryptCookies::class,
+            //\App\Models\Http\Middleware\EncryptCookies::class,
             //\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             //\Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            //\App\Models\Models\Http\Middleware\VerifyCsrfToken::class,
+            //\App\Models\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]);
@@ -54,9 +54,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'can' => \Illuminate\Auth\Middleware\Authorize::class,
             'guest' => App\Http\Middleware\RedirectIfAuthenticated::class,
             'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-            'login'=>  \App\Models\Http\Middleware\ChecarLogin::class,
-            'liberar.recurso'=>  \App\Models\Http\Middleware\LiberarRecurso::class,
-            'login.perfil'=> \App\Models\Http\Middleware\LoginPerfil::class
+            'login'=>  \App\Http\Middleware\ChecarLogin::class,
+            'liberar.recurso'=>  \App\Http\Middleware\LiberarRecurso::class,
+            'login.perfil'=> \App\Http\Middleware\LoginPerfil::class
         ]);
 
         // 4. Se necessário, configure prioridade

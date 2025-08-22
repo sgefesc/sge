@@ -24,7 +24,7 @@ class ReceitaAnualReportController extends Controller
                                     //->toSql();
                                     ->get();
         //dd($lancamentos);
-        $data = new \App\Models\classes\Data('01/'.$mes.'/'.$ano);
+        $data = new \App\classes\Data('01/'.$mes.'/'.$ano);
         $mes = $data->mes();
        }else{
             $lancamentos = \App\Models\Boleto::select(['*','lancamentos.valor as valor_parcela'])

@@ -335,8 +335,8 @@ class PessoaController extends Controller
 		//return $pessoa;
 		//return redirect(asset('/secretaria/atender/'.$id));
 
-		$pessoa->cpf = \App\Models\classes\Strings::mask($pessoa->cpf,'###.###.###-##');
-		$pessoa->rg = \App\Models\classes\Strings::mask($pessoa->rg,'##.###.###-##');
+		$pessoa->cpf = \App\classes\Strings::mask($pessoa->cpf,'###.###.###-##');
+		$pessoa->rg = \App\classes\Strings::mask($pessoa->rg,'##.###.###-##');
 		$atestados = \App\Models\Atestado::where('pessoa',$pessoa->id)->get();
 		$atendimentos = \App\Models\Atendimento::where('usuario', $pessoa->id)->orderBy('created_at','desc')->get();
 		$contatos = \App\Models\Contato::where('para',$pessoa->id)->get();
@@ -582,7 +582,7 @@ class PessoaController extends Controller
 				}
 		}
 
-		$dados['cpf'] =  \App\Models\classes\Strings::mask($dados['cpf'] ,'###.###.###-##');
+		$dados['cpf'] =  \App\classes\Strings::mask($dados['cpf'] ,'###.###.###-##');
 		//dd($dados['genero']);
 		return view('pessoa.editar-dados-gerais', compact('dados'));
 	}

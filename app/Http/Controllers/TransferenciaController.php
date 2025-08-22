@@ -30,7 +30,7 @@ class TransferenciaController extends Controller
 
         $tr->getAnterior();
         $tr->getNova();
-        $mes = (new \App\Models\classes\Data(\Carbon\Carbon::parse($tr->data)->format('d/m/Y')))->mes();
+        $mes = (new \App\classes\Data(\Carbon\Carbon::parse($tr->data)->format('d/m/Y')))->mes();
         $data = \Carbon\Carbon::parse($tr->data)->format('d').' de '.$mes.' de '.\Carbon\Carbon::parse($tr->data)->format('Y');
 
         return view('juridico.documentos.troca-turma',compact('tr'))->with('pessoa',$tr->getPessoa())->with('data',$data);

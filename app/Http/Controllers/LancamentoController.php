@@ -36,7 +36,7 @@ class LancamentoController extends Controller
 
 		
 		$referencia= '01/'.($request->parcela+1).'/'.date('Y');
-		$data_util = new \App\Models\classes\Data($referencia);
+		$data_util = new \App\classes\Data($referencia);
 		$parcelas = array();
 
 
@@ -226,7 +226,7 @@ class LancamentoController extends Controller
 				for($i=$parcela_atual;$i>0;$i--){ //gerador recursivo de parcela
 
 					$referencia= '01/'.($i+1).'/'.date('Y');
-					$referencia = new \App\Models\classes\Data($referencia);
+					$referencia = new \App\classes\Data($referencia);
 
 
 					$valor_parcela=($matricula->valor->valor-$matricula->valor_desconto)/$matricula->valor->parcelas; //calcula valor parcela
@@ -642,12 +642,12 @@ class LancamentoController extends Controller
 					if($r->retroativas > 0){
 						for($i=1;$i <= $parcela;$i++){
 							$referencia= '01/'.($i+1).'/'.date('Y');
-							$data_util = new \App\Models\classes\Data($referencia);
+							$data_util = new \App\classes\Data($referencia);
 
 							$valor_parcela=($matricula->valor->valor-$matricula->valor_desconto)/$matricula->valor->parcelas;
 							if(!$this->verificaSeLancada($matricula->id,$i) && $valor_parcela > 0  ){ //se não tiver ou for 0
 							$referencia= '01/'.($i+1).'/'.date('Y');
-							$data_util = new \App\Models\classes\Data($referencia);
+							$data_util = new \App\classes\Data($referencia);
 							$lancamento=new Lancamento; //gera novo lançamento
 							$lancamento->matricula=$matricula->id;
 							$lancamento->parcela=$i;
@@ -665,7 +665,7 @@ class LancamentoController extends Controller
 						$valor_parcela=($matricula->valor->valor-$matricula->valor_desconto)/$matricula->valor->parcelas;
 						//return $matricula->valor;
 						$referencia= '01/'.($r->parcela+1).'/'.date('Y');
-						$data_util = new \App\Models\classes\Data($referencia);
+						$data_util = new \App\classes\Data($referencia);
 
 						if($this->verificaSeLancada($matricula->id,$r->parcela)){
 							$erros[] = 'Parcela referente à '.$data_util->Mes().' da matricula '.$matricula->id.' já consta como lançada.';

@@ -758,7 +758,7 @@ class InscricaoController extends Controller
                         $endereco->estado = $aluno['estado'];
 
                     $endereco->cep = preg_replace( '/[^0-9]/is', '', $aluno['cep']);
-                    $bairro = \App\Models\classes\CepUtils::bairroCompativel(preg_replace( '/[^0-9]/is', '', $aluno['cep']));  
+                    $bairro = \App\classes\CepUtils::bairroCompativel(preg_replace( '/[^0-9]/is', '', $aluno['cep']));  
                     if(isset($endereco->bairro_str))
                         $endereco->bairro_str = $aluno['bairro'];       
                     

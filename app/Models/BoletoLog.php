@@ -15,7 +15,7 @@ class BoletoLog extends Model
     ];
 
     public function getPessoa(){
-        $pessoa = \App\Models\Models\Pessoa::find($this->pessoa);
+        $pessoa = \App\Models\Pessoa::find($this->pessoa);
         return $pessoa->nome_simples;
     }
 

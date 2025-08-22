@@ -53,7 +53,7 @@
             <small>clique em alterar dados para cadastrar</small>
           @endif
           @if(isset($pessoa->celular))
-          <p class="text-muted font-size-sm">{{\App\Models\classes\Strings::formataTelefone($pessoa->celular)}}</p>
+          <p class="text-muted font-size-sm">{{\App\classes\Strings::formataTelefone($pessoa->celular)}}</p>
           @else 
           <p class="text-danger font-size-sm">CELULAR NÃO CADASTRADO</p>
           <small>clique em alterar dados para cadastrar</small>

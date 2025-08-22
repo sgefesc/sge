@@ -15,11 +15,11 @@ class UsoLivre extends Model
     ];
 
     public function getUsuario(){
-        $pessoa = \App\Models\Models\Pessoa::find($this->atendido);
+        $pessoa = \App\Models\Pessoa::find($this->atendido);
         return $pessoa->nome;
     }
     public function getResponsavel(){
-        $pessoa = \App\Models\Models\Pessoa::find($this->responsavel);
+        $pessoa = \App\Models\Pessoa::find($this->responsavel);
         return $pessoa->nome;
 
     }

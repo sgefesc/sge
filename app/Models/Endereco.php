@@ -16,7 +16,7 @@ class Endereco extends Model
         	if($this->bairro_str!='')
             	return $this->bairro_str;
             else{
-            	return \App\Models\Models\classes\CepUtils::getBairro($this->cep).'.';
+            	return \App\classes\CepUtils::getBairro($this->cep).'.';
             }
 	}
 	

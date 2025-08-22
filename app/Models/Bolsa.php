@@ -16,7 +16,7 @@ class Bolsa extends Model
 		//
 		//
 		//return $value;
-		$valor = \App\Models\Models\Desconto::find($value);
+		$valor = \App\Models\Desconto::find($value);
 		
 			return $valor;
 
@@ -26,7 +26,7 @@ class Bolsa extends Model
 	}
 
 	public function getNomeCurso($matricula){
-		$matricula = \App\Models\Models\Matricula::find($matricula);
+		$matricula = \App\Models\Matricula::find($matricula);
 		if($matricula)
 			return $matricula->getNomeCurso();
 		else

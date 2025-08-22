@@ -22,7 +22,7 @@ class Aula extends Model
 
     public function getAlunosPresentes(){
         $presentes = array();
-        $frequencias = \App\Models\Models\Frequencia::select('aluno')->where('aula',$this->id)->get();
+        $frequencias = \App\Models\Frequencia::select('aluno')->where('aula',$this->id)->get();
         foreach($frequencias as $frequencia){
             $presentes[] = $frequencia->aluno;
         }

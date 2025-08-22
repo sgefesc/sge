@@ -34,7 +34,7 @@ class TurmaController extends Controller
         $professores=PessoaDadosAdministrativos::getEducadores();
         $professores = $professores->sortBy('nome_simples');
         $locais = Local::select(['id','sigla','nome'])->orderBy('sigla')->get();
-        $periodos = \App\Models\classes\Data::semestres();
+        $periodos = \App\classes\Data::semestres();
         return view('turmas.listar-pedagogico', compact('turmas'))
             ->with('programas',$programas)
             ->with('professores', $professores)
@@ -236,14 +236,14 @@ class TurmaController extends Controller
         if(isset($filtros['periodo']) && count($filtros['periodo'])){
             if(count($filtros['periodo'])==1){
                 $elemento = current($filtros['periodo']);
-                $intervalo = \App\Models\classes\Data::periodoSemestreTurmas($elemento);
+                $intervalo = \App\classes\Data::periodoSemestreTurmas($elemento);
                 $turmas = $turmas->whereBetween('turmas.data_inicio', $intervalo);
             }      
             else{
                 //Parameter Grouping
                 $turmas = $turmas->where(function ($query) use ($filtros){
                     foreach($filtros['periodo'] as $periodo){
-                        $intervalo = \App\Models\classes\Data::periodoSemestreTurmas($periodo);
+                        $intervalo = \App\classes\Data::periodoSemestreTurmas($periodo);
                         $query = $query->orWhereBetween('turmas.data_inicio', $intervalo);
                     }
 
@@ -289,7 +289,7 @@ class TurmaController extends Controller
         $professores=PessoaDadosAdministrativos::getEducadores();
         $locais = Local::select(['id','sigla','nome'])->orderBy('sigla')->get();
 
-        return view('turmas.listar-secretaria', compact('turmas'))->with('programas',$programas)->with('professores', $professores)->with('locais',$locais)->with('filtros',$_SESSION['filtro_turmas'])->with('periodos',\App\Models\classes\Data::semestres());
+        return view('turmas.listar-secretaria', compact('turmas'))->with('programas',$programas)->with('professores', $professores)->with('locais',$locais)->with('filtros',$_SESSION['filtro_turmas'])->with('periodos',\App\classes\Data::semestres());
     }
 
 
@@ -1349,7 +1349,7 @@ class TurmaController extends Controller
         $turmas_subistituir = Turma::whereIn('id',$substituto)->get();
 
         if($semestre > 0){
-            $intervalo = \App\Models\classes\Data::periodoSemestreTurmas($semestre);
+            $intervalo = \App\classes\Data::periodoSemestreTurmas($semestre);
             $turmas = Turma::where('professor', $docente)->whereIn('status',['lancada','iniciada','encerrada'])->whereBetween('data_inicio', $intervalo)->orderBy('hora_inicio')->get();
         }
         else{

@@ -282,8 +282,8 @@ class BolsaController extends Controller
         $pessoa = \App\Models\Pessoa::find($bolsa->pessoa);
 
         $pessoa = PessoaController::formataParaMostrar($pessoa);
-        $pessoa->cpf = \App\Models\classes\Strings::mask($pessoa->cpf,'###.###.###-##');
-        $pessoa->rg = \App\Models\classes\Strings::mask($pessoa->rg,'##.###.###-##');
+        $pessoa->cpf = \App\classes\Strings::mask($pessoa->cpf,'###.###.###-##');
+        $pessoa->rg = \App\classes\Strings::mask($pessoa->rg,'##.###.###-##');
 
         $matriculas = \App\Models\BolsaMatricula::where('bolsa',$bolsa->id)->get();
 

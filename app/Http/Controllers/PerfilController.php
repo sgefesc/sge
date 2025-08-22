@@ -163,7 +163,7 @@ class PerfilController extends Controller
     }
 
     public function parceriaCurriculo(Request $r){
-        return \App\Models\classes\Arquivo::download('-.-documentos-.-curriculos-.-'.$r->pessoa->id.'.pdf');
+        return \App\classes\Arquivo::download('-.-documentos-.-curriculos-.-'.$r->pessoa->id.'.pdf');
     }
 
     public function parceriaCancelar(Request $r){
