@@ -17,7 +17,7 @@ class DividaAtiva extends Model
 
 
     public function getNomePessoa(){
-        $pessoa = \App\Models\Pessoa::withTrashed()->find($this->pessoa);
+        $pessoa = \App\Models\Models\Pessoa::withTrashed()->find($this->pessoa);
         return $pessoa->nome;
     }
 

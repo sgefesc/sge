@@ -311,7 +311,7 @@ class Turma extends Model
 	}
 
 	public function getFichaTecnica(){
-		$ficha = \App\Models\FichaTecnica::select('id')->where('turma',$this->id)->first();
+		$ficha = \App\Models\Models\FichaTecnica::select('id')->where('turma',$this->id)->first();
 		if($ficha)
 			return $ficha->id;
 		else

@@ -89,19 +89,19 @@
                                     @case('professor')
                                         <strong>professorer</strong>: 
                                         @foreach($valor as $i)
-                                            {{\App\Models\Pessoa::getNome($i)}},
+                                            {{\App\Models\Models\Pessoa::getNome($i)}},
                                         @endforeach
                                         @break;
                                     @case('programa')
                                         <strong>programas</strong>: 
                                         @foreach($valor as $i)
-                                            {{\App\Programa::getSigla($i)}},
+                                            {{\App\Models\Programa::getSigla($i)}},
                                         @endforeach
                                         @break;
                                     @case('local')
                                         <strong>locais</strong>: 
                                         @foreach($valor as $i)
-                                            {{\App\Models\Local::getSigla($i)}},
+                                            {{\App\Models\Models\Local::getSigla($i)}},
                                         @endforeach
                                         @break;
                                     

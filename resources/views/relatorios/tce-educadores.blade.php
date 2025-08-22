@@ -126,7 +126,7 @@
 	                    	<tr style="border-bottom: 1px solid gray; line-height:30px;" >
 	                    		<td><strong>{{$educador->id}}</strong></td>
 	                    		<td><strong>{{$educador->nome}}</strong></td>
-	                    		<td><strong>{{\App\classes\Data::converteParaUsuario($educador->nascimento)}}</strong></td>
+	                    		<td><strong>{{\App\Models\classes\Data::converteParaUsuario($educador->nascimento)}}</strong></td>
 	                    	</tr>
 	                    	@foreach($educador->turmas as $turma)
 

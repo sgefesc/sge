@@ -11,10 +11,10 @@ class BolsaMatricula extends Model
     protected $table  = 'bolsa_matriculas';
 
     public function getNomeCurso(){
-		 $matricula = \App\Models\Matricula::find($this->matricula);
+		 $matricula = \App\Models\Models\Matricula::find($this->matricula);
 		 if(!$matricula)
 		 	return "ERRO: Matricula não encontrada. BolsaMatricula::getNomeCurso";
-		 $curso = \App\Models\Curso::find($matricula->curso);
+		 $curso = \App\Models\Models\Curso::find($matricula->curso);
 		 if($curso)
 		 	return $curso->nome;
 		 else
@@ -22,7 +22,7 @@ class BolsaMatricula extends Model
     }
 
 	public static function atualizarPorMatricula(int $matricula){
-		$matricula = \App\Models\Matricula::find($matricula);
+		$matricula = \App\Models\Models\Matricula::find($matricula);
 		if(!$matricula)
 			return null;
 		switch($matricula->status){

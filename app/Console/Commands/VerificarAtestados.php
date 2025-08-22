@@ -31,7 +31,7 @@ class VerificarAtestados extends Command
         $this->info('Verificando atestados...');
         $hoje = Carbon::now();
         $modificados = 0;
-        $atestados = \App\Models\Atestado::where('tipo','saude')->where('status','aprovado')->whereDate('emissao','<',(clone $hoje)->subMonths(12))->get();
+        $atestados = \App\Models\Models\Atestado::where('tipo','saude')->where('status','aprovado')->whereDate('emissao','<',(clone $hoje)->subMonths(12))->get();
         //dd((clone $hoje)->subMonths(12));
 		foreach($atestados as $atestado){       
             $atestado->status = 'vencido';

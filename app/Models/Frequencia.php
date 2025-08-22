@@ -132,7 +132,7 @@ class Frequencia extends Model
      * 
      */
     public static function verificarPontualidadeChamada($turma){
-        $atrasadas = \App\Models\Aula::where('turma',$turma)
+        $atrasadas = \App\Models\Models\Aula::where('turma',$turma)
                 ->where('data','<',date('Y-m-d'))
                 ->where('status','prevista')
                 ->count();

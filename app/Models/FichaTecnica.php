@@ -20,24 +20,24 @@ class FichaTecnica extends Model
 
 
     public function getDocente(){
-        $pessoa = \App\Models\Pessoa::find($this->docente);
+        $pessoa = \App\Models\Models\Pessoa::find($this->docente);
         return $pessoa->nome_simples;
     }
 
     public function getPrograma(){
-        $programa = \App\Models\Programa::find($this->programa);
+        $programa = \App\Models\Models\Programa::find($this->programa);
         return $programa;
         
     }
 
     public function getLocal(){
-        $local = \App\Models\Local::find($this->local);
+        $local = \App\Models\Models\Local::find($this->local);
         return $local->nome;
 
     }
 
     public function getSala(){
-        $sala = \App\Models\Sala::find($this->sala);
+        $sala = \App\Models\Models\Sala::find($this->sala);
         return $sala->nome;
 
 

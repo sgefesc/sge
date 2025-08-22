@@ -26,21 +26,21 @@ class Transferencia extends Model
     	return $this->hasOne('App\Models\Pessoa');
     }
      public function getAnterior(){
-        $this->anterior = \App\Models\Inscricao::find($this->anterior);
+        $this->anterior = \App\Models\Models\Inscricao::find($this->anterior);
         
      }
      public function getNova(){
-        $this->nova = \App\Models\Inscricao::find($this->nova);
+        $this->nova = \App\Models\Models\Inscricao::find($this->nova);
         
      }
      public function getMatricula(){
-        $this->matricula = \App\Models\Matricula::find($this->matricula);
+        $this->matricula = \App\Models\Models\Matricula::find($this->matricula);
      }
      public function getPessoa(){
         $this->getMatricula();
         $matricula = $this->matricula;
         $pessoa = $matricula->pessoa;
-        return \App\Models\Pessoa::find($pessoa);
+        return \App\Models\Models\Pessoa::find($pessoa);
      }
 
 }

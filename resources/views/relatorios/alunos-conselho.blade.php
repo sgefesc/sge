@@ -119,7 +119,7 @@
 	                    	<tr style="border-bottom: 1px solid gray; line-height:30px;" >
 	                    		<td>{{$aluno['dados']->id}}</td>
 	                    		<td>{{$aluno['nome']}}</td>
-								<td>{{\App\classes\Data::converteParaUsuario($aluno['dados']->nascimento)}}</td>
+								<td>{{\App\Models\classes\Data::converteParaUsuario($aluno['dados']->nascimento)}}</td>
 								<td>&nbsp;</td>
 	                    	</tr>
 	                    	

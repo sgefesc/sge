@@ -73,7 +73,7 @@
         	<div class="col-xs-12">
 
 	        	<p style="margin-top: 5%">
-	        		Eu, {{$pessoa->nome}}, alun{{\App\Models\Pessoa::getArtigoGenero($pessoa->genero)}} regularmente matriculad{{\App\Models\Pessoa::getArtigoGenero($pessoa->genero)}} nesta instituição no ano de {{date("Y")}}, venho pela presente, SOLICITAR A TROCA DAS SEGUINTES TURMAS:
+	        		Eu, {{$pessoa->nome}}, alun{{\App\Models\Models\Pessoa::getArtigoGenero($pessoa->genero)}} regularmente matriculad{{\App\Models\Models\Pessoa::getArtigoGenero($pessoa->genero)}} nesta instituição no ano de {{date("Y")}}, venho pela presente, SOLICITAR A TROCA DAS SEGUINTES TURMAS:
 		       </p>
 		       <ul>
 		       	
@@ -137,7 +137,7 @@
         	<div class="col-xs-12">
 
 	        	<p style="margin-top: 5%">
-	        		Eu, {{$pessoa->nome}}, alun{{\App\Models\Pessoa::getArtigoGenero($pessoa->genero)}} regularmente matriculad{{\App\Models\Pessoa::getArtigoGenero($pessoa->genero)}} nesta instituição no ano de {{date("Y")}}, venho pela presente, SOLICITAR A TROCA DAS SEGUINTES TURMAS:
+	        		Eu, {{$pessoa->nome}}, alun{{\App\Models\Models\Pessoa::getArtigoGenero($pessoa->genero)}} regularmente matriculad{{\App\Models\Models\Pessoa::getArtigoGenero($pessoa->genero)}} nesta instituição no ano de {{date("Y")}}, venho pela presente, SOLICITAR A TROCA DAS SEGUINTES TURMAS:
 		       </p>
 		       <ul>
 		       

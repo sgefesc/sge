@@ -73,7 +73,7 @@
         	<div class="col-xs-12">
 
 	        	<p style="margin-top: 5%">
-	        		Eu, {{$pessoa->nome}}, alun{{\App\Models\Pessoa::getArtigoGenero($pessoa->genero)}} regularmente matriculad{{\App\Models\Pessoa::getArtigoGenero($pessoa->genero)}} nesta instituição no ano de {{date("Y")}}, venho pela presente, DECLARAR MINHA DESISTÊNCIA À VAGA, NAS TURMAS DO CURSO ABAIXO:
+	        		Eu, {{$pessoa->nome}}, alun{{\App\Models\Models\Pessoa::getArtigoGenero($pessoa->genero)}} regularmente matriculad{{\App\Models\Models\Pessoa::getArtigoGenero($pessoa->genero)}} nesta instituição no ano de {{date("Y")}}, venho pela presente, DECLARAR MINHA DESISTÊNCIA À VAGA, NAS TURMAS DO CURSO ABAIXO:
 			   </p>
 				
 		       <ul>
@@ -89,7 +89,7 @@
 				Estou ciente também de que existem boletos vencidos e não pagos, sujeito a sanções descritas no Termo de Matrícula.</p>
 			   @endif
 		       <p style="margin-top: 20px;" align="center">
-		       	São Carlos, {{$matricula->updated_at->format('d')}} de {{(new \App\classes\Data($matricula->updated_at->format('d/n/Y')))->mes()}} de {{$matricula->updated_at->format('Y')}}.
+		       	São Carlos, {{$matricula->updated_at->format('d')}} de {{(new \App\Models\classes\Data($matricula->updated_at->format('d/n/Y')))->mes()}} de {{$matricula->updated_at->format('Y')}}.
 		       </p>
 		       <center>
 		       <p style="border-top: solid 1px black; width: 30%; margin-top: 10%" align="center" >
@@ -135,7 +135,7 @@
 
 	        	<p style="margin-top: 0%">
 	        		<strong>PROTOCOLO DE CANCELAMENTO DE MATRÍCULA {{$matricula->id}}</strong><br>
-	        		Eu, {{$pessoa->nome}}, alun{{\App\Models\Pessoa::getArtigoGenero($pessoa->genero)}} regularmente matriculad{{\App\Models\Pessoa::getArtigoGenero($pessoa->genero)}} nesta instituição no ano de {{date("Y")}}, venho pela presente, DECLARAR MINHA DESISTÊNCIA À VAGA, NAS TURMAS DO CURSO ABAIXO:
+	        		Eu, {{$pessoa->nome}}, alun{{\App\Models\Models\Pessoa::getArtigoGenero($pessoa->genero)}} regularmente matriculad{{\App\Models\Models\Pessoa::getArtigoGenero($pessoa->genero)}} nesta instituição no ano de {{date("Y")}}, venho pela presente, DECLARAR MINHA DESISTÊNCIA À VAGA, NAS TURMAS DO CURSO ABAIXO:
 			   </p>
 			   
 		       <ul>
@@ -148,7 +148,7 @@
 				Estou ciente também de que existem boletos vencidos e não pagos, sujeito a sanções descritas no Termo de Matrícula.</p>
 			   @endif
 		       <p  align="center">
-		       		São Carlos, {{$matricula->updated_at->format('d')}} de {{(new \App\classes\Data($matricula->updated_at->format('d/n/Y')))->mes()}} de {{$matricula->updated_at->format('Y')}}.
+		       		São Carlos, {{$matricula->updated_at->format('d')}} de {{(new \App\Models\classes\Data($matricula->updated_at->format('d/n/Y')))->mes()}} de {{$matricula->updated_at->format('Y')}}.
 		       </p>
 		       <center>
 		       <p style="border-top: solid 1px black; width: 30%; margin-top: 5%" align="center" >

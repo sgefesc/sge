@@ -135,18 +135,18 @@ class Pessoa extends Model
 	public static function cabecalho($id)
 	{
 		$pessoa= Pessoa::withTrashed()->find($id);
-		$pessoa=\App\Models\Http\Controllers\PessoaController::formataParaMostrar($pessoa);
+		$pessoa=\App\Models\Models\Http\Controllers\PessoaController::formataParaMostrar($pessoa);
 		if(isset($pessoa->telefone))
-			$pessoa->telefone=\App\Models\classes\Strings::formataTelefone($pessoa->telefone);
+			$pessoa->telefone=\App\Models\Models\classes\Strings::formataTelefone($pessoa->telefone);
 		if(isset($pessoa->telefone_alternativo))
-			$pessoa->telefone_alternativo=\App\Models\classes\Strings::formataTelefone($pessoa->telefone_alternativo);
+			$pessoa->telefone_alternativo=\App\Models\Models\classes\Strings::formataTelefone($pessoa->telefone_alternativo);
 		if(isset($pessoa->telefone_contato))
-			$pessoa->telefone_contato=\App\Models\classes\Strings::formataTelefone($pessoa->telefone_contato);
+			$pessoa->telefone_contato=\App\Models\Models\classes\Strings::formataTelefone($pessoa->telefone_contato);
 
 		return $pessoa;
 	}
 	public function getIdade(){
-		return \App\Models\classes\Data::calculaIdade($this->nascimento);
+		return \App\Models\Models\classes\Data::calculaIdade($this->nascimento);
 	}
 
 	public function getProgramas(){

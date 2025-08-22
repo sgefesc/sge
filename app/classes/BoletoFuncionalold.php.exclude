@@ -46,7 +46,7 @@ public function gerar($boleto){
 		$dadosboleto["endereco2"] = ($cliente->bairro=='Outros/Outra cidade' ? $cliente->bairro_alt : $cliente->bairro). ', ' .$cliente->cidade.' '.$cliente->estado.', CEP '.$cliente->cep;
 
 		// INFORMACOES PARA O CLIENTE
-		$lancamentos = \App\Models\Lancamento::select('referencia')->where('boleto', $boleto->id)->get();
+		$lancamentos = \App\Models\Models\Lancamento::select('referencia')->where('boleto', $boleto->id)->get();
 		for($i=0;$i<$lancamentos->count();$i++){
 			$dadosboleto["referencia".$i] = $lancamentos{$i}->referencia;
 		}

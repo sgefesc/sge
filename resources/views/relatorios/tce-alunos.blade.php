@@ -125,7 +125,7 @@
 	                    	<tr style="border-bottom: 1px solid gray; line-height:30px;" >
 	                    		<td><strong>{{$aluno['dados']->id}}</strong></td>
 	                    		<td><strong>{{$aluno['nome']}}</strong></td>
-	                    		<td>{{\App\classes\Data::converteParaUsuario($aluno['dados']->nascimento)}}</td>
+	                    		<td>{{\App\Models\classes\Data::converteParaUsuario($aluno['dados']->nascimento)}}</td>
 	                    	</tr>
 	                    	@foreach($aluno['inscricoes'] as $inscricao)
 	                    	<tr >

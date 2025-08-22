@@ -16,7 +16,7 @@ class AtestadoLog extends Model
 
 
     public function getNomeResponsavel(){
-		return \App\Models\Pessoa::getNome($this->pessoa,'simples');
+		return \App\Models\Models\Pessoa::getNome($this->pessoa,'simples');
 	}
 
     public static function registrar($codigo,$evento,$autor=0){

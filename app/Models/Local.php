@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use \App\Models\Sala;
-use \App\Models\Turma;
+use \App\Models\Models\Sala;
+use \App\Models\Models\Turma;
 use stdClass;
 
 class Local extends Model
@@ -54,7 +54,7 @@ class Local extends Model
         
         
             
-        $dia_semana = \App\Models\classes\Data::stringDiaSemana($inicio->format('d/m/Y'));
+        $dia_semana = \App\Models\Models\classes\Data::stringDiaSemana($inicio->format('d/m/Y'));
 
         //dd($dia_semana);
         $eventos=collect();

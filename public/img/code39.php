@@ -12,6 +12,6 @@ elseif(file_exists('../../app/classes/Barcode.php')){
 else
 	echo 'nenhuma classe de geração de CB encontrada';
 
-new \App\Models\classes\barcode($_GET['code']);
+new \App\Models\Models\classes\barcode($_GET['code']);
 
 ?>
