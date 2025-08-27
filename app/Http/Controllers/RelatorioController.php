@@ -140,7 +140,7 @@ class RelatorioController extends Controller
       
 		$total_vagas = 0;
 		$total_inscricoes = 0;
-		$tc =  new \App\Models\Http\Controllers\TurmaController;
+		$tc =  new \App\Http\Controllers\TurmaController;
 		$turmas = $tc->listagemGlobal($request->filtro,$request->valor,$request->removefiltro,$request->remove,500);
         //$atuais = $turmas->pluck('id')->toArray();
         //dd(array_diff($atuais,$outro));
@@ -210,7 +210,7 @@ class RelatorioController extends Controller
         $planilha->setCellValue('S2', 'NF');
 
 
-        $tc =  new \App\Models\Http\Controllers\TurmaController;
+        $tc =  new \App\Http\Controllers\TurmaController;
 		$turmas = $tc->listagemGlobal($request->filtro,$request->valor,$request->removefiltro,$request->remove,500);
 
         foreach($turmas as $turma){
@@ -370,7 +370,7 @@ class RelatorioController extends Controller
     public function inscricoes(Request $request){ 
     	$total_vagas = 0;
 		$total_inscricoes = 0;
-		$tc =  new \App\Models\Http\Controllers\TurmaController;
+		$tc =  new \App\Http\Controllers\TurmaController;
 		$turmas = $tc->listagemGlobal($request->filtro,$request->valor,$request->removefiltro,$request->remove,500);
 
     	$programas=Programa::all();

@@ -146,14 +146,14 @@ class painelController extends Controller
             $id = Auth::user()->pessoa;
         }
 
-        //return  \App\Models\Utils\WeekHandler::toNumber('seg');
+        //return  \App\Utils\WeekHandler::toNumber('seg');
         $horarios = array();
         $dias = ['seg','ter','qua','qui','sex','sab'];
         $carga_ativa = Carbon::createFromTime(0, 0, 0, 'America/Sao_Paulo'); ;
         //$carga_ativa = 0;
 
-        $turmas = \App\Models\Http\Controllers\TurmaController::listarTurmasDocente($id,$semestre);
-        $jornadas = \App\Models\Http\Controllers\JornadaController::listarDocente($id,$semestre);
+        $turmas = \App\Http\Controllers\TurmaController::listarTurmasDocente($id,$semestre);
+        $jornadas = \App\Http\Controllers\JornadaController::listarDocente($id,$semestre);
         
         //$jornadas = \App\Models\Jornada::where('pessoa',$id)->get();
         $jornadas_ativas = $jornadas->where('status','ativa');
@@ -518,7 +518,7 @@ class painelController extends Controller
     }
 
     public function testarClasse(){
-        dd(\App\Models\Http\Controllers\DiaNaoLetivoController::cadastroAnual());
+        dd(\App\Http\Controllers\DiaNaoLetivoController::cadastroAnual());
         
 
 
@@ -736,7 +736,7 @@ class painelController extends Controller
         $msg = "FESC INFORMA: Prezados alunos, os boletos do mês de agosto, com vencimento em 10/08 serão cancelados.Fique seguro, fique em casa.";
         $matriculas=Matricula::where('status','ativa')->groupBy('pessoa')->get();
         foreach($matriculas as $matricula){
-            $this->dispatch(new \App\Models\Jobs\EnviarSMS($msg,$matricula->pessoa));
+            $this->dispatch(new \App\Jobs\EnviarSMS($msg,$matricula->pessoa));
             //$CC->enviarSMS($msg,[$matricula->pessoa]);
         }
         return "Notificações enviadas";

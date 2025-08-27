@@ -484,7 +484,7 @@ class SecretariaController extends Controller
 				$email_fesc = $email_fesc->valor;
 
 				//dd($pessoa);
-				//\App\Models\Jobs\EnviaEmails::dispatch($pessoa,$email,$email_fesc);
+				//\App\Jobs\EnviaEmails::dispatch($pessoa,$email,$email_fesc);
 			}
 			
 

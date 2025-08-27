@@ -56,22 +56,22 @@ class Inscricao extends Model
 		$this->save();
 		switch($status){
 			case "pendente" :
-				\App\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
+				\App\Http\Controllers\MatriculaController::atualizar($this->matricula);
 				break;
 			case "regular": 
-				\App\Models\Http\Controllers\TurmaController::modInscritos($this->turma->id);
-				\App\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
+				\App\Http\Controllers\TurmaController::modInscritos($this->turma->id);
+				\App\Http\Controllers\MatriculaController::atualizar($this->matricula);
 				break;
 			case "finalizada": 
-				\App\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
+				\App\Http\Controllers\MatriculaController::atualizar($this->matricula);
 				break;
 			case "cancelada":
-				\App\Models\Http\Controllers\TurmaController::modInscritos($this->turma->id);
-				\App\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
+				\App\Http\Controllers\TurmaController::modInscritos($this->turma->id);
+				\App\Http\Controllers\MatriculaController::atualizar($this->matricula);
 				break;
 			case "transferida": 
-				\App\Models\Http\Controllers\TurmaController::modInscritos($this->turma->id);
-				\App\Models\Http\Controllers\MatriculaController::atualizar($this->matricula);
+				\App\Http\Controllers\TurmaController::modInscritos($this->turma->id);
+				\App\Http\Controllers\MatriculaController::atualizar($this->matricula);
 				break;
 		}
                     

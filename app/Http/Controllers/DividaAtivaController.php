@@ -28,7 +28,7 @@ class DividaAtivaController extends Controller
 		$boletos = Boleto::where('status','emitido')->whereYear('vencimento','=',date('Y')-1)->paginate(900);
         //dd($boletos);
 			
-		$beneficiario = new \Eduardokum\LaravelBoleto\Pessoa([
+		$beneficiario = new \Adautopro\LaravelBoleto\Pessoa([
 		    'documento' => '45.361.904/0001-80',
 		    'nome'      => 'Fundação Educacional São Carlos',
 		    'cep'       => '13560-230',
@@ -37,7 +37,7 @@ class DividaAtivaController extends Controller
 		    'uf'        => 'SP',
 		    'cidade'    => 'São Carlos',
 		]);
-		$remessa = new \Eduardokum\LaravelBoleto\Cnab\Remessa\Cnab240\Banco\Bb(
+		$remessa = new \Adautopro\LaravelBoleto\Cnab\Remessa\Cnab240\Banco\Bb(
 		    [
 		        'agencia'      => '0295',
 		        'carteira'     => 17,
@@ -56,7 +56,7 @@ class DividaAtivaController extends Controller
 
 		foreach($boletos as $boleto){
 			try{ //tentar gerar boleto completo
-                $boleto_controller = new \App\Models\Http\Controllers\BoletoController;
+                $boleto_controller = new \App\Http\Controllers\BoletoController;
 				$boleto_completo = $boleto_controller->gerarBoleto($boleto);
 			}
 			catch(\Exception $e){

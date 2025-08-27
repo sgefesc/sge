@@ -70,7 +70,7 @@ class ValorController extends Controller
 
             $inscricoes = \App\Models\Inscricao::where('matricula',$matricula->id)->whereIn('status',['regular','pendente','espera'])->get();
             if($matricula->curso == null){
-                \App\Models\Http\Controllers\MatriculaController::matriculaSemCurso($matricula);
+                \App\Http\Controllers\MatriculaController::matriculaSemCurso($matricula);
 
             }
             //$inscricao_t = \App\Models\Inscricao::where('matricula',$matricula->id)->first();

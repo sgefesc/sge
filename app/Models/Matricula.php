@@ -25,14 +25,14 @@ class Matricula extends Model
 
     protected $appends=['valor'];
 	public function getValorAttribute($value){		
-		$valor = \App\Models\Http\Controllers\ValorController::valorMatricula($this->id);
+		$valor = \App\Http\Controllers\ValorController::valorMatricula($this->id);
 			return $valor;
 
 	}
 
 
 	public function getInscricoes($tipo = 'todas'){
-		$inscricoes= \App\Models\Http\Controllers\InscricaoController::inscricoesPorMatricula($this->id,$tipo);
+		$inscricoes= \App\Http\Controllers\InscricaoController::inscricoesPorMatricula($this->id,$tipo);
 		$this->inscricoes = $inscricoes;
 		return $inscricoes;
 	}
@@ -74,7 +74,7 @@ class Matricula extends Model
 
 
 	public function getDescontoAttribute($value){
-		$valor = \App\Models\Http\Controllers\BolsaController::verificaBolsa($this->pessoa,$this->id);
+		$valor = \App\Http\Controllers\BolsaController::verificaBolsa($this->pessoa,$this->id);
 		if($valor)
 			return $valor->desconto;
 		else
@@ -147,14 +147,14 @@ class Matricula extends Model
 
 		
 		//se a data de matrícula for anterior ao início do curso
-		if($data_matricula->format('m') <= $primeira_parcela->format('m') || $data_matricula->format('Y') < $primeira_parcela->format('Y'))
+		if($data_matricula->format('m') < $primeira_parcela->format('m') || $data_matricula->format('Y') < $primeira_parcela->format('Y')) 
 			return $parcelas;
 		else{
-			// se for de agosto em diante, adiciona uma parcela pois pula-se julho (se o curso começar antes de julho e a matricula depois de junho)
-			if($primeira_parcela->format('m') < 7 && $data_matricula->format('m')>6)
-				$parcelas = $parcelas - ($data_matricula->format('m')-$primeira_parcela->format('m'))+1;
-			else
-				$parcelas = $parcelas - ($data_matricula->format('m')-$primeira_parcela->format('m'));
+			$parcelas = $parcelas - ($interval->y * 12);
+			if($data_matricula->format('d') > self::CORTE)
+				$parcelas = $parcelas -1;
+			//se for de janeiro a junho, subtrai o número de meses entre a matrícula e o início do curso
+
 
 		}
 		return $parcelas;

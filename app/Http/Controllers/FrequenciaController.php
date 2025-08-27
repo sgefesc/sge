@@ -19,7 +19,7 @@ class FrequenciaController extends Controller
             $id = Auth::user()->pessoa;
         }
 
-        $turmas = \App\Models\Http\Controllers\TurmaController::listarTurmasDocente($id,$semestre);
+        $turmas = \App\Http\Controllers\TurmaController::listarTurmasDocente($id,$semestre);
         $semestres = \App\classes\Data::semestres();
         $docente = \App\Models\Pessoa::withTrashed()->find($id);
         //dd($semestres);

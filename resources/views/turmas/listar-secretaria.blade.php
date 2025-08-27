@@ -15,6 +15,7 @@
                 <i class="fa fa-remove" style="color:red"></i>
                 Limpar Filtros
             </a> -->
+            @if($filtros)
             @foreach($filtros as $filtro=>$valor)
                 @if(count($filtros[$filtro]))
 
@@ -24,6 +25,7 @@
                     </a>
                 @endif
             @endforeach
+            @endif
        
 
         </div>

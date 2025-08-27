@@ -35,7 +35,7 @@ class JornadaDocentes extends Controller
             $educador->jornadas = collect();
 
 
-            //$educador->turmas = \App\Models\Http\Controllers\TurmaController::listarTurmasDocente($educador->id,'0'.$ano);
+            //$educador->turmas = \App\Http\Controllers\TurmaController::listarTurmasDocente($educador->id,'0'.$ano);
            
             if($ano == date('Y')){
                 $educador->turmas = \App\Models\Turma::where('professor',$educador->id)->where('data_inicio','>',$ano.'-01-01')->where('data_termino','>',date('Y-m-d'))->where('status','iniciada')->get();
@@ -192,7 +192,7 @@ class JornadaDocentes extends Controller
             $educador->jornadas = collect();
 
 
-            //$educador->turmas = \App\Models\Http\Controllers\TurmaController::listarTurmasDocente($educador->id,'0'.$ano);
+            //$educador->turmas = \App\Http\Controllers\TurmaController::listarTurmasDocente($educador->id,'0'.$ano);
            
             if($ano == date('Y')){
                 $educador->turmas = \App\Models\Turma::where('professor',$educador->id)->where('data_inicio','>',$ano.'-01-01')->where('data_termino','>',date('Y-m-d'))->where('status','x')->get();

@@ -33,7 +33,7 @@ class RetornoController extends Controller
 				$arquivo = new \stdClass();
 				$arquivo->nome = $file;
 				try{
-					$retorno = new \Eduardokum\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($file);
+					$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($file);
 					$retorno->processar();
 					$header = $retorno->getHeader();
 					$arquivo->id = $header->numeroSequencialArquivo;
@@ -71,7 +71,7 @@ class RetornoController extends Controller
 				$arquivo = new \stdClass();
 				$arquivo->nome = $file;
 				try{
-					$retorno = new \Eduardokum\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($file);
+					$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($file);
 					$retorno->processar();
 					$header = $retorno->getHeader();
 					$arquivo->id = $header->numeroSequencialArquivo;
@@ -101,7 +101,7 @@ class RetornoController extends Controller
 				$arquivo = new \stdClass();
 				$arquivo->nome = $file;
 				try{
-					$retorno = new \Eduardokum\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($file);
+					$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($file);
 					$retorno->processar();
 					$header = $retorno->getHeader();
 					$arquivo->id = $header->numeroSequencialArquivo;
@@ -151,7 +151,7 @@ class RetornoController extends Controller
 
 		public function retorno($arquivo){
 			$arquivo='documentos/retornos/'.$arquivo;
-			$retorno = new \Eduardokum\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
+			$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
 			$retorno->processar();
 			dd($retorno);
 
@@ -163,7 +163,7 @@ class RetornoController extends Controller
 			
 			$titulos_baixados=array();
 			try{
-				$retorno = new \Eduardokum\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
+				$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
 				$retorno->processar();
 			}
 			catch(\Exception $e){
@@ -224,7 +224,7 @@ class RetornoController extends Controller
 		}
 		public function processarArquivo($arquivo){
 			$arquivo='documentos/retornos/'.$arquivo;
-			$retorno = new \Eduardokum\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
+			$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
 			$retorno->processar();
 			//dd($retorno);
 			$header = $retorno->getHeader();
@@ -301,7 +301,7 @@ class RetornoController extends Controller
 		}
 		public function reProcessarArquivo($arquivo){
 			$arquivo='documentos/retornos/'.$arquivo;
-			$retorno = new \Eduardokum\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
+			$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
 			$retorno->processar();
 			//dd($retorno);
 			$header = $retorno->getHeader();

@@ -13,7 +13,7 @@ class ContatoController extends Controller
         switch($r->meio){
             case 'sms': 
                 //$sms = $this->enviarSMS($r->mensagem,[$r->pessoa]);
-                $this->dispatch(new \App\Models\Jobs\EnviarSMS($r->mensagem,$r->pessoa,Auth::user()->pessoa));
+                $this->dispatch(new \App\Jobs\EnviarSMS($r->mensagem,$r->pessoa,Auth::user()->pessoa));
                 return response('ok',200);
                 break;
             case 'email':

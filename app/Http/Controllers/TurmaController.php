@@ -114,13 +114,13 @@ class TurmaController extends Controller
     public function listagemGlobal($filtro=null,$valor=null,$rem_filtro=null,$remove=0,$ipp=50){
         
         
-        session_start(); 
+        //session_start();
+        $sessao_filtro_turmas = session()->get('filtro_turmas');
+         
 
-    
-        
 
-        if(isset($_SESSION['filtro_turmas']))
-            $filtros = $_SESSION['filtro_turmas'];    
+        if($sessao_filtro_turmas)
+            $filtros = $sessao_filtro_turmas;    
         else
             $filtros = array(); 
 
@@ -151,7 +151,9 @@ class TurmaController extends Controller
             if(isset($filtros[$rem_filtro]))
                 unset($filtros[$rem_filtro]);
         } 
-        $_SESSION['filtro_turmas'] = $filtros;
+
+        //$_SESSION['filtro_turmas'] = $filtros;
+        session(['filtro_turmas'=> $filtros]);
         $turmas=Turma::select('*', 'turmas.id as id' ,'turmas.vagas as vagas','turmas.carga as carga', 
             'turmas.programa as programa', 'turmas.periodicidade as periodicidade','disciplinas.id as disciplinaid','cursos.id as cursoid',
             'turmas.programa as programaid','turmas.valor as valor')
@@ -289,7 +291,8 @@ class TurmaController extends Controller
         $professores=PessoaDadosAdministrativos::getEducadores();
         $locais = Local::select(['id','sigla','nome'])->orderBy('sigla')->get();
 
-        return view('turmas.listar-secretaria', compact('turmas'))->with('programas',$programas)->with('professores', $professores)->with('locais',$locais)->with('filtros',$_SESSION['filtro_turmas'])->with('periodos',\App\classes\Data::semestres());
+        
+        return view('turmas.listar-secretaria', compact('turmas'))->with('programas',$programas)->with('professores', $professores)->with('locais',$locais)->with('filtros',session()->get('filtro_turmas'))->with('periodos',\App\classes\Data::semestres());
     }
 
 
@@ -1358,7 +1361,7 @@ class TurmaController extends Controller
 
         foreach($turmas as $turma){
               
-            $turma->weekday = \App\Models\Utils\WeekHandler::toNumber($turma->dias_semana[0]);
+            $turma->weekday = \App\Utils\WeekHandler::toNumber($turma->dias_semana[0]);
             $turma->chamada_regular = \App\Models\Frequencia::verificarPontualidadeChamada($turma->id);
 
         }

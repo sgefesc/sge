@@ -11,7 +11,7 @@ class EventoController extends Controller
 {
 
     public function index(Request $r){
-        $calendario = new \App\Models\Utils\Calendar();
+        $calendario = new \App\Utils\Calendar();
 
         $eventos = Evento::where('data_termino','>=',date('Y-m-d'))->orderBy('data_inicio')->get();
         return view('eventos.index')->with('eventos',$eventos)->with('data',$calendario->data)->with('mes',$calendario->dias);

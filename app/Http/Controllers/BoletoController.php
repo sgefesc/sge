@@ -273,8 +273,8 @@ class BoletoController extends Controller
 		return view('financeiro.boletos.gerador-csv',compact('boletos'));
 	}
 	public function imprimirLaravelBoleto($ids){
-		//$html = new \Eduardokum\LaravelBoleto\Boleto\Render\Html();
-		$html = new \Eduardokum\LaravelBoleto\Boleto\Render\Pdf();
+		//$html = new \Adautopro\LaravelBoleto\Boleto\Render\Html();
+		$html = new \Adautopro\LaravelBoleto\Boleto\Render\Pdf();
 		$boletos = explode(',',$ids);
 		$boletos = Boleto::whereIn('id',$boletos)->get();
 		foreach($boletos as $boleto){
@@ -557,7 +557,7 @@ class BoletoController extends Controller
 
 		$array_lancamentos = array_slice($array_lancamentos, 0, 5);
 
-		$beneficiario = new \Eduardokum\LaravelBoleto\Pessoa([
+		$beneficiario = new \Adautopro\LaravelBoleto\Pessoa([
 			'documento' => '45.361.904/0001-80',
 			'nome'      => 'Fundação Educacional São Carlos',
 			'cep'       => '13560-230',
@@ -571,7 +571,7 @@ class BoletoController extends Controller
 			$cliente->cpf = '111.111.111-11';
 		}
 
-		$pagador = new \Eduardokum\LaravelBoleto\Pessoa([
+		$pagador = new \Adautopro\LaravelBoleto\Pessoa([
 			'documento' => $cliente->cpf,
 			'nome'      => str_replace(['º', 'ª', '°', '´', '~', '^', '`', '\''], '', substr($cliente->nome, 0, 37)),
 			'cep'       => $cliente->cep ? $cliente->cep : '13560-970',
@@ -597,13 +597,13 @@ class BoletoController extends Controller
 		if($boleto->pessoa == 19511){
 			$qrcode = $boleto->getQRCode();
 			if($qrcode){
-				$pix_cc = \Eduardokum\LaravelBoleto\Util::gerarPixCopiaECola($qrcode->url, $boleto->valor,$qrcode->txid, $pagador, $beneficiario);
+				$pix_cc = \Adautopro\LaravelBoleto\Util::gerarPixCopiaECola($qrcode->url, $boleto->valor,$qrcode->txid, $pagador, $beneficiario);
 			}
 			else{
 				$pix_cc = null;
 			}
 			 
-			$bb = new \Eduardokum\LaravelBoleto\Boleto\Banco\Bb([
+			$bb = new \Adautopro\LaravelBoleto\Boleto\Banco\Bb([
 
 				'id'				 => $boleto->id,
 				'logo'                => 'img/logo-small.png',
@@ -635,7 +635,7 @@ class BoletoController extends Controller
 
 		}    
 		else{
-			$bb = new \Eduardokum\LaravelBoleto\Boleto\Banco\Bb([
+			$bb = new \Adautopro\LaravelBoleto\Boleto\Banco\Bb([
 				'id'				 => $boleto->id,
 				'logo'                => 'img/logo-small.png',
 				'dataVencimento'      => Carbon::parse($boleto->vencimento),

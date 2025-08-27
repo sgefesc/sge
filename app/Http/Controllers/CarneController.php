@@ -43,7 +43,7 @@ class CarneController extends Controller
 		$pessoas = Boleto::whereIn('status',['gravado','emitido','impresso'])->where('vencimento','>=',date('Y-m-d'))->groupBy('pessoa')->paginate(20);
 		//dd($pessoas);
 		foreach($pessoas as $pessoa){
-			$html = new \Eduardokum\LaravelBoleto\Boleto\Render\Pdf();
+			$html = new \Adautopro\LaravelBoleto\Boleto\Render\Pdf();
 			$boletos = Boleto::where('pessoa',$pessoa->pessoa)->whereIn('status',['gravado','emitido','impresso'])->where('vencimento','>=',date('Y-m-d'))->orderBy('pessoa')->orderBy('vencimento')->get();	
 			foreach($boletos as $boleto){
 
@@ -94,7 +94,7 @@ class CarneController extends Controller
 	 */
 	public function carneFase6(){
 
-			$beneficiario = new \Eduardokum\LaravelBoleto\Pessoa([
+			$beneficiario = new \Adautopro\LaravelBoleto\Pessoa([
 		    'documento' => '45.361.904/0001-80',
 		    'nome'      => 'Fundação Educacional São Carlos',
 		    'cep'       => '13560-230',
@@ -103,7 +103,7 @@ class CarneController extends Controller
 		    'uf'        => 'SP',
 		    'cidade'    => 'São Carlos',
 		]);
-		$remessa = new \Eduardokum\LaravelBoleto\Cnab\Remessa\Cnab240\Banco\Bb(
+		$remessa = new \Adautopro\LaravelBoleto\Cnab\Remessa\Cnab240\Banco\Bb(
 		    [
 		        'agencia'      => '0295',
 		        'carteira'     => 17,
@@ -512,8 +512,8 @@ class CarneController extends Controller
 		//dd('teste');
 		$boletos = Boleto::where('pessoa',$pessoa)->whereIn('status',['emitido','gravado','impresso','pelosite'])->get();
 		
-		//$html = new \Eduardokum\LaravelBoleto\Boleto\Render\Html();
-		$html = new \Eduardokum\LaravelBoleto\Boleto\Render\Pdf();
+		//$html = new \Adautopro\LaravelBoleto\Boleto\Render\Html();
+		$html = new \Adautopro\LaravelBoleto\Boleto\Render\Pdf();
 
 
 		foreach($boletos as $boleto){
@@ -547,7 +547,7 @@ class CarneController extends Controller
 	public function reimpressao(){
 		$boletos = Boleto::where('status','emitido')->orwhere('status','impresso')->orderBy('pessoa')->orderBy('vencimento')->paginate(200);	
 		
-		$html = new \Eduardokum\LaravelBoleto\Boleto\Render\Pdf();
+		$html = new \Adautopro\LaravelBoleto\Boleto\Render\Pdf();
 		foreach($boletos as $boleto){
 			try{
 				$boleto_completo = BoletoController::gerarBoleto($boleto);
@@ -574,8 +574,8 @@ class CarneController extends Controller
 		//dd('teste');
 		$boletos = Boleto::where('pessoa',$pessoa)->whereIn('status',['emitido','gravado','impresso'])->get();
 		
-		//$html = new \Eduardokum\LaravelBoleto\Boleto\Render\Html();
-		$html = new \Eduardokum\LaravelBoleto\Boleto\Render\Pdf();
+		//$html = new \Adautopro\LaravelBoleto\Boleto\Render\Html();
+		$html = new \Adautopro\LaravelBoleto\Boleto\Render\Pdf();
 
 
 		foreach($boletos as $boleto){
@@ -603,7 +603,7 @@ class CarneController extends Controller
 		$pessoas = \App\Models\Matricula::where('status','espera')->groupBy('pessoa')->pluck('pessoa')->toArray();  
 		
 		foreach($pessoas as $pessoa){
-			$this->dispatch(new \App\Models\Jobs\GeradorCarnes($pessoa));
+			$this->dispatch(new \App\Jobs\GeradorCarnes($pessoa));
 			$msg[] =  'Solicitando geração dos boletos para pessoa '.$pessoa;
 		}
 		/*

@@ -135,7 +135,7 @@ class Pessoa extends Model
 	public static function cabecalho($id)
 	{
 		$pessoa= Pessoa::withTrashed()->find($id);
-		$pessoa=\App\Models\Http\Controllers\PessoaController::formataParaMostrar($pessoa);
+		$pessoa=\App\Http\Controllers\PessoaController::formataParaMostrar($pessoa);
 		if(isset($pessoa->telefone))
 			$pessoa->telefone=\App\classes\Strings::formataTelefone($pessoa->telefone);
 		if(isset($pessoa->telefone_alternativo))
