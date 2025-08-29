@@ -8,18 +8,7 @@ use App\Models\Boleto;
 ini_set('max_execution_time', 180);
 class RetornoController extends Controller
 {
-    		public function upload(Request $r){
-			$arquivos = $r->file('arquivos');
-			foreach($arquivos as $arquivo){
-				//dd($arquivo);
-				if (!empty($arquivo)) {
-		            $arquivo->move('documentos/retornos',$arquivo->getClientOriginalName());
-		        }
-
-			}
-			return redirect(asset('financeiro/boletos/retorno/arquivos'));
-
-		}
+	
 
 		public function listarRetornos(){
 

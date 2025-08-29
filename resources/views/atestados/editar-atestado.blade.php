@@ -54,10 +54,11 @@
                 Arquivo
             </label>
             <div class="col-sm-6">
-            @if(file_exists('documentos/atestados/'.$atestado->id.'.pdf'))
-                <a href="{{'/documentos/atestados/'.$atestado->id.'.pdf'}}" target="_blank"><i class="fa fa-file"></i> Arquivo disponível </a><br><br>
-            @endif
+            @if($atestado->getDownloadLink())
+                <a href="{{'/download/atestado/'.$atestado->id}}" target="_blank"><i class="fa fa-file"></i> Arquivo disponível </a> &nbsp;&nbsp; <a href="#" title="Excluir arquivo"><i class="fa fa-trash text-danger"></i></a><br><br>
+            @else
                 <input type="file" accept=".pdf" name="arquivo" class="form-control boxed"> 
+            @endif
             </div>
         </div>
 

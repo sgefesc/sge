@@ -1,5 +1,5 @@
 @extends('layout.app')
-@section('titulo')Upload de arquivo de retorno @endsection
+@section('titulo')Upload de arquivo de matrícula @endsection
 @section('pagina')
 
 <div class="title-block">
@@ -17,7 +17,7 @@
             <div class="card card-primary">
                 <div class="card-header">
                     <div class="header-block">
-                        <p class="title" style="color:white">Escolha um{{$qnde==0?' ou vários arquivos':''}}.</p>
+                        <p class="title" style="color:white">Escolha um {{$qnde==0?'ou vários arquivos':'documento.'}}.</p>
                     </div>
                 </div>
                 <div class="card-block">

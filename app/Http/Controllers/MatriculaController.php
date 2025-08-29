@@ -539,29 +539,9 @@ class MatriculaController extends Controller
         return view('secretaria.matricula.upload-termo')->with('matricula',$matricula);
     }
 
-    /**
-     * Execução de upload de termo
-     */
-    public function uploadTermo(Request $r){
-        $arquivo = $r->file('arquivo');                  
-            if (!empty($arquivo)) 
-                $arquivo->move('documentos/matriculas/termos',$r->matricula.'.pdf');         
 
-            return redirect(asset('secretaria/atender'));
-    }
 
-    /**
-     * Execução de upload em lote
-     */
-    public function uploadTermosLote(Request $r){
-        $arquivos = $r->file('arquivos');
-        foreach($arquivos as $arquivo){
-            //dd($arquivo);
-            if (!empty($arquivo)) 
-                $arquivo->move('documentos/matriculas/termos', preg_replace( '/[^0-9]/is', '', $arquivo->getClientOriginalName()).'.pdf');
-        }
-        return redirect(asset('secretaria/matricula/upload-termo-lote'))->withErrors(['Enviados'.count($arquivos).' arquivos.']);
-    }
+
 
     /**
      * view de upload de cancelamento de matricula
@@ -570,18 +550,7 @@ class MatriculaController extends Controller
         return view('secretaria.matricula.upload-termo')->with('matricula',$matricula);
     }
 
-    /**
-     * Execução de upload de cancelamento
-     */
-    public function uploadCancelamentoMatricula(Request $r){
-        $arquivos = $r->file('arquivos');
-            foreach($arquivos as $arquivo){
-                if (!empty($arquivo)) 
-                    $arquivo->move('documentos/matriculas/cancelamentos', preg_replace( '/[^0-9]/is', '', $arquivo->getClientOriginalName()).'.pdf');    
-            }
-        return redirect(asset('secretaria/atender'))->withErrors(['Enviados'.count($arquivos).' arquivos.']);
-        
-    }
+  
 
     /**
      * [uploadGlobal_vw description]
@@ -618,6 +587,16 @@ class MatriculaController extends Controller
      * @return [type]     [description]
      */
     public function uploadGlobal(Request $r){
+        $r->validate([
+            'arquivos' => 'required|mimes:pdf|max:4096'
+        ],
+        [
+            'arquivos.required' => 'Selecione ao menos um arquivo para envio.',
+            'arquivos.mimes' => 'Apenas arquivos em PDF são permitidos.',
+            'arquivos.max' => 'Tamanho máximo permitido para envio é 4MB.'
+        ]);
+       
+        
 
         switch($r->tipo){
             case 0:
@@ -652,15 +631,32 @@ class MatriculaController extends Controller
         if($r->qnde == 0){
             $arquivos = $r->file('arquivos');
             foreach($arquivos as $arquivo){
-                if (!empty($arquivo)) 
-                   $arquivo->move('documentos/'.$pasta, preg_replace( '/[^0-9]/is', '', $arquivo->getClientOriginalName()).'.pdf');            
+                if (!empty($arquivo)) {
+                    try{
+                        $path = $r->file('arquivos')->storeAs('documentos/'.$pasta, preg_replace( '/[^0-9]/is', '', $arquivo->getClientOriginalName()).'.pdf'); 
+                    }
+                    catch(\Exception $e){
+                        return redirect($_SERVER['HTTP_REFERER'])->withErrors(['Erro ao enviar arquivo '.$arquivo->getClientOriginalName().' - '.$e->getMessage()]);
+                    }
+                }
+                               
             }
             return redirect($_SERVER['HTTP_REFERER'])->withErrors(['Enviados'.count($arquivos).' arquivos.']);
         }
         else{
+
             $arquivo = $r->file('arquivos');
-            if (!empty($arquivo)) 
-                    $arquivo->move('documentos/'.$pasta, $r->valor.'.pdf');       
+            if (!empty($arquivo)) {
+            
+                try{
+                    
+                    //$arquivo->move('../../storage/app/documentos/'.$pasta, $r->valor.'.pdf');
+                    $path = $r->file('arquivos')->storeAs('documentos/'.$pasta, $r->valor.'.pdf'); 
+                }
+                catch(\Exception $e){
+                    return redirect($_SERVER['HTTP_REFERER'])->withErrors(['Erro ao enviar arquivo '.$arquivo->getClientOriginalName().' - '.$e->getMessage()]);
+                }  
+            }       
             return redirect(asset('secretaria/atender'))->withErrors(['Arquivo enviado.']);
         }   
     }

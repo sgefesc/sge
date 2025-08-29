@@ -126,7 +126,8 @@ class Matricula extends Model
 		foreach($inscricoes as $inscricao){
 			$turma= \App\Models\Turma::find($inscricao->turma->id); 
 			if($parcelas < $turma->getParcelas()){
-				$parcelas = $turma->getParcelas();
+// Aqui é onde pega o número de parcelas padrão da turma (antes de começar)
+				$parcelas_turma = $turma->getParcelas(); 
 			}
 			
 		}
@@ -134,31 +135,48 @@ class Matricula extends Model
 		//se pacote
 		if($this->pacote>0){
 			$valor = Valor::where('pacote',$this->pacote)->where('ano',substr($turma->data_inicio,-4))->first();
-			if(isset($valor->parcelas))
-				$parcelas =  $valor->parcelas;
+			if($valor && isset($valor->parcelas))
+				$parcelas_turma =  $valor->parcelas;
 		}
-
+		try{
 		//transforma data de inicio da turma e matrícula em objeto de data 
 		$primeira_parcela = $turma->getDataPrimeiraParcela();
 		$data_matricula = \DateTime::createFromFormat('Y-m-d',$this->data);
+		//$data_matricula = \DateTime::createFromFormat('Y-m-d', '2025-07-22'); // testador de datas
+		$data_limite_semestral = \DateTime::createFromFormat('Y-m-d', '2025-06-20');//depois dessa data não conta mais o mês de julho
 		$interval = $primeira_parcela->diff($data_matricula);
-
-		
+		}catch(\Exception $e){
+			throw new \Exception("Erro definir as datas na getParcelas da Matrícula: ".$e->getMessage());
+		}
+	
 
 		
 		//se a data de matrícula for anterior ao início do curso
 		if($data_matricula->format('m') < $primeira_parcela->format('m') || $data_matricula->format('Y') < $primeira_parcela->format('Y')) 
-			return $parcelas;
+			return $parcelas_turma;
 		else{
-			$parcelas = $parcelas - ($interval->y * 12);
+			$parcelas = $parcelas_turma - ($interval->m);
+			
+			// se a diferença entre o mes da primeira parcela e a data da matricula dor maior que 5 (passou do meio do ano), eliminar julho
+			if($parcelas_turma>5 && $data_matricula>$data_limite_semestral && $data_matricula->format('m')>7){
+				$parcelas--;
+			}
+			
 			if($data_matricula->format('d') > self::CORTE)
-				$parcelas = $parcelas -1;
+				$parcelas = $parcelas--;
 			//se for de janeiro a junho, subtrai o número de meses entre a matrícula e o início do curso
 
 
 		}
 		return $parcelas;
 
+	}
+
+	public function getLinkTermo(){
+		if(\Illuminate\Support\Facades\Storage::exists('documentos/matriculas/termos/'.$this->id.'.pdf'))
+			return asset('/download/maricula/'.$this->id);
+		else
+			return null;
 	}
 
 

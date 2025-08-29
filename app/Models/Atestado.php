@@ -87,5 +87,19 @@ class Atestado extends Model
 		
 	}
 
+	public function getDownloadLink(){
+		if(\Illuminate\Support\Facades\Storage::exists('documentos/atestados/'.$this->id.'.pdf'))
+			return asset('/download/atestado/'.$this->id);
+		else
+			return null;
+	}
+
+	public function getViewLink(){
+		if(\Illuminate\Support\Facades\Storage::exists('documentos/atestados/'.$this->id.'.pdf'))
+			return asset('/arquivo/atestado/'.$this->id);
+		else
+			return null;
+	}
+
 
 }

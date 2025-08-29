@@ -82,14 +82,11 @@ class BolsaController extends Controller
                             $atendimento = AtendimentoController::novoAtendimento('Solicitação de bolsa '.$bolsa->id.' reativada.',$bolsa->pessoa);
                            
                             break;
-                        
                     }
                 }
             }
         }
         return redirect()->back()->withErrors(['Bolsa(s) processadas.']);
-
-
     }
 
 
@@ -104,29 +101,20 @@ class BolsaController extends Controller
 
     }
 
-
-    /*
-    Função que verificaa bolsa no financeiro.
+    /*************************************
+     *Função que verifica a bolsa no financeiro.
      */
     public static function verificaBolsa($pessoa,$matricula){
-        //********************************************* aqui colocar a validade dos descontos
         $bmatricula = BolsaMatricula::where('matricula',$matricula)->orderByDESC('id')->first();
-        //dd($bmatricula);        
-        if($bmatricula){
-            //$bolsa = Bolsa::where('id',$bmatricula->bolsa)->where('status','ativa')->where('validade','>',date('Y-m-d'))->first();
+        if($bmatricula){  
             $bolsa = Bolsa::where('id',$bmatricula->bolsa)->where('status','ativa')->first();
-           
             if(isset($bolsa->id))              
                 return $bolsa;
             else
                 return null;
-
         }
         else
             return null;
-     
-       
-
     }
 
     /**
@@ -144,9 +132,6 @@ class BolsaController extends Controller
             $bolsa->desconto_str = \App\Models\Desconto::find($bolsa->desconto->id);
 
         }
-
-
-
         return view('pessoa.bolsa.cadastrar',compact('pessoa'))->with('matriculas',$matriculas)->with('bolsas',$bolsas)->with('descontos',$descontos);
     }
 
@@ -184,17 +169,14 @@ class BolsaController extends Controller
 
         if(isset($bolsa->id)){
             $matriculas = \App\Models\BolsaMatricula::where('bolsa',$bolsa->id)->whereIn('matricula',[$request->matricula[0]])->get();
-            
             if($matriculas->count()>0)
                     return redirect()->back()->withErrors(['Já existe uma solicitação de bolsa para esta matícula.']);
-
             $bolsa_matricula = new BolsaMatricula();
             $bolsa_matricula->bolsa = $bolsa->id;
             $bolsa_matricula->pessoa = $bolsa->pessoa;
             $bolsa_matricula->matricula = $request->matricula[0];
             $bolsa_matricula->programa = \App\Models\Matricula::find($bolsa_matricula->matricula)->getPrograma()->id;
             $bolsa_matricula->save();
-
             return redirect()->back()->withErrors(['Matrícula inserida na bolsa com sucesso.']);  
         }
         else{
@@ -202,57 +184,44 @@ class BolsaController extends Controller
                 $validade = date('Y-12-31 23:23:59', strtotime("+12 months",strtotime(date('Y-m-d')))); 
             else
                 $validade = date('Y-12-31 23:23:59'); 
-            
-        
+
             if($this->vericaSeSolicitado($request->pessoa,$request->matricula))
                 return redirect()->back()->withErrors(['Bolsa já solicitada.']);
-
             $bolsa = new Bolsa;
             $bolsa->pessoa = $request->pessoa;
             $bolsa->desconto = $request->desconto;
             $bolsa->rematricula = $request->rematricula;
             $bolsa->validade = $validade;
-
-            //ativa atutomaticamente os encaminhamentos do caps, saúde e idade maior que 60
+            //ativa automaticamente os encaminhamentos do caps, saúde e idade maior que 60
             if($request->desconto == 7 || $request->desconto == 8 || $request->desconto == 13)
                 $bolsa->status = 'ativa';
             else 
                 $bolsa->status = 'analisando';
-
             $bolsa->save();
-
             foreach($request->matricula as $matricula){
-
                 $bolsa_matricula = new BolsaMatricula();
                 $bolsa_matricula->bolsa = $bolsa->id;
                 $bolsa_matricula->pessoa = $bolsa->pessoa;
                 $bolsa_matricula->matricula = $matricula;
-
                 $obj_matricula = \App\Models\Matricula::find($matricula);
                 $programa_matricula = $obj_matricula ->getPrograma();
                 $bolsa_matricula->programa = $programa_matricula->id;
                 $bolsa_matricula->save();
-
                 if($bolsa->status == 'analisando'){
                     $matricula_obj = \App\Models\Matricula::find($matricula);
                     $matricula_obj->status = 'pendente';
                     $matricula_obj->save();
                 }
             }
-            
         }
-
         $atendimento = AtendimentoController::novoAtendimento('Solicitação de Bolsa',$request->pessoa);
-
         return redirect()->back()->withErrors(['Bolsa registrada com sucesso. Aguarde análise da Comissão de Avaliação']);
 
     }
     public function vericaSeSolicitado($pessoa,$matricula){
-        
         $bmatricula = BolsaMatricula::where('matricula',$matricula)->orderByDesc('id')->first();
         if(isset($bmatricula->id)){
-            $bolsa = Bolsa::find($bmatricula->bolsa);
-            
+            $bolsa = Bolsa::find($bmatricula->bolsa);  
             if(isset($bolsa->id)){
                 if($bolsa->status == 'ativa' || $bolsa->status == 'analisando')
                     return true;
@@ -273,26 +242,17 @@ class BolsaController extends Controller
     public function imprimir($bolsa){
         setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
         date_default_timezone_set('America/Sao_Paulo');
-
         $bolsa = Bolsa::find($bolsa);
-
         if(is_null($bolsa))
             return redirect()->back()->withErrors("Erro ao localizar bolsa");
-
         $pessoa = \App\Models\Pessoa::find($bolsa->pessoa);
-
         $pessoa = PessoaController::formataParaMostrar($pessoa);
         $pessoa->cpf = \App\classes\Strings::mask($pessoa->cpf,'###.###.###-##');
         $pessoa->rg = \App\classes\Strings::mask($pessoa->rg,'##.###.###-##');
-
         $matriculas = \App\Models\BolsaMatricula::where('bolsa',$bolsa->id)->get();
-
         $bolsa->matriculas = $matriculas;
         $bolsa->desconto_str = \App\Models\Desconto::find($bolsa->desconto->id);
         $hoje = strftime('%d de %B de %Y', strtotime($bolsa->created_at));
-
-
-
         return view('bolsas.requerimento',compact('bolsa'))->with('pessoa',$pessoa)->with('hoje',$hoje);
 
     }
@@ -308,31 +268,22 @@ class BolsaController extends Controller
                 $pessoa = $bolsa->getPessoa();
                 $bolsa->nome = $pessoa->nome;
             }
-
         }else 
             $bolsa=null;
-
         return view('bolsas.analisar')->with('bolsa',$bolsa)->with('bolsas',$bolsas);
-        
-
     }
 
 
 
     public function gravarAnalise(Request $r){
-        //dd('teste');
          $this->validate($r,[
             'parecer' => 'required',
         ]);
-
-        //dd(\Session::get('nome_usuario'));
-
 
         $bolsa_array = explode(",", $r->bolsas);
         foreach($bolsa_array as $bolsa_i){
             $bolsa = Bolsa::find($bolsa_i);
             if($bolsa){
-
                 switch($r->parecer){
                     case 'ativa':
                         $bolsa->status = 'ativa';    
@@ -348,7 +299,6 @@ class BolsaController extends Controller
                 $bolsa->obs = $r->obs."\n".date('d/m/Y').' parecer: '.$r->parecer.' por '.\Auth::user()->username;
                 $bolsa->save();
             }
-
         }
         return redirect('/bolsas/liberacao')->withErrors(['Bolsa(s) alteradas com sucesso.']);
     }
@@ -358,35 +308,9 @@ class BolsaController extends Controller
         return view('pessoa.bolsa.upload')->with('bolsa',$bolsa);
     }
 
-
-
-    public function uploadExec(Request $r){
-        $arquivo = $r->file('arquivo');      
-            if (!empty($arquivo)) {
-                $arquivo->move('documentos/bolsas/requerimentos',$r->matricula.'.pdf');
-            }
-            return redirect(asset('secretaria/atender'));
-    } 
-
-
-
     public function uploadParecerForm($bolsa){
         return view('pessoa.bolsa.upload-parecer')->with('bolsa',$bolsa);
     }
-
-
-
-    public function uploadParecerExec(Request $r){
-        $arquivo = $r->file('arquivo');
-            
-                if (!empty($arquivo)) {
-                    $arquivo->move('documentos/bolsas/pareceres',$r->matricula.'.pdf');
-                }
-
-            return redirect(asset('secretaria/atender'));
-    }
-
-   
 
     public function ajusteBolsaSemMatriculaxs(){
         $bolsas = Bolsa::where('matricula',null)->get();
@@ -395,13 +319,10 @@ class BolsaController extends Controller
             if($matricula){
                 $bolsa->matricula = $matricula->id;
                 $bolsa->save();
-            }
-            
-       
+            }   
         }
         return $bolsas;
     }
-
 
 
     public function novaBolsa(){
@@ -414,8 +335,6 @@ class BolsaController extends Controller
             $bolsa->save();
         }
     }
-
-
 
     public function ajusteBolsaSemMatricula(){
         $bolsas = Bolsa::whereIn('status',['ativa','analisando'])->get();
@@ -441,16 +360,14 @@ class BolsaController extends Controller
 
                         }
                     }
-
-                   
-
-                   
                 }
             }
 
         }
         return "Bolsas processadas";
     }
+
+
     public function unLinkMe($matricula,$bolsa){
         $bolsa_matricula = BolsaMatricula::where('matricula',$matricula)->where('bolsa',$bolsa)->first();
         if($bolsa_matricula == null)
@@ -461,13 +378,12 @@ class BolsaController extends Controller
         if(count($bolsa->getMatriculas())==0){
             $bolsa->status = 'expirada';
             $bolsa->obs = $bolsa->obs."\n".date('d/m/Y').' Bolsa expirada por extinção de matrículas';
-
         }
         $bolsa->save();
-
         return true;
 
     }
+
     public function desvincular($matricula,$bolsa){
         if($this->unLinkMe($matricula,$bolsa)){
             return redirect()->back()->withErrors(["Matricula ".$matricula." foi desvinculado com sucesso da bolsa ".$bolsa]);
@@ -475,7 +391,6 @@ class BolsaController extends Controller
         else{
             return redirect()->back()->withErrors(["Erro ao desvincular matrícula."]);
         }
-
     }
 
     /**
@@ -486,96 +401,37 @@ class BolsaController extends Controller
         $matriculas = collect();
         $array_bolsas = Bolsa::where('status','ativa')
                     ->whereIn('desconto',[1,2,6,7,8])
-                    ->leftjoin('bolsa_matriculas', 'bolsas.id', '=', 'bolsa_matriculas.bolsa')
-                    
+                    ->leftjoin('bolsa_matriculas', 'bolsas.id', '=', 'bolsa_matriculas.bolsa')               
                     ->get();
         
         foreach($array_bolsas as $array_bolsa){
             $matricula = Matricula::find($array_bolsa->matricula);
             $matricula->getInscricoes('regular');
             foreach($matricula->inscricoes as $inscricao){
-
-
                 $aulas = $inscricao->turma->getAulas();
                 $aulasexec = $aulas->where('status','executada');
                 $falta=0;
-
-                
-
                 foreach($aulasexec as $aula){
-                    
                     $frequencia = \App\Models\Frequencia::where('aula',$aula->id)->where('aluno',$inscricao->pessoa->id)->first();
                     $data_aula = \Carbon\Carbon::instance($aula->data);
 
-                    /* Código para rastreamento
-                    if($inscricao->id == 23141){
-                        echo 'aula '.$aula->id. 'frequencia: '.$frequencia.'<br>';
-                        
-                            echo $data_aula->diffInDays($inscricao->created_at, false).'<br>';
-                        
-                    }*/
-
-                    
- 
-                    if(isset($frequencia->id) || $data_aula->diffInDays($inscricao->created_at,false)>=0){
+                    if(isset($frequencia->id) || $data_aula->diffInDays($inscricao->created_at,false)>=0)
                         $falta=0;
-                        
-
-                    }
-                        
                     else{
-                        //echo $data_aula;
-                        //echo \App\Models\Frequencia::verificarSeAbonaFalta($inscricao->pessoa->id,$data_aula);
-                        //aqui vamos ver se a data está no atestado
-                        //dd(\App\Models\Frequencia::verificarSeAbonaFalta($inscricao->pessoa->id,$data_aula));
                         if(\App\Models\Frequencia::verificarSeAbonaFalta($inscricao->pessoa->id,$data_aula))
                             $falta=0; 
                         else
-                            $falta++;
-
-                       
+                            $falta++;                       
                         if($falta>=3){
                             $alunos[$inscricao->pessoa->id] = 'turma '.$inscricao->turma->id.' aluno';
                             break;
                         }
 
                     }
-
-                   
-
                 }
-                //if($inscricao->pessoa->id ==19354)
-                //dd($frequencia);
-                //echo $inscricao->id. ' faltas: '.$falta."<br>";
-
-                
-
             }
-            //$matriculas->push($matricula);
         }
-      
-
         return $alunos;
-
-
     }
-
-    /**
-     * Inscrição de aluno em turma mista
-     *
-     * @param integer $pessoa
-     * @param integer $turma
-     * @return void
-     */
-    public static function inscricaoEMG(\App\Models\Inscricao $inscricao){
-        //verifica se há bolsa emg
-        //verifica se tem matricula vinculada a essa bolsa
-
-        
-
-
-    }
-
-
 
 }

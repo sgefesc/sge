@@ -16,7 +16,7 @@
             <div class="card card-primary">
                 <div class="card-header">
                     <div class="header-block">
-                        <p class="title" style="color:white">Escolha um ou vários arquivos.</p>
+                        <p class="title" style="color:white">Escolha um ou vários documento.</p>
                     </div>
                 </div>
                 <div class="card-block">
@@ -29,7 +29,7 @@
                                 Arquivo
                             </label>
                             <div class="col-sm-11">  
-                                <input type="file" required="true" accept=".pdf" name="arquivo" class="form-control boxed"  placeholder="" maxlength="150"> 
+                                <input type="file" required="true" accept=".pdf" name="documento" class="form-control boxed"  placeholder="" maxlength="150"> 
                             </div>
                         </div>
                         {{ csrf_field() }}

@@ -14,8 +14,7 @@
     </div>
 </div>
 @include('inc.errors')
-<form name="item" method="post" enctype="multipart/form-data">
-{{csrf_field()}}
+
     <div class="card card-block">
     	<div class="subtitle-block">
             <h3 class="subtitle"><i class=" fa fa-medkit "></i> Análise de Atestado número {{$atestado->id}}. </h3>
@@ -56,8 +55,8 @@
             <div class="col-sm-6">
             @if($atestado->getViewLink())
                 <embed src="/arquivo/atestado/{{$atestado->id}}#navpanes=0" width="760" height="500" type='application/pdf' >
-            @else
-                <strong>Arquivo não disponível</strong>
+                    @else
+                    <strong>Arquivo não disponível</strong>
             @endif
                 
             </div>

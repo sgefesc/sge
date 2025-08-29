@@ -10,6 +10,34 @@ use Carbon\Carbon;
 
 class AtestadoController extends Controller
 {
+	public function visualizar(int $id){
+		$atestado = Atestado::find($id);
+		
+		if($atestado){
+			$logs = \App\Models\AtestadoLog::where('atestado',$id)->get();
+			//$atestado->validade = \Carbon\Carbon::parse($atestado->validade)->format('d/m/Y');
+			$pessoa=\App\Models\Pessoa::find($atestado->pessoa);
+			$pessoa=PessoaController::formataParaMostrar($pessoa);
+			if(isset($pessoa->telefone))
+				$pessoa->telefone=\App\classes\Strings::formataTelefone($pessoa->telefone);
+			if(isset($pessoa->telefone_alternativo))
+				$pessoa->telefone_alternativo=\App\classes\Strings::formataTelefone($pessoa->telefone_alternativo);
+			if(isset($pessoa->telefone_contato))
+				$pessoa->telefone_contato=\App\classes\Strings::formataTelefone($pessoa->telefone_contato);
+			if(file_exists('documentos/atestados/'.$atestado->id.'.pdf')){
+				$arquivo = file_get_contents('documentos/atestados/'.$atestado->id.'.pdf');
+			}
+			else
+				$arquivo = 'Arquivo não encontrado';
+
+			return view('atestados.visualizar-atestado')->with('atestado',$atestado)
+						->with('pessoa',$pessoa)
+						->with('logs',$logs)
+						->with('arquivo',$arquivo);
+		}else
+		 return redirect()->back()->withErrors(['Atestado não encontrado.']);
+
+	}
 	public function novo($id){
 		$pessoa=\App\Models\Pessoa::find($id);
 		$pessoa=PessoaController::formataParaMostrar($pessoa);
@@ -39,22 +67,27 @@ class AtestadoController extends Controller
 
 		$arquivo = $r->file('arquivo');
 		$atestado = new Atestado;
-				$atestado->pessoa = $r->pessoa;
-				$atestado->tipo = $r->tipo;
-				$atestado->emissao = $r->emissao;
+		$atestado->pessoa = $r->pessoa;
+		$atestado->tipo = $r->tipo;
+		$atestado->emissao = $r->emissao;
 
-				if(isset($r->validade))
-					$atestado->validade = $r->validade;
-				else
-					$atestado->validade = $r->emissao;
+		if(isset($r->validade))
+			$atestado->validade = $r->validade;
+		else
+			$atestado->validade = $r->emissao;
 
 
-				$atestado->atendente = Auth::user()->pessoa;
-				$atestado->status = 'aprovado';
-				$atestado->save();
-        if (!empty($arquivo)) {	
-                $arquivo->move('documentos/atestados/', $atestado->id.'.pdf');
-        }
+		$atestado->atendente = Auth::user()->pessoa;
+		$atestado->status = 'aprovado';
+		$atestado->save();
+		if (!empty($arquivo)) {	
+			try{
+				$arquivo->storeAs('documentos/atestados', preg_replace( '/[^0-9]/is', '', $atestado->id).'.pdf'); 
+			}
+			catch(\Exception $e){
+				return redirect($_SERVER['HTTP_REFERER'])->withErrors(['Erro ao enviar arquivo '.$arquivo->getClientOriginalName().' - '.$e->getMessage()]);
+			}
+		}
 		AtestadoLogController::registrar($atestado->id,'Atestado cadastrado pela secretaria.', Auth::user()->pessoa);
 		if($atestado->tipo == 'vacinacao')					
 			PessoaDadosAdminController::liberarPendencia($atestado->pessoa,'Falta atestado de vacinação aprovado.');
@@ -120,7 +153,13 @@ class AtestadoController extends Controller
 			$atestado->save();
 			$arquivo = $r->file('arquivo');
        		if (!empty($arquivo)) {
-       			$arquivo->move('documentos/atestados/', $atestado->id.'.pdf');
+				try{
+                    $arquivo->storeAs('documentos/atestados', preg_replace( '/[^0-9]/is', '', $atestado->id).'.pdf'); 
+                }
+                catch(\Exception $e){
+                    return redirect($_SERVER['HTTP_REFERER'])->withErrors(['Erro ao enviar arquivo '.$arquivo->getClientOriginalName().' - '.$e->getMessage()]);
+                }
+       			//$arquivo->move('documentos/atestados/', $atestado->id.'.pdf');
        		}
 
 			AtestadoLogController::registrar($atestado->id,'Atestado editado', Auth::user()->pessoa);
@@ -140,25 +179,10 @@ class AtestadoController extends Controller
     //
 	}
 	public function apagarArquivo($id){
-		if(file_exists('documentos/atestados/'.$id.'.pdf'))
-			unlink('documentos/atestados/'.$id.'.pdf');
+		return \App\classes\Arquivo::delete('documentos/atestados/'.$id.'.pdf');
 
 	}
-	public function arquivo($id){
-		if(file_exists('documentos/atestados/'.$id.'.pdf')){
-			header("Content-type:application/pdf");
 
-// It will be called downloaded.pdf
-			//header("Content-Disposition:attachment;filename='downloaded.pdf'");
-
-// The PDF source is in original.pdf
-			readfile('documentos/atestados/'.$id.'.pdf');
-		}
-			
-		else
-			return 'arquivo não encontrado';
-
-	}
 
 	public function Analisar_view(int $id){
 		$atestado = Atestado::find($id);

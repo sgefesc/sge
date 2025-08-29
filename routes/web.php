@@ -52,6 +52,7 @@ use App\Http\Controllers\{
     TagController,
     TransferenciaController,
     TurmaController,
+    UploadController,
     UsoLivreController,
     ValorController,
     WebServicesController,
@@ -158,6 +159,7 @@ Route::prefix('perfil')->group(function(){
             Route::get('/', [PerfilController::class, 'atestadoIndex']);
             Route::get('cadastrar', [PerfilController::class, 'cadastrarAtestadoView']);
             Route::post('cadastrar', [PerfilController::class, 'cadastrarAtestadoexec']);
+            
         });
         
         // Rematrícula
@@ -198,12 +200,12 @@ Route::middleware(['auth','login'])->group(function(){
     Route::get('notificacoes', [NotificacaoController::class, 'index']);
     
     // Downloads e Visualização
-    Route::get('download/{arquivo}', function ($arquivo){
-        return App\classes\Arquivo::download($arquivo);
+    Route::get('download/{tipo}/{arquivo}', function ($tipo, $arquivo){
+        return App\classes\Arquivo::download($tipo, $arquivo);
     });
     
-    Route::get('view-atestado/{id}', function ($arquivo){
-        return App\classes\Arquivo::show('documentos-.-atestados-.-'.$arquivo.'.pdf');
+    Route::get('arquivo/{tipo}/{arquivo}', function ($tipo, $arquivo){
+        return App\classes\Arquivo::show($tipo, $arquivo);
     });
     
     // ========== GESTÃO ACADÊMICA ==========
@@ -330,6 +332,7 @@ Route::middleware(['auth','login'])->group(function(){
         
         // Atestados
         Route::prefix('atestado')->group(function(){
+            Route::get('mostrar/{atestado}', [AtestadoController::class, 'visualizar']);
             Route::get('cadastrar/{pessoa}', [AtestadoController::class, 'novo']);
             Route::post('cadastrar/{pessoa}', [AtestadoController::class, 'create']);
             Route::get('arquivar/{atestado}', [AtestadoController::class, 'apagar']);
@@ -353,9 +356,9 @@ Route::middleware(['auth','login'])->group(function(){
             Route::post('cadastrar/{pessoa}', [BolsaController::class, 'gravar']);
             Route::get('imprimir/{bolsa}', [BolsaController::class, 'imprimir']);
             Route::get('upload/{bolsa}', [BolsaController::class, 'uploadForm']);
-            Route::post('upload/{bolsa}', [BolsaController::class, 'uploadExec']);
+            Route::post('upload/{bolsa}', [UploadController::class, 'uploadBolsaExec']);
             Route::get('parecer/{bolsa}', [BolsaController::class, 'uploadParecerForm']);
-            Route::post('parecer/{bolsa}', [BolsaController::class, 'uploadParecerExec']);
+            Route::post('parecer/{bolsa}', [UploadController::class, 'uploadParecerExec']);
         });
         
         // Dependentes
@@ -483,7 +486,7 @@ Route::middleware(['auth','login'])->group(function(){
             Route::prefix('retorno')->group(function(){
                 Route::get('home', function(){ return view('financeiro.retorno.home'); });
                 Route::get('upload', function(){ return view('financeiro.retorno.upload'); });
-                Route::post('upload', [RetornoController::class, 'upload']);
+                Route::post('upload', [UploadController::class, 'uploadRetornos']);
                 Route::get('arquivos', [RetornoController::class, 'listarRetornos']);
                 Route::get('analisar/{arquivo}', [RetornoController::class, 'analisarArquivo']);
                 Route::get('processar/{arquivo}', [RetornoController::class, 'processarArquivo']);
@@ -631,7 +634,7 @@ Route::middleware(['auth','login'])->group(function(){
         Route::get('turmas-disponiveis/{pessoa}/{turmas}/{busca?}', [TurmaController::class, 'turmasDisponiveis']);
         Route::get('turmas-escolhidas/{turmas}/', [TurmaController::class, 'turmasEscolhidas']);
         Route::get('upload', [SecretariaController::class, 'uploadGlobal_vw']);
-        Route::post('upload', [SecretariaController::class, 'uploadGlobal']);
+        Route::post('upload', [UploadController::class, 'enviarDocumentosSecretaria']);
         Route::get('frequencia/{turma}', [FrequenciaController::class, 'listaChamada']);
         Route::get('alunos', [SecretariaController::class, 'alunos']);
         Route::get('alunos-cancelados', [SecretariaController::class, 'alunosCancelados']);
@@ -642,11 +645,11 @@ Route::middleware(['auth','login'])->group(function(){
             Route::get('/{ids}', [SecretariaController::class, 'viewMatricula']);
             Route::get('/nova/{pessoa}', [InscricaoController::class, 'novaInscricao']);
             Route::get('/upload-termo-lote', function(){ return view('secretaria.matricula.upload-termos-lote'); });
-            Route::post('/upload-termo-lote', [MatriculaController::class, 'uploadTermosLote']);
+            Route::post('/upload-termo-lote', [UploadController::class, 'uploadTermosLote']);
             Route::get('/upload-termo/{matricula}', [MatriculaController::class, 'uploadTermo_vw']);
-            Route::post('/upload-termo/{matricula}', [MatriculaController::class, 'uploadTermo']);
+            Route::post('/upload-termo/{matricula}', [UploadController::class, 'uploadTermo']);
             Route::get('/upload-termo-cancelamento/{matricula}', [MatriculaController::class, 'uploadCancelamentoMatricula_vw']);
-            Route::post('/upload-termo-cancelamento/{matricula}', [MatriculaController::class, 'uploadCancelamentoMatricula']);
+            Route::post('/upload-termo-cancelamento/{matricula}', [UploadController::class, 'uploadCancelamentoMatricula']);
             Route::get('/uploadglobal/{tipo}/{operacao}/{qnde}/{valor}', [MatriculaController::class, 'uploadGlobal_vw']);
             Route::post('/uploadglobal/{tipo}/{operacao}/{qnde}/{valor}', [MatriculaController::class, 'uploadGlobal']);
             Route::get('renovar/{pessoa}', [MatriculaController::class, 'renovar_vw']);
