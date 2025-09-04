@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Boleto;
+use Illuminate\Support\Facades\Storage;
 
 class RemessaController extends Controller
 {
@@ -73,7 +74,8 @@ class RemessaController extends Controller
 		else
 			$page = 1;
 
-		$remessa->save( 'documentos/remessas/'.date('Ymd').'_'.$page.'.rem');
+		$remessa->save( '../storage/app/private/documentos/remessas/'.date('YmdHis').'_'.$page.'.rem');
+
 		$arquivo = date('Ymd').'_'.$page.'.rem';
 
 		return view('financeiro.remessa.gerador-paginado',compact('boletos'))->with('arquivo',$arquivo);
@@ -86,9 +88,10 @@ class RemessaController extends Controller
 
 	}
 	public function listarRemessas(){
-		chdir( 'documentos/remessas/' );
+		/*chdir( 'documentos/remessas/' );
 		$arquivos = glob("{*.rem}", GLOB_BRACE);
-		rsort($arquivos);
+		rsort($arquivos);*/
+		$arquivos = Storage::files('documentos/remessas');
 		//return $arquivos;
 		return view('financeiro.remessa.lista')->with('arquivos',$arquivos);
 	}

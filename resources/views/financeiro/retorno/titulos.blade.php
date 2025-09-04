@@ -7,7 +7,7 @@
             <h3 class="title">Análise do Retorno</h3>
             <p class="title-description">
               Arquivo: 
-              <a href="{{asset('financeiro/boletos/retorno/original')}}/{{substr($arquivo,9)}}" title="Clique para ver os dados originais" target="_blank">
+              <a href="{{asset('financeiro/boletos/retorno/original')}}/{{str_replace('../storage/app/private/documentos/retornos/','',$arquivo)}}" title="Clique para ver os dados originais" target="_blank">
                 {{$arquivo}} 
               </a>
             </p>
@@ -80,10 +80,10 @@
                
                 <div class="card-block">
                     @if($processado == false)
-                    <a class="btn btn-primary" href="#" onclick="processar('{{substr($arquivo,20)}}');">Processar</a>
+                    <a class="btn btn-primary" href="#" onclick="processar('{{str_replace('../storage/app/private/documentos/retornos/','',$arquivo)}}');">Processar</a>
                     @endif
-                    <a class="btn btn-primary" href="#" onclick="reprocessar('{{substr($arquivo,20)}}');">Reprocessar</a>
-                    <a class="btn btn-primary" href="#" onclick="descartar('{{substr($arquivo,20)}}');">Descartar</a>
+                    <a class="btn btn-primary" href="#" onclick="reprocessar('{{str_replace('../storage/app/private/documentos/retornos/','',$arquivo)}}');">Reprocessar</a>
+                    <a class="btn btn-primary" href="#" onclick="descartar('{{str_replace('../storage/app/private/documentos/retornos/','',$arquivo)}}');">Descartar</a>
                     <a class="btn btn-primary" href="{{asset('/financeiro/boletos/retorno/arquivos')}}">Arquivos</a>
 
 
@@ -107,7 +107,6 @@
     }
     function reprocessar(item){
         if(confirm('Tem certeza que quer REPROCESSAR o arquivo? Os títulos pagos não serão processados.')){
-            alert("{{asset('/financeiro/boletos/retorno/reprocessar/')}}/"+item);
             window.location.replace("{{asset('/financeiro/boletos/retorno/reprocessar/')}}/"+item);
 
         }

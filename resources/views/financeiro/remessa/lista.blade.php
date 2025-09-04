@@ -20,11 +20,13 @@
                 </div>
                 <div class="card-block">
                     @foreach($arquivos as $arquivo)
+                    @php $arquivo = str_replace('documentos/remessas/','',$arquivo) @endphp
+                    @php $arquivo = str_replace('documentos/remessas/','',$arquivo) @endphp
     
                     <div>
-                        <a href="{{asset('/financeiro/boletos/remessa/download')}}/{{$arquivo}}" class="btn btn-primary-outline col-xs-12 text-xs-left">
+                        <a href="{{asset('/download/remessa/')}}/{{$arquivo}}" class="btn btn-primary-outline col-xs-12 text-xs-left">
                         <i class=" fa fa-cloud-download "></i>
-                        &nbsp;&nbsp;{{substr($arquivo,6,2)}}/{{substr($arquivo,4,2)}}/{{substr($arquivo,0,4)}} - {{substr($arquivo,8,2)}}:{{substr($arquivo,10,2)}}</a>
+                        &nbsp;&nbsp;{{substr($arquivo,6,2)}}/{{substr($arquivo,4,2)}}/{{substr($arquivo,0,4)}} - {{$arquivo}}</a>
                     </div>
                     @endforeach
                     <!--

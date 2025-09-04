@@ -62,44 +62,8 @@
             </div>
             
         </div>
-        <div class="form-group row"> 
-			<label class="col-sm-2 form-control-label text-xs-right">
-				Parecer
-			</label>
-			<div class="col-sm-3">
-                <div>
-                    <label>
-                        <input class="radio" name="status" type="radio" value="aprovado">
-                        <span class="text-success">Aprovado</span>
-                    </label>
-                    <label>
-                        <input class="radio" name="status" type="radio" value="recusado">
-                        <span class="text-danger">Recusado</span>
-                    </label>
-                    
-                </div>
-               
-			</div>
-        </div>
-        <div class="form-group row"> 
-            <label class="col-sm-2 form-control-label text-xs-right">
-                Observações <br> <small>*Caso recusado</small>
-            </label>
-            <div class="col-sm-6">
-                <textarea rows="3" name="obs" class="form-control"></textarea>
-            </div>
-            
-        </div>
-
-		<div class="form-group row">
-			<label class="col-sm-2 form-control-label text-xs-right"></label>
-			<div class="col-sm-10 col-sm-offset-2"> 
-				<input type="hidden" name="atestado" value="{{$atestado->id}}">
-                <button type="submit" name="btn"  class="btn btn-primary">Salvar</button>
-                <button type="reset" name="btn"  class="btn btn-primary">Restaurar</button>
-                <button type="cancel" name="btn" class="btn btn-primary" onclick="history.back(-2);return false;">Cancelar</button>
-			</div>
-       </div>
+      
+      
 
        <div class="subtitle-block">
         <h3 class="subtitle"><i class=" fa fa-medkit "></i> Histórico atestado número {{$atestado->id}}. </h3>

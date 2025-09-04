@@ -12,10 +12,6 @@ class Bolsa extends Model
     protected $appends=['desconto'];
 
 	public function getDescontoAttribute($value){
-		//return $value;
-		//
-		//
-		//return $value;
 		$valor = \App\Models\Desconto::find($value);
 		
 			return $valor;
@@ -54,11 +50,8 @@ class Bolsa extends Model
 	}
 
 	public function getPrograma(){
-
 		$programa = array();
-		$bolsa_matriculas = $this->getMatriculas();
-
-		
+		$bolsa_matriculas = $this->getMatriculas();		
 		foreach($bolsa_matriculas as $bolsa_matricula){
 			$matricula = Matricula::find($bolsa_matricula->matricula);
 			if(!in_array($matricula->getPrograma()->sigla, $programa))
@@ -66,8 +59,26 @@ class Bolsa extends Model
 
 
 		}
-
-		//dd($programa);
 		return $programa;
+	}
+
+	/**
+	 * Função para obter o link de download ou visualização do arquivo
+	 * $tipo: requerimento ou parecer
+	 * 
+	 */
+	public function getLink(string $tipo) {
+		if($tipo == 'parecer'){
+			$path = 'documentos/bolsas/pareceres/'.$this->id.'.pdf';
+		}
+		else{
+			$path = 'documentos/bolsas/requerimentos/'.$this->id.'.pdf';
+		}
+
+		if(\Illuminate\Support\Facades\Storage::exists($path)){
+			return $path;
+		}
+		else
+			return null;
 	}
 }

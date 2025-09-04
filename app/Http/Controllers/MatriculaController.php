@@ -8,6 +8,7 @@ use App\Models\Desconto;
 use App\Models\Pessoa;
 use Illuminate\Http\Request;
 use App\Models\Inscricao;
+
 use Session;
 use Auth;
 
@@ -114,12 +115,11 @@ class MatriculaController extends Controller
         $turmas=TurmaController::csvTurmas($r->turmas); 
         foreach($turmas as $turma){
             $insc=InscricaoController::inscreverAluno($r->pessoa,$turma->id);
-            BolsaController::inscricaoEMG($insc);
         }
         
         $CC = new CarneController;
         $CC->gerarCarneIndividual($r->pessoa);
-        //$boletos = \App\Models\Boleto::where('pessoa',$r->pessoa)->where('status','gravado')->get();
+       
         
         
         

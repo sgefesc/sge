@@ -142,9 +142,17 @@ class Matricula extends Model
 		//transforma data de inicio da turma e matrícula em objeto de data 
 		$primeira_parcela = $turma->getDataPrimeiraParcela();
 		$data_matricula = \DateTime::createFromFormat('Y-m-d',$this->data);
-		//$data_matricula = \DateTime::createFromFormat('Y-m-d', '2025-07-22'); // testador de datas
+		$data_matricula = \DateTime::createFromFormat('Y-m-d', '2025-07-22'); // testador de datas
 		$data_limite_semestral = \DateTime::createFromFormat('Y-m-d', '2025-06-20');//depois dessa data não conta mais o mês de julho
 		$interval = $primeira_parcela->diff($data_matricula);
+	
+
+		/*dd([
+			'data_matricula'=>$data_matricula,
+			'primeira_parcela'=>$primeira_parcela,
+			'interval'=>$interval->m+($interval->d/30),
+			'parcelas_turma'=>$parcelas_turma
+		])*/;
 		}catch(\Exception $e){
 			throw new \Exception("Erro definir as datas na getParcelas da Matrícula: ".$e->getMessage());
 		}
@@ -162,7 +170,7 @@ class Matricula extends Model
 				$parcelas--;
 			}
 			
-			if($data_matricula->format('d') > self::CORTE)
+			if($data_matricula->format('d') > self::CORTE )
 				$parcelas = $parcelas--;
 			//se for de janeiro a junho, subtrai o número de meses entre a matrícula e o início do curso
 

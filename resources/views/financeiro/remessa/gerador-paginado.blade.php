@@ -53,9 +53,9 @@
 <div id="progressbar"></div>
 <br>
 @for($i=1;$i<=$boletos->lastPage();$i++)
-<a href="{{asset('/financeiro/boletos/remessa/download')}}/{{date('Ymd').'_'.$i.'.rem'}}" target="_blank" class="btn btn-warning" style="display:none;">Baixar arquivo {{$i}}</a><br>
+<a href="{{asset('/download/remessa/')}}/{{date('YmdHis').'_'.$i.'.rem'}}" target="_blank" class="btn btn-warning" style="display:none;">Baixar arquivo {{$i}}</a><br>
 @endfor
-<a  href="/financeiro/boletos/home" class="btn btn-primary" style="display:none;">Menu Boletos</a>
+<a  href="/financeiro/" class="btn btn-primary" style="display:none;">Menu Financeiro</a>
 
 
 

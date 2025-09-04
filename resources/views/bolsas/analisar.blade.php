@@ -36,6 +36,7 @@
                                         <small> <strong>Solicitado em: </strong>{{$bolsa->created_at->format('d/m/Y')}} <strong>Alterada em: </strong>{{$bolsa->updated_at->format('d/m/Y')}}
                                             <strong>Validade: </strong>{{$bolsa->validade}} 
                                             <br>
+                                            
                                             @foreach($bolsa->getMatriculas() as $matricula)
                                             <strong>Matrícula: </strong> {{$matricula->matricula}} 
                                             <strong>Curso: </strong>{{$matricula->getNomeCurso()}} &nbsp;&nbsp;
@@ -43,23 +44,24 @@
                                                 <i class=" fa fa-unlink " style="color:red;"></i>
                                             </a>
                                             <br>
+                                            
                                             @endforeach
                                             </small>
                                         </p> <small>
-                                            @if(file_exists('documentos/bolsas/requerimentos/'.$bolsa->id.'.pdf'))
-                                                <a href="/download/{{str_replace('/','-.-', "/documentos/bolsas/requerimentos/".$bolsa->id.".pdf")}}" title="Visualizar documentos;">
-                                                    <i class=" fa fa-file-text "></i> Visualizar documentos do requerimento</a><br>
+                                            @if($bolsa->getLink('requerimento'))
+                                                        <embed src="/arquivo/bolsa/{{$bolsa->id}}" width="760" height="500" type='application/pdf' >
                                             @else
                                                 <a href="/pessoa/bolsa/upload/{{$bolsa->id}}" title="Enviar requerimento">
                                                     <i class=" fa fa-cloud-upload "></i> Enviar requerimento digitalizado.</a><br>
 
                                             @endif
-                                             @if(file_exists('documentos/bolsas/pareceres/'.$bolsa->id.'.pdf'))
-                                                <a href="/download/{{str_replace('/','-.-', "/documentos/bolsas/pareceres/".$bolsa->id.".pdf")}}" title="Visualizar documentos;">
-                                                    <i class=" fa fa-file-text "></i> Visualizar documentos do parecer.</a><br>
+                                             @if($bolsa->getLink('parecer'))
+                                                <a href="/download/parecer/{{$bolsa->id}}" title="Clique para baixar">
+                                                <i class=" fa fa-file "></i> Baixar parecer assinado.</a><br>
+                                                    
                                              @else
                                                 <a href="/pessoa/bolsa/parecer/{{$bolsa->id}}" style="color:orange;" title="Enviar parecer">
-                                                    <i class=" fa fa-cloud-upload"></i> Enviar parecer digitalizado.</a><br>
+                                                    <i class=" fa fa-cloud-upload"></i> Enviar parecer assinado.</a><br>
                                             @endif
                                             <i class=" fa fa-trash-o " style="color:red;"></i> <a href="#" onclick="alterarStatusIndividual('apagar',{{$bolsa->id}})" style="color:red">Excluir esta solicitação. </a><br><br>
                                         </small>
@@ -75,22 +77,7 @@
                                
                                 <form name="item" method="post" enctype="multipart/form-data">
                                 {{csrf_field()}}
-                                <!--
-                                <div class="form-group row"> 
-                                    <label class="col-sm-1 form-control-label text-xs-right">
-                                        <small><strong>Estado</strong></small>
-                                    </label>
-                                    <div class="col-sm-6"> <small>
-                                        <select name="desconto" class="c-select form-control-sm boxed" ">
-                                            <option value="1">Aprovada</option>
-                                            <option value="2">Negada</option>
-                                            <option value="3">Bolsa para Funcionários Públicos (20%)</option>
-                                            <option value="4">Bolsa Alunos de Parcerias</option>
-                                            <option value="5">Bolsa Servidores Fesc</option>
-                                        </select></small>
-                                    </div>
-                                </div>
-                            -->
+                               
                                 <div class="form-group row"> 
                                     <label class="col-sm-1 form-control-label text-xs-right">
                                         <small><strong>Análise:</strong></small></strong>

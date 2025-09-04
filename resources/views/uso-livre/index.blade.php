@@ -131,9 +131,9 @@
                                   @foreach($locais as $local)
                                   @if(session('local') && session('local')==$local->id_local)
                         
-                                  <option value="{{$local->id_local}}" selected="selected">{{$local->local}}</option>
+                                  <option value="{{$local->id_local}}" selected="selected">{{$local->local}} ({{$local->sala}})</option>
                                   @else
-                                  <option value="{{$local->id_local}}">{{$local->local}}</option>
+                                  <option value="{{$local->id_local}}">{{$local->local}} ({{$local->sala}})</option>
                                   @endif
                                   @endforeach
                   

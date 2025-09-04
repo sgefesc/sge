@@ -10,6 +10,7 @@
         </div>
     </div>
 </div>
+@include('inc.errors')
 <section class="section">
     <div class="row">
         <div class="col-md-10 center-block">
@@ -21,7 +22,7 @@
                 </div>
                 <div class="card-block">
                     <form action="" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="matricula" value="{{$bolsa}}"/>
+                        <input type="hidden" name="bolsa" value="{{$bolsa}}"/>
 
                         
                         <div class="form-group row"> 

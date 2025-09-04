@@ -130,7 +130,7 @@ class UploadController extends Controller
         $arquivo = $r->file('arquivo');                  
             if (!empty($arquivo)) 
                 try{
-                    $path = $r->file('arquivos')->storeAs('documentos/matriculas/termos', preg_replace( '/[^0-9]/is', '', $r->matricula).'.pdf'); 
+                    $path = $r->file('arquivo')->storeAs('documentos/matriculas/termos', preg_replace( '/[^0-9]/is', '', $r->matricula).'.pdf'); 
                 }
                 catch(\Exception $e){
                     return redirect($_SERVER['HTTP_REFERER'])->withErrors(['Erro ao enviar arquivo '.$arquivo->getClientOriginalName().' - '.$e->getMessage()]);
@@ -173,7 +173,7 @@ class UploadController extends Controller
     public function uploadParecerExec(Request $r){
     $r->validate([
         'arquivo' => 'required|file|mimes:pdf|max:2048', // Validação para arquivos PDF com tamanho máximo de 2MB
-        'matricula' => 'required|integer'
+        'bolsa' => 'required|integer'
     ],
     [
         'arquivo.required' => 'Selecione um arquivo para envio.',
@@ -184,17 +184,23 @@ class UploadController extends Controller
         
             if (!empty($arquivo)) {
 
-                $arquivo->move('documentos/bolsas/pareceres',$r->matricula.'.pdf');
+                try{
+                    $path = $arquivo->storeAs('documentos/bolsas/pareceres', preg_replace( '/[^0-9]/is', '', $r->bolsa).'.pdf'); 
+                }
+                catch(\Exception $e){
+                    return redirect('/bolsas/analisar'.'/'.$r->bolsa)->withErrors(['Erro ao enviar arquivo '.$arquivo->getClientOriginalName().' - '.$e->getMessage()]);
+                }
+                
             }
 
-        return redirect(asset('secretaria/atender'));
+        return redirect('/bolsas/analisar'.'/'.$r->bolsa)->with('success','Arquivo enviado com sucesso.');
     }
 
 
 
     public function uploadBolsaExec(Request $r){
         $r->validate([
-            'arquivo' => 'required|file|mimes:pdf|max:2048', // Validação para arquivos PDF com tamanho máximo de 2MB
+            'arquivo' => 'required|file|mimes:pdf|max:4096', // Validação para arquivos PDF com tamanho máximo de 2MB
             'matricula' => 'required|integer'
         ],
         [
@@ -205,7 +211,7 @@ class UploadController extends Controller
         $arquivo = $r->file('arquivo');      
             if (!empty($arquivo)) {
                 try{
-                    $path = $r->file('arquivos')->storeAs('documentos/bolsas/requerimentos', preg_replace( '/[^0-9]/is', '', $r->matricula).'.pdf'); 
+                    $path = $arquivo->storeAs('documentos/bolsas/requerimentos', preg_replace( '/[^0-9]/is', '', $r->matricula).'.pdf'); 
                 }
                 catch(\Exception $e){
                     return redirect($_SERVER['HTTP_REFERER'])->withErrors(['Erro ao enviar arquivo '.$arquivo->getClientOriginalName().' - '.$e->getMessage()]);
@@ -219,28 +225,28 @@ class UploadController extends Controller
      */
     public function uploadRetornos(Request $r){
         $r->validate([
-            'arquivo' => 'required|file|mimes:pdf|max:4096', // Validação para arquivos PDF com tamanho máximo de 4MB
+            'arquivos' => 'required|max:4096', // Validação para arquivos PDF com tamanho máximo de 4MB
         ],
         [
-            'arquivo.required' => 'Selecione um arquivo para envio.',
-            'arquivo.mimes' => 'Apenas arquivos em PDF são permitidos.',
-            'arquivo.max' => 'Tamanho máximo permitido para envio é 4MB.'
+            'arquivos.required' => 'Selecione um arquivo para envio.',
+            'arquivos.max' => 'Tamanho máximo permitido para envio é 4MB.'
         ]);
-		$arquivos = $r->file('arquivos');
+		$arquivos = $r->arquivos;
 		foreach($arquivos as $arquivo){
-			//dd($arquivo);
 			if (!empty($arquivo)) {
                 try{
-                    $path = $r->file('arquivos')->storeAs('documentos/retornos', preg_replace( '/[^0-9]/is', '', $r->matricula).'.pdf'); 
+                    $path = $arquivo->storeAs('documentos/retornos', $arquivo->getClientOriginalName());
+                    $msg['success'] = 'Arquivo '.$arquivo->getClientOriginalName().' enviado com sucesso.'; 
                 }
                 catch(\Exception $e){
+                    $msg = array();
                     return redirect($_SERVER['HTTP_REFERER'])->withErrors(['Erro ao enviar arquivo '.$arquivo->getClientOriginalName().' - '.$e->getMessage()]);
                 }
 				//$arquivo->move('documentos/retornos',$arquivo->getClientOriginalName());
 			}
 
 		}
-		return redirect(asset('financeiro/boletos/retorno/arquivos'));
+		return redirect(asset('financeiro/boletos/retorno/arquivos'))->with('success',$msg['success']);
 
 	}
 }

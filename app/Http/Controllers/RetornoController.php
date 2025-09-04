@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Retorno;
 use App\Models\Boleto;
+use Illuminate\Support\Facades\Storage;
 ini_set('max_execution_time', 180);
 class RetornoController extends Controller
 {
@@ -12,9 +13,13 @@ class RetornoController extends Controller
 
 		public function listarRetornos(){
 
-			chdir( 'documentos/retornos/' );
+			chdir( '../storage/app/private/documentos/retornos/' );
 			$files = glob("{*.ret}", GLOB_BRACE);
 			rsort($files);
+
+			//$files = Storage::files('documentos/retornos');
+
+
 
 			$arquivos = collect();
 
@@ -44,43 +49,10 @@ class RetornoController extends Controller
 		
 		public function listarRetornosProcessados(){
 			$retornos = Retorno::orderByDesc('id')->paginate(50);
-
-			//return $retornos;
-			/*
-			chdir( 'retornos/' );
-			$files = glob("{*.ret_PROC}", GLOB_BRACE);
-			//$files = rsort($files);
-
-			$files=array_slice($files, 0, -30);
-
-
-			$arquivos = collect();
-
-			foreach($files as $file){
-				$arquivo = new \stdClass();
-				$arquivo->nome = $file;
-				try{
-					$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($file);
-					$retorno->processar();
-					$header = $retorno->getHeader();
-					$arquivo->id = $header->numeroSequencialArquivo;
-					$arquivo->data = $header->data;
-				}
-				catch(\Exception $e){
-				   		//rename($file, $file.'_ERRO');
-				   		$arquivo->status = 'Erro ao ler arquivo';
-				}
-
-				$arquivos->push($arquivo);
-
-			}
-			$arquivos = $arquivos->sortByDesc('id');
-			//return $arquivos;
-			*/
 			return view('financeiro.retorno.lista', compact('retornos'))->with('processado',true);
 		}
 		public function listarRetornosComErro(){
-			chdir( 'documentos/retornos/' );
+			chdir( '../storage/app/private/documentos/retornos/' );
 			$files = glob("{*.ret_ERRO}", GLOB_BRACE);
 			rsort($files);
 
@@ -138,15 +110,15 @@ class RetornoController extends Controller
 			return redirect(asset('/financeiro/boletos/retorno/processados'));
 		}
 
-		public function retorno($arquivo){
-			$arquivo='documentos/retornos/'.$arquivo;
+		public function retornarOriginal($arquivo){
+			$arquivo='../storage/app/private/documentos/retornos/'.$arquivo;
 			$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
 			$retorno->processar();
 			dd($retorno);
 
 		}
 		public function analisarArquivo($arquivo){
-			$arquivo='documentos/retornos/'.$arquivo;
+			$arquivo='../storage/app/private/documentos/retornos/'.$arquivo;
 			if(!file_exists($arquivo))
 				return "Arquivo ".$arquivo." não encontrado.";
 			
@@ -178,12 +150,6 @@ class RetornoController extends Controller
 			$liquidado=0;
 
 			foreach($detalhes as $linha){
-				//dd($linha);
-				/*
-				if($linha->ocorrencia == '02')
-					return "Registrado Boleto ".$linha->nossoNumero;*/
-
-				
 				
 				 // se o começo é o da carteira de boletos
 				
@@ -212,10 +178,10 @@ class RetornoController extends Controller
 
 		}
 		public function processarArquivo($arquivo){
-			$arquivo='documentos/retornos/'.$arquivo;
+			$arquivo='../storage/app/private/documentos/retornos/'.$arquivo;
 			$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
 			$retorno->processar();
-			//dd($retorno);
+
 			$header = $retorno->getHeader();
 			$retorno_id = $header->numeroSequencialArquivo;
 			$retorno_data = $header->data;
@@ -228,10 +194,8 @@ class RetornoController extends Controller
 			$retorno_bd->data_ocorrencia = \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $data, 'Europe/London');
 			$retorno_bd->save();
 
-			//return $retorno_bd;
-
 			foreach($detalhes as $linha){
-				//dd($linha);
+				
 				$boleto= Boleto::find(str_replace('2838669','',$linha->nossoNumero)*1);//procura o boleto no banco
 				if(!is_null($boleto)){
 
@@ -273,26 +237,22 @@ class RetornoController extends Controller
 								$boleto->status = 'cancelado';
 								$boleto->save();
 							}
-
+							LogController::alteracaoBoleto($boleto->id,'Boleto Rejeitado: '.$linha->ocorrenciaDescricao);					
 							
-							
-							LogController::alteracaoBoleto($boleto->id,'Boleto Rejeitado: '.$linha->ocorrenciaDescricao);
-							
-							
-						break;
-						
-					}
-					//LogController::alteracaoBoleto($boleto->id,'Boleto processado pelo arquivo de retorno: '.$retorno_id.': '.$linha->ocorrenciaDescricao.' '.$linha->error);
+						break;						
+					}				
 				}		
 			}
 			rename($arquivo, $arquivo.'_PROC');
 			return redirect(asset('financeiro/boletos/retorno/analisar'.'/'.substr($arquivo,20).'_PROC'))->withErrors([$arquivo.' foi processado com sucesso']);
 		}
+
+
 		public function reProcessarArquivo($arquivo){
-			$arquivo='documentos/retornos/'.$arquivo;
+			$arquivo='../storage/app/private/documentos/retornos/'.$arquivo;
 			$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
 			$retorno->processar();
-			//dd($retorno);
+			
 			$header = $retorno->getHeader();
 			$retorno_id = $header->numeroSequencialArquivo;
 			$retorno_data = $header->data;
@@ -306,14 +266,12 @@ class RetornoController extends Controller
 				$retorno_bd->nome_arquivo = $arquivo;
 				$retorno_bd->data_ocorrencia = \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $data, 'Europe/London');;
 				$retorno_bd->save();
-			}
-			//return $retorno_existe;
+			}	
 
 			foreach($detalhes as $linha){
 				//dd($linha);
 				$boleto= Boleto::find(str_replace('2838669','',$linha->nossoNumero)*1);//procura o boleto no banco
 				if(!is_null($boleto)){
-
 					switch($linha->ocorrenciaTipo){
 						case 1: //Liquidação
 							if($boleto->status == 'cancelar')
@@ -326,14 +284,14 @@ class RetornoController extends Controller
 							$boleto->retorno = $retorno_id;
 							$boleto->save();
 							LogController::alteracaoBoleto($boleto->id,'Pagamento confirmado');
-						break;
+							break;
 						case 3: //Entrada confirmada
 							if($boleto->status == 'gravado' || $boleto->status == 'impresso' || $boleto->status == 'pelosite' ){
 								$boleto->status = 'emitido';
 								$boleto->save();
 								LogController::alteracaoBoleto($boleto->id,'Registro confirmado');
 							}
-						break;
+							break;
 						case 2://baixa
 							if($boleto->status == 'cancelar'){
 								$boleto->status = 'cancelado';
@@ -351,14 +309,9 @@ class RetornoController extends Controller
 							if($boleto->status == 'cancelar'){
 								$boleto->status = 'cancelado';
 								$boleto->save();
-							}
-							
+							}							
 							LogController::alteracaoBoleto($boleto->id,'ERRO: '.$linha->ocorrenciaDescricao);
-							
-						
-							
-						break;
-						//9 -  entrada rejeitada
+							break;						
 					}
 					LogController::alteracaoBoleto($boleto->id,'Boleto processado pelo arquivo de retorno: '.$retorno_id.': '.$linha->ocorrenciaDescricao.' '.$linha->error);
 				}		
@@ -372,12 +325,14 @@ class RetornoController extends Controller
 		}
 		
 		public function marcarErro($arquivo){
-			$arquivo='documentos/retornos/'.$arquivo;
+			$arquivo='../storage/app/private/documentos/retornos/'.$arquivo;
+			$arquivo = Storage::get($arquivo);
+
 			rename($arquivo, $arquivo.'_ERRO');
 			return redirect($_SERVER['HTTP_REFERER'])->withErrors([$arquivo.' foi descartado pois apresentou erro ao ser analisado. Faça um novo upload ou gere outro arquivo de retorno no BB e tente novamente.']);
 		}
 		public function marcarProcessado($arquivo){
-			$arquivo='documentos/retornos/'.$arquivo;
+			$arquivo='../storage/app/private/documentos/retornos/'.$arquivo;
 			rename($arquivo, $arquivo.'_PROC');
 			return redirect(asset('financeiro/boletos/retorno/arquivos'))->withErrors([$arquivo.' foi marcado como processado.']);
 		}

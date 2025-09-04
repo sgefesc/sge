@@ -495,6 +495,7 @@ Route::middleware(['auth','login'])->group(function(){
                 Route::get('marcar-erro/{arquivo}', [RetornoController::class, 'marcarErro']);
                 Route::get('com-erro', [RetornoController::class, 'listarRetornosComErro']);
                 Route::get('processados', [RetornoController::class, 'listarRetornosProcessados']);
+                Route::get('original/{arquivo}', [RetornoController::class, 'retornarOriginal']);
             });
         });
         
