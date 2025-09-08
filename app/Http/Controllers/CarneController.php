@@ -14,6 +14,197 @@ class CarneController extends Controller
 	private const data_corte = 20;
 	private const dias_adicionais = 5;
 
+	/**
+	 * Fase 1 - Geração de lançamentos de todas as matriculas.
+	 * @return [view]
+	 */
+	public function carneFase1(){
+		$pessoas = array();
+		$matriculas = \App\Matricula::whereIn('status',['ativa','pendente','espera'])->where('data','>','2022-11-01')->paginate(50);
+		//$matriculas = \App\Matricula::where('status','ativa')->where('obs','like','%IP%')->paginate(50);
+		//dd($matriculas);
+		foreach($matriculas as $matricula){
+			if(!in_array($matricula->pessoa,$pessoas))
+				array_push($pessoas,$matricula->pessoa);
+				
+
+		}
+		foreach($pessoas as $pessoa){
+			$boletos = $this->gerarCarneIndividual($pessoa);
+		}
+				
+		return view('financeiro.carne.fase1')->with('matriculas',$matriculas);
+
+	}
+
+	/**
+	 * Gerar PDF's
+	 */
+	public function carneFase4(){
+		$pessoas = Boleto::whereIn('status',['gravado','emitido','impresso'])->where('vencimento','>=',date('Y-m-d'))->groupBy('pessoa')->paginate(20);
+		//dd($pessoas);
+		foreach($pessoas as $pessoa){
+			$html = new \Adautopro\LaravelBoleto\Boleto\Render\Pdf();
+			$boletos = Boleto::where('pessoa',$pessoa->pessoa)->whereIn('status',['gravado','emitido','impresso'])->where('vencimento','>=',date('Y-m-d'))->orderBy('pessoa')->orderBy('vencimento')->get();	
+			foreach($boletos as $boleto){
+
+				try{
+					$boleto_completo = BoletoController::gerarBoleto($boleto);
+					$html->addBoleto($boleto_completo);
+				}
+				catch(\Exception $e){
+					NotificacaoController::notificarErro($boleto->pessoa,'Erro ao gerar Boleto');
+					continue;
+				}
+			}
+			$html->gerarCarne($dest = $html::OUTPUT_SAVE, $save_path = '../storage/app/private/documentos/carnes/'.date('Y-m-d_').$pessoa->pessoa.'.pdf');
+
+			//$html->gerarCarne($dest = $html::OUTPUT_SAVE, $save_path = 'documentos/carnes/'.date('Y-m-d_').$pessoa.'.pdf');
+		}
+
+		if(!isset($_GET['page']))
+			$_GET['page']=1;
+
+		//!!!!!!!  IMPORTANTE o método gerarCarne da classe Pdf é uma implementação prória!!!!
+		return view('financeiro.carne.fase4')->with('boletos',$pessoas);
+
+
+	}
+
+	/**
+	 * [Fase 5 - Muda Status dos boletos para IMPRESSO]
+	 * @return [type] [description]
+	 */
+	public function carneFase5(){
+	
+		$boletos =Boleto::where('status','gravado')->where('vencimento','>=',date('Y-m-d'))->paginate(500);
+		foreach($boletos as $boleto){
+			$boleto->status = 'impresso';
+			$boleto->save();
+		}
+
+		return view('financeiro.carne.fase5')->with('boletos',$boletos);
+
+	}
+
+	/**
+	 * [Fase 6 - Gerar arquivos de remessas]
+	 * @return [type] [description]
+	 */
+	public function carneFase6(){
+
+			$beneficiario = new \Adautopro\LaravelBoleto\Pessoa([
+		    'documento' => '45.361.904/0001-80',
+		    'nome'      => 'Fundação Educacional São Carlos',
+		    'cep'       => '13560-230',
+		    'endereco'  => 'Rua São Sebastiao, 2828, ',
+		    'bairro' => ' Vila Nery',
+		    'uf'        => 'SP',
+		    'cidade'    => 'São Carlos',
+		]);
+		$remessa = new \Adautopro\LaravelBoleto\Cnab\Remessa\Cnab240\Banco\Bb(
+		    [
+		        'agencia'      => '0295',
+		        'carteira'     => 17,
+		        'conta'        => 52822,
+		        'convenio'     => 2838669,
+		        'variacaoCarteira' => '019',
+		        'beneficiario' => $beneficiario,
+		    ]
+		);
+			//$boletos =Boleto::where('status','impresso')->orWhere('status','cancelar')->where('pessoa', '22610')->paginate(500);
+		
+			$boletos =Boleto::whereIn('status',['impresso','cancelar'])->where('vencimento','>=',date('Y-m-d'))->paginate(500);
+
+		if(count($boletos) == 0)
+			return redirect()->back()->withErrors(['Nenhum boleto encontrado']);
+
+
+		foreach($boletos as $boleto){
+            try{ //tentar gerar boleto completo
+                
+				$boleto_completo = BoletoController::gerarBoleto($boleto);
+			}
+			catch(\Exception $e){
+				NotificacaoController::notificarErro($boleto->pessoa,'Erro na geração do boleto no processo de geração da remessa do carne');
+				continue;
+			}
+			
+			
+			try{//tentar gerar remessa desse boleto
+				$remessa->addBoleto($boleto_completo);
+			}
+			catch(\Exception $e){
+				NotificacaoController::notificarErro($boleto->pessoa,'Erro na geração da remessa do carne');
+				continue;
+			}
+			if($boleto->status == 'cancelar'){
+				$boleto_completo->baixarBoleto();
+			}		
+			
+		}
+		
+		//dd($remessa);
+		$remessa->save( '../storage/app/private/documentos/remessas/'.date('YmdHis').'.rem');
+		$arquivo = date('YmdHis').'.rem';
+		return view('financeiro.carne.fase6',compact('boletos'))->with('arquivo',$arquivo);
+	}
+
+	/**
+	 * Fase 7 - Compactar todos arquivos gerados e retornar ela com os arquivos.
+	 * @return [type] [description]
+	 */
+	public function carneFase7(){
+		//gerar zip
+		
+		//dd(getcwd());
+		$zip = new ZipArchive();
+		$filename = '../storage/app/private/documentos/carnes/carnes_'.date('Ymd').'.zip';
+		if($zip->open( $filename , ZipArchive::CREATE ) === FALSE){
+			dd("Erro ao criar arquivo Zip.");
+		}
+		chdir( '../storage/app/private/documentos/remessas/' );
+		//$files = glob("{*.rem}", GLOB_BRACE);
+		$remessas= glob(date('Ymd')."*rem", GLOB_BRACE);
+		
+
+		//dd($files);
+		foreach($remessas as $remessa){
+			if(file_exists($remessa)){
+				$zip->addFile($remessa, $remessa);
+			}else
+				dd('Arquivo não encontrado: '.$file);
+			
+		}
+
+		chdir( '../carnes' );
+		//$files = glob("{*.rem}", GLOB_BRACE);
+		$carnes= glob(date('Y-m-d')."*.pdf", GLOB_BRACE);
+
+		foreach($carnes as $carne){
+			if(file_exists($carne)){
+				$zip->addFile($carne, $carne);
+			}else
+				dd('Arquivo não encontrado: '.$file);
+			
+		}
+
+
+		$zip->close();
+
+		
+		//entrar na pasta pdf
+		//pegar todos arquivos , verificar quais começam com a data de hoje
+
+		//enrtrar na pasta remessas e fazer a mesma coisa
+
+		//retornar arquivo zip.
+
+
+		return view('financeiro.carne.fase7')->with('remessas',$remessas)->with('carnes',$carnes);
+
+    }
+
 
 	public function gerarCarneIndividual(int $pessoa){
 		
@@ -44,11 +235,6 @@ class CarneController extends Controller
 			}
 			else
 				continue;
-
-			
-
-
-
 			// limpa todos lançamentos da matrícula sem boletos e de status nulo
 			$boletos_lancados = \App\Models\Lancamento::leftjoin('boletos','lancamentos.boleto','=','boletos.id')
 													->where('lancamentos.matricula',$matricula->id)
@@ -56,10 +242,7 @@ class CarneController extends Controller
 													->where('lancamentos.status', null)
 													->where('boletos.id','=', null)
 													->delete();
-			
-			
-			
-
+		
 			//gerar todas parcelas da matricula
 			$LC = new LancamentoController;
 			$LC->gerarTodosLancamentos($matricula);	
