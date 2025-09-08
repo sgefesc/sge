@@ -1,0 +1,23 @@
+name: "Deploy para Host"
+on:
+    push:
+        branches:
+            - master
+jobs:
+    build_deply:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: appleboy/ssh-action@v1.2.1
+              with:
+                host: ${{ secrets.HOST }}
+                username: wwfesc
+                key: ${{ secrets.KEY }}
+                port: ${{ secrets.HOST_PORT }}
+                script:  |
+                        cd sge
+                        git pull origin master 
+                        php artisan config:clear
+                        php artisan route:clear
+                        php artisan view:clear
+                        php artisan cache:clear
