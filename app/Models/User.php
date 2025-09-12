@@ -20,6 +20,10 @@ class User extends Authenticatable
     public function getRecursosAttribute(){
         return ControleAcessoRecurso::where('pessoa', $this->pessoa)->pluck('recurso')->toArray();
     }
+
+    public function getPessoa(){
+        return Pessoa::find($this->pessoa);
+    }
  
 
     /**

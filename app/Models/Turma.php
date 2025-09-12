@@ -320,6 +320,7 @@ class Turma extends Model
 
 	public function verificaRequisitos($aluno, $relatorio = false){
 	
+		
 		$aluno = Pessoa::find($aluno);
 		if($aluno == null){
 			if($relatorio){
@@ -363,7 +364,8 @@ class Turma extends Model
 					$idade_minima = 10;
 					$idade_maxima = 14;
 					break;
-				case 18:
+				case 27:// piscina
+				case 18:// atividade física	
 					$atestado = 1;
 					break;
 				case 1:
@@ -397,20 +399,33 @@ class Turma extends Model
 			else
 				return false;
 		}
+
 		if($atestado ==1){
 			$atestado_m = Atestado::where('pessoa',$aluno->id)->where('tipo','saude')->where('status','aprovado')->first();
 			if($atestado_m == null){
-
 				if($relatorio){
 					$retorno = new \stdClass;
 					$retorno->status = false;
 					$retorno->msg = "Aluno não possui atestado de saúde aprovado.";
 					return $retorno;
+				}
+				else
+					return false;
+			}
+			
+			if($atestado_m->verificaPorTurma($this->id))
+				return true;
+			else{
+				if($relatorio){
+					$retorno = new \stdClass;
+					$retorno->status = false;
+					$retorno->msg = "Atestado de saúde está vencido para esta atividade.";
+					return $retorno;
 	
 				}
 				else
 					return false;
-			}	
+			}
 		}
 		return true;		
 	}

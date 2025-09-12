@@ -39,7 +39,7 @@ class TurmaController extends Controller
             ->with('programas',$programas)
             ->with('professores', $professores)
             ->with('locais',$locais)
-            ->with('filtros',$_SESSION['filtro_turmas'])
+            ->with('filtros',session()->get('filtro_turmas'))
             ->with('periodos',$periodos);
     }
 
@@ -917,8 +917,8 @@ class TurmaController extends Controller
     {
         
         $turmas_af=collect();
-        $lista=array();
-        $lst=array();
+        $turmas_conflitantes=array();
+        $dias = array();
 
         //transforma a string de turmas atuais em collection de turmas
         $turmas_atuais=explode(',',$turmas_atuais);
@@ -969,22 +969,31 @@ class TurmaController extends Controller
                     $hora_fim=date("H:i",strtotime($turma->hora_termino." - 1 minutes"));
                     foreach($turma->dias_semana as $turm){
                         $data = \Carbon\Carbon::createFromFormat('d/m/Y', $turma->data_termino)->format('Y-m-d');
-                        $lista[]=Turma::where('dias_semana', 'like', '%'.$turm.'%')->whereBetween('hora_inicio', [$turma->hora_inicio,$hora_fim])->where('data_inicio','<=',$data)->get(['id']);
+                        //listar turmas que tenham conflito de horário
+
+                        $turmas_conflitantes = array_merge($turmas_conflitantes,
+                        Turma::where('dias_semana', 'like', '%'.$turm.'%')
+                            ->where(function($t) use ($turma,$hora_fim){
+                                $t->whereBetween('hora_inicio', [$turma->hora_inicio,$hora_fim])
+                                    ->orWhere('hora_termino', '>=',$hora_fim) ;  
+                            })                         
+                            ->where('data_inicio','<=',$data)
+                            ->whereIn('status',['iniciada','espera'])
+                            ->pluck('id')->toArray());  
+                        $dias[]=$turm;
+
                     }
+                    //dd($turmas_conflitantes,[$turma->hora_inicio,$hora_fim,$data,$dias]);
                     
                 }   
-            foreach($lista as $col_turma){
-                foreach($col_turma as $obj_turma)
-                    $lst[]=$obj_turma->id;
-
-            }
+          
             $turmas = Turma::select(['turmas.*','cursos.nome as nome_curso','disciplinas.nome as disciplina_nome','pessoas.nome as nome_professor','programas.sigla as sigla_programa'])
                 ->join('cursos', 'cursos.id', '=', 'turmas.curso')
                 ->leftjoin('disciplinas', 'disciplinas.id', '=', 'turmas.disciplina')
                 ->join('pessoas', 'pessoas.id', '=', 'turmas.professor')
                 ->join('programas', 'programas.id', '=', 'turmas.programa')
                 ->whereIn('turmas.status_matriculas', ['aberta','presencial'])
-                ->whereNotIn('turmas.id', $lst)
+                ->whereNotIn('turmas.id', array_unique($turmas_conflitantes))
                 ->where(function($busca) use ($query){
                     $busca->where('cursos.nome', 'like','%'.$query.'%')
                             ->orwhere('turmas.id',$query)

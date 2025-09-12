@@ -125,18 +125,6 @@ function listar(itens_atuais){
     $('#turmas').load('{{asset('/secretaria/turmas-disponiveis')."/".$pessoa->id}}/'+itens_atuais+'{{$str_turmas}}/'+busca);
     $('#itens_escolhidos').load('{{asset('/secretaria/turmas-escolhidas')}}/'+itens_atuais+'');
     $('#idatividades').val(itens_atuais);
-
-    /*
-    $.ajax({
-    url:'{{asset('/secretaria/turmas-disponiveis')}}' +
-        '/'+itens_atuais+'/0',
-    type:'GET',
-    success: function(data){
-           $('#turmas').html(data);
-           console.log(data);
-        }
-    });
-    */
 }
 function recomecar() {
     // body...

@@ -776,7 +776,7 @@ class BoletoController extends Controller
 
 
 			$boleto->valor = str_replace(',','.',str_replace('.','',$r->valor));
-			$boleto->status = $r->status;
+			
 
 			//VERIFICA SE ESTÁ EM HOMOLOGAÇÃO ATRAVES DO NUMERO DE CONVENIO
 			if($boleto->status == 'emitido' && env('BB_CONVENIO') == 3128557 ){

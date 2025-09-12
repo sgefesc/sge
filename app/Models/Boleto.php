@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Lancamento;
-use App\QrcodeBoletos;
+use App\Models\QrcodeBoletos;
 
 
 class Boleto extends Model

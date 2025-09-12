@@ -38,7 +38,8 @@
                         
                         <div class="item-col fixed pull-left item-col-title">
                         <div class="item-heading">Curso/atividade</div>
-                        <div class="">
+                        <div class=""> 
+                            {{ $turma->verificaRequisitos($pessoa, true) }}
                             
                                  <div href="#" style="margin-bottom:5px;" class="color-primary">Turma {{$turma->id}} - <i class="fa fa-{{$turma->icone_status}}" title=""></i><small> {{$turma->status}} <br> De {{$turma->data_inicio}} a {{$turma->data_termino}}</small></div> 
 
@@ -93,10 +94,10 @@
                 @endforeach    
 
                 @foreach($turmas as $turma)
-                @if(!$turma->verificaRequisitos($pessoa) || $turma->matriculados>=$turma->vagas)  
-                @if($turma->matriculados>=$turma->vagas)                             
-                <li class="item" style="background-color: #ebebeb" title="Turma sem vagas"> 
-                @else
+                @if($turma->verificaRequisitos($pessoa) == false || $turma->matriculados>=$turma->vagas)  
+                    @if($turma->matriculados>=$turma->vagas)                             
+                        <li class="item" style="background-color: #ebebeb" title="Turma sem vagas"> 
+                    @else
                 <li class="item" style="background-color: #ebebeb" title="{{($turma->verificaRequisitos($pessoa,true))->msg}}"> 
                 @endif
                     <div class="item-row">

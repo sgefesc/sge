@@ -157,8 +157,6 @@ class InscricaoController extends Controller
      * @return [type]             [description]
      */
     public static function inscreverAluno($aluno,$turma,$matricula=0,$atendente=0){
-     
-       
 
         $turma=Turma::find($turma);
         //dd($turma);
@@ -170,11 +168,8 @@ class InscricaoController extends Controller
         //segurança para evitar espertinhos que alteram o html
         if($atendente>0 && $turma->vagas<=$turma->matriculados){
             redirect()->back()->withErrors(['Não há vagas para a turma'.$turma->id]); 
-            return false; 
-
-                 
+            return false;          
         }
-
 
         if(!$turma->verificaRequisitos($aluno)){
             redirect()->back()->withErrors(['Aluno não atende aos requisitos da turma']);
@@ -202,7 +197,6 @@ class InscricaoController extends Controller
             {
                 \App\Models\PessoaDadosAdministrativos::cadastrarUnico($pessoa,'pendencia','Falta atestado de saúde aprovado.');	
                 $status="pendente";
-
             }              
             else
             {
@@ -494,33 +488,7 @@ class InscricaoController extends Controller
         }
         $logs = \App\Models\Log::where('tipo','turma')->where('codigo',$turma->id)->orderByDesc('data')->get();
         $hitorico_inscricoes = Inscricao::where('turma','=', $turma->id)->get();
-        /*
-        foreach($hitorico_inscricoes as $insc){
-            $registro = new stdClass;
-            $registro->data = $insc->created_at;
-            $registro->desc = 'Inscricao do aluno '.$insc->pessoa;
-            $registro->responsavel = '19511'; //! preciso ver como obter o responsável
-            $historico->push($registro);
-            switch($insc->status){
-                case 'transferida':
-                    $registro = new \stdClass;
-                    $registro->data = $insc->created_at;
-                    $registro->desc = 'Aluno '.$insc->pessoa.'transferido parax';
-                    $registro->responsavel = '19511'; //! preciso ver como obter o responsável
-                    $historico->push($registro);
-                    break;
-                case 'cancelada':
-                    $registro = new \stdClass;
-                    $registro->data = $insc->created_at;
-                    $registro->desc = 'Aluno '.$insc->pessoa.' cancelou';
-                    $registro->responsavel = '19511'; //! preciso ver como obter o responsável
-                    $historico->push($registro);
-                    break;
-            }
-
-        }*/
-        
-        //return $inscricoes;
+       
         return view('turmas.dados-secretaria',compact('turma'))->with('inscricoes',$inscricoes)->with('logs',$logs);
 
 
