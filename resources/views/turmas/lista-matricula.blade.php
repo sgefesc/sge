@@ -39,7 +39,7 @@
                         <div class="item-col fixed pull-left item-col-title">
                         <div class="item-heading">Curso/atividade</div>
                         <div class=""> 
-                            {{ $turma->verificaRequisitos($pessoa, true) }}
+                            
                             
                                  <div href="#" style="margin-bottom:5px;" class="color-primary">Turma {{$turma->id}} - <i class="fa fa-{{$turma->icone_status}}" title=""></i><small> {{$turma->status}} <br> De {{$turma->data_inicio}} a {{$turma->data_termino}}</small></div> 
 
