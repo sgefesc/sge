@@ -31,14 +31,9 @@ class RemessaController extends Controller
 		);
 		
 		$boletos =Boleto::whereIn('status',['impresso','pelosite','cancelar'])->paginate(300);
-		//$boletos =Boleto::where('status','emitido')->where('vencimento','like','2023-03-10 %')->paginate(300);
-
 		if($boletos->count() == 0)
 			return redirect($_SERVER['HTTP_REFERER'])->withErrors(['Nenhum boleto encontrado']);
-
-
 		foreach($boletos as $boleto){
-
 			try{
 				$boleto_completo = $BC->gerarBoleto($boleto);
 			}
@@ -47,9 +42,7 @@ class RemessaController extends Controller
 				continue;
 			}
 			if($boleto->status == 'cancelar' && isset($boleto_completo))
-				$boleto_completo->baixarBoleto();
-
-					
+				$boleto_completo->baixarBoleto();	
 			try{
 				$remessa->addBoleto($boleto_completo);
 			}
@@ -57,42 +50,22 @@ class RemessaController extends Controller
 				NotificacaoController::notificarErro($boleto->pessoa,6);
 				continue;
 			}
-
-			
-
 			$boleto->remessa = intval(date('ymdHi'));
-			$boleto->save();
-
-			
-	
+			$boleto->save();		
 		}
-
-		//dd($remessa);
-
 		if(isset($_GET["page"]))
 			$page = $_GET["page"];
 		else
 			$page = 1;
 
 		$remessa->save( '../storage/app/private/documentos/remessas/'.date('YmdHis').'_'.$page.'.rem');
-
 		$arquivo = date('Ymd').'_'.$page.'.rem';
-
 		return view('financeiro.remessa.gerador-paginado',compact('boletos'))->with('arquivo',$arquivo);
 
 	}
-	public function downloadRemessa($arquivo){
-		$arquivo='documentos/remessas/'.$arquivo;
-		$arquivo = str_replace('/','-.-', $arquivo);
-		return \App\classes\Arquivo::download($arquivo);
 
-	}
 	public function listarRemessas(){
-		/*chdir( 'documentos/remessas/' );
-		$arquivos = glob("{*.rem}", GLOB_BRACE);
-		rsort($arquivos);*/
 		$arquivos = Storage::files('documentos/remessas');
-		//return $arquivos;
 		return view('financeiro.remessa.lista')->with('arquivos',$arquivos);
 	}
 }

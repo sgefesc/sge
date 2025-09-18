@@ -341,7 +341,7 @@ private function calcularFatorVencimento($dataVencimento)
 		$fator = 2; 
 		for ($i = strlen($num); $i > 0; $i--) {
 			$numeros[$i] = substr($num,$i-1,1);
-			$parcial[$i] = $numeros[$i] * $fator;
+			$parcial[$i] = (int)$numeros[$i] * (int)$fator;
 			$soma += $parcial[$i];
 			if ($fator == $base) {
 				$fator = 1;
