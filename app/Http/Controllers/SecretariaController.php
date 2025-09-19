@@ -268,7 +268,7 @@ class SecretariaController extends Controller
 	
 	public function processarDocumentos(){
 
-		$dir_iterator = new RecursiveDirectoryIterator(env('STORAGE_HOME').'//documentos/pprocessar/');
+		$dir_iterator = new RecursiveDirectoryIterator(env('STORAGE_HOME').'/documentos/pprocessar/');
 		$iterator = new RecursiveIteratorIterator($dir_iterator, RecursiveIteratorIterator::SELF_FIRST);
 
 		foreach ($iterator as $arquivo) {
