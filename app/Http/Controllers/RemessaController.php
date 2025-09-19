@@ -58,7 +58,7 @@ class RemessaController extends Controller
 		else
 			$page = 1;
 
-		$remessa->save( '~/sge/storage/app/private/documentos/remessas/'.date('YmdHis').'_'.$page.'.rem');
+		$remessa->save( env('STORAGE_HOME').'/documentos/remessas/'.date('YmdHis').'_'.$page.'.rem');
 		$arquivo = date('Ymd').'_'.$page.'.rem';
 		return view('financeiro.remessa.gerador-paginado',compact('boletos'))->with('arquivo',$arquivo);
 

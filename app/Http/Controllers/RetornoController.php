@@ -13,8 +13,11 @@ class RetornoController extends Controller
 	
 
 		public function listarRetornos(){
+			
+			
 
-			chdir( '~/sge/storage/app/private/documentos/retornos/' );
+			chdir(env('STORAGE_HOME').'/documentos/retornos/');
+
 			$files = glob("{*.ret}", GLOB_BRACE);
 			rsort($files);
 
@@ -53,7 +56,7 @@ class RetornoController extends Controller
 			return view('financeiro.retorno.lista', compact('retornos'))->with('processado',true);
 		}
 		public function listarRetornosComErro(){
-			chdir( '~/sge/storage/app/private/documentos/retornos/' );
+			chdir(env('STORAGE_HOME').'/documentos/retornos/' );
 			$files = glob("{*.ret_ERRO}", GLOB_BRACE);
 			rsort($files);
 
@@ -112,14 +115,14 @@ class RetornoController extends Controller
 		}
 
 		public function retornarOriginal($arquivo){
-			$arquivo='~/sge/storage/app/private/documentos/retornos/'.$arquivo;
+			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$arquivo;
 			$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
 			$retorno->processar();
 			dd($retorno);
 
 		}
 		public function analisarArquivo($arquivo){
-			$arquivo='~/sge/storage/app/private/documentos/retornos/'.$arquivo;
+			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$arquivo;
 			if(!file_exists($arquivo))
 				return "Arquivo ".$arquivo." não encontrado.";
 			
@@ -179,7 +182,7 @@ class RetornoController extends Controller
 
 		}
 		public function processarArquivo($arquivo){
-			$arquivo='~/sge/storage/app/private/documentos/retornos/'.$arquivo;
+			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$arquivo;
 			$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
 			$retorno->processar();
 
@@ -250,7 +253,7 @@ class RetornoController extends Controller
 
 
 		public function reProcessarArquivo($arquivo){
-			$arquivo='~/sge/storage/app/private/documentos/retornos/'.$arquivo;
+			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$arquivo;
 			$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
 			$retorno->processar();
 			
@@ -326,14 +329,14 @@ class RetornoController extends Controller
 		}
 		
 		public function marcarErro($arquivo){
-			$arquivo='~/sge/storage/app/private/documentos/retornos/'.$arquivo;
+			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$arquivo;
 			$arquivo = Storage::get($arquivo);
 
 			rename($arquivo, $arquivo.'_ERRO');
 			return redirect($_SERVER['HTTP_REFERER'])->withErrors([$arquivo.' foi descartado pois apresentou erro ao ser analisado. Faça um novo upload ou gere outro arquivo de retorno no BB e tente novamente.']);
 		}
 		public function marcarProcessado($arquivo){
-			$arquivo='~/sge/storage/app/private/documentos/retornos/'.$arquivo;
+			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$arquivo;
 			rename($arquivo, $arquivo.'_PROC');
 			return redirect(asset('financeiro/boletos/retorno/arquivos'))->withErrors([$arquivo.' foi marcado como processado.']);
 		}

@@ -29,15 +29,15 @@ class FichaTecnicaController extends Controller
 
     public function index($filtro=null,$valor=null,$rem_filtro=null,$remove=0,$ipp=50){
 
-        session_start();
+        
         //dd($_GET['rem_filtro']);
         $view=null;
 
  
         
-        if(isset($_SESSION['filtro_fichas']))
-            $filtros = $_SESSION['filtro_fichas'];
-        
+        if(session('filtro_fichas'))
+            $filtros = session('filtro_fichas');
+
         else
             $filtros = array();
 
@@ -79,7 +79,7 @@ class FichaTecnicaController extends Controller
         //dd($filtro);
         
 
-        $_SESSION['filtro_fichas'] = $filtros;
+        session()->put('filtro_fichas',$filtros);
         
         $fichas = FichaTecnica::where('id','>','1');
         $programas=Programa::whereIn('id',[1,2,3,4,12])->orderBy('sigla')->get();
@@ -147,7 +147,7 @@ class FichaTecnicaController extends Controller
             ->with('programas',$programas)
             ->with('locais',$locais)
             ->with('professores',$professores)
-            ->with('filtros',$_SESSION['filtro_fichas'])
+            ->with('filtros',session('filtro_fichas'))
             ->with('view',$view)
             ->with('fichas',$fichas);
 
