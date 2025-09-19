@@ -270,6 +270,7 @@ class SecretariaController extends Controller
 
 		$dir_iterator = new RecursiveDirectoryIterator(env('STORAGE_HOME').'/documentos/pprocessar/');
 		$iterator = new RecursiveIteratorIterator($dir_iterator, RecursiveIteratorIterator::SELF_FIRST);
+		$msgs = Array();
 
 		foreach ($iterator as $arquivo) {
 		   if($arquivo->isFile()){

@@ -25,11 +25,13 @@
                     <figure title="{{$log}}">
                             @if(substr($log,0,1)=="E")
                              <span class="svg-error" >
-                               {!!file_get_contents(asset('svg/si-glyph-document-error.svg'))!!}
+                                <img src="{{asset('svg/si-glyph-document-error.svg')}}" style="width:3.5em;"/>
+                              
                              </span>
                              @else
                              <span class="svg-success">
-                               {!!file_get_contents(asset('svg/si-glyph-document-checked.svg'))!!}
+                                <img src="{{asset('svg/si-glyph-document-checked.svg')}}" style="width:3.5em;"/>
+                              
                              </span>
                              @endif
                            
