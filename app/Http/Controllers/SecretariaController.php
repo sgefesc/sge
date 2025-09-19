@@ -293,7 +293,7 @@ class SecretariaController extends Controller
                 		break;
                 	case 'CI':
                 		if(!file_exists(env('STORAGE_HOME').'/documentos/inscricoes/cancelamentos/'. (preg_replace( '/[^0-9]/is', '', $arquivo->getFilename())*1).'.pdf'))
-                		 	rename( $arquivo,env('STORAGE_HOME').'//documentos/inscricoes/cancelamentos/'. (preg_replace( '/[^0-9]/is', '', $arquivo->getFilename())*1).'.pdf');
+                		 	rename( $arquivo,env('STORAGE_HOME').'/documentos/inscricoes/cancelamentos/'. (preg_replace( '/[^0-9]/is', '', $arquivo->getFilename())*1).'.pdf');
                 		 else
                 		 	rename( $arquivo,env('STORAGE_HOME').'/documentos/inscricoes/cancelamentos/'. (preg_replace( '/[^0-9]/is', '', $arquivo->getFilename())*1).'_'.date('Ymd').'.pdf');
                 		//$arquivo->move('/documentos/inscricoes/cancelamentos/', preg_replace( '/[^0-9]/is', '', $arquivo));
