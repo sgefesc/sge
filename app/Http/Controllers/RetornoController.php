@@ -13,17 +13,9 @@ class RetornoController extends Controller
 	
 
 		public function listarRetornos(){
-			dd(__DIR__);
-			
-
 			chdir(env('STORAGE_HOME').'/documentos/retornos/');
-
 			$files = glob("{*.ret}", GLOB_BRACE);
 			rsort($files);
-
-			//$files = Storage::files('documentos/retornos');
-
-
 
 			$arquivos = collect();
 
@@ -38,12 +30,9 @@ class RetornoController extends Controller
 					$arquivo->data = $header->data;
 				}
 				catch(\Exception $e){
-				   		//rename($file, $file.'_ERRO');
 				   		$arquivo->status = 'Erro ao ler arquivo';
 				}
-
 				$arquivos->push($arquivo);
-
 			}
 			$arquivos = $arquivos->sortBy('id');
 			//return $arquivos;
