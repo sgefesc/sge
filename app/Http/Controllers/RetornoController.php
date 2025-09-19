@@ -13,7 +13,7 @@ class RetornoController extends Controller
 	
 
 		public function listarRetornos(){
-			
+			dd(__DIR__);
 			
 
 			chdir(env('STORAGE_HOME').'/documentos/retornos/');
