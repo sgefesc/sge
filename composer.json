@@ -10,6 +10,7 @@
         "adautopro/laravel-boleto": "^0.8.9.1",
         "laravel/fortify": "^1.28",
         "laravel/framework": "^12.0",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "phpoffice/phpspreadsheet": "^5.1"
     },
