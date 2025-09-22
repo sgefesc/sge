@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\Jornada;
+use App\Models\Jornada;
 use Auth;
 
 class JornadaController extends Controller
