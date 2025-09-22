@@ -170,8 +170,11 @@ class RetornoController extends Controller
 
 
 		}
-		public function processarArquivo($arquivo){
-			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$arquivo;
+		public function processarArquivo($filename){
+			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$filename;
+			if(!file_exists($arquivo))
+				dd("Arquivo ".$arquivo." não encontrado.");
+
 			$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
 			$retorno->processar();
 
@@ -183,7 +186,7 @@ class RetornoController extends Controller
 			//verificar se ja foi processado
 			$retorno_bd= new Retorno;
 			$retorno_bd->id = $retorno_id;
-			$retorno_bd->nome_arquivo = $arquivo;
+			$retorno_bd->nome_arquivo = $filename;
 			$retorno_bd->data_ocorrencia = \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $data, 'Europe/London');
 			$retorno_bd->save();
 
@@ -237,12 +240,14 @@ class RetornoController extends Controller
 				}		
 			}
 			rename($arquivo, $arquivo.'_PROC');
-			return redirect(asset('financeiro/boletos/retorno/analisar'.'/'.substr($arquivo,20).'_PROC'))->withErrors([$arquivo.' foi processado com sucesso']);
+			return redirect(asset('financeiro/boletos/retorno/analisar'.'/'.$filename.'_PROC'))->withErrors([$filename.' foi processado com sucesso']);
 		}
 
 
-		public function reProcessarArquivo($arquivo){
-			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$arquivo;
+		public function reProcessarArquivo($filename){
+			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$filename;
+			if(!file_exists($arquivo))
+				dd("Arquivo ".$arquivo." não encontrado.");
 			$retorno = new \Adautopro\LaravelBoleto\Cnab\Retorno\Cnab240\Banco\Bb($arquivo);
 			$retorno->processar();
 			
@@ -256,7 +261,7 @@ class RetornoController extends Controller
 			if($retorno_existe == null){
 				$retorno_bd= new Retorno;
 				$retorno_bd->id = $retorno_id;
-				$retorno_bd->nome_arquivo = $arquivo;
+				$retorno_bd->nome_arquivo = $filename;
 				$retorno_bd->data_ocorrencia = \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $data, 'Europe/London');;
 				$retorno_bd->save();
 			}	
@@ -314,19 +319,22 @@ class RetornoController extends Controller
 				$arquivo = $arquivo.'_PROC';
 			}
 			
-			return redirect(asset('financeiro/boletos/retorno/analisar'.'/'.substr($arquivo,20)))->withErrors([$arquivo.' foi reprocessado.']);
+			return redirect(asset('financeiro/boletos/retorno/analisar'.'/'.$filename.'_PROC'))->withErrors([$filename.' foi reprocessado.']);
 		}
 		
-		public function marcarErro($arquivo){
-			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$arquivo;
-			$arquivo = Storage::get($arquivo);
+		public function marcarErro($filename){
+			
+
+			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$filename;
+			//dd($arquivo);
+			//$arquivo = Storage::get($arquivo);
 
 			rename($arquivo, $arquivo.'_ERRO');
-			return redirect($_SERVER['HTTP_REFERER'])->withErrors([$arquivo.' foi descartado pois apresentou erro ao ser analisado. Faça um novo upload ou gere outro arquivo de retorno no BB e tente novamente.']);
+			return redirect($_SERVER['HTTP_REFERER'])->withErrors([$filename.' foi descartado pois apresentou erro ao ser analisado. Faça um novo upload ou gere outro arquivo de retorno no BB e tente novamente.']);
 		}
-		public function marcarProcessado($arquivo){
-			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$arquivo;
+		public function marcarProcessado($filename){
+			$arquivo=env('STORAGE_HOME').'/documentos/retornos/'.$filename;
 			rename($arquivo, $arquivo.'_PROC');
-			return redirect(asset('financeiro/boletos/retorno/arquivos'))->withErrors([$arquivo.' foi marcado como processado.']);
+			return redirect(asset('financeiro/boletos/retorno/arquivos'))->withErrors([$filename.' foi marcado como processado.']);
 		}
 }

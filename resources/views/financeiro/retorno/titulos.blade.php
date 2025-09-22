@@ -7,8 +7,8 @@
             <h3 class="title">Análise do Retorno</h3>
             <p class="title-description">
               Arquivo: 
-              <a href="{{asset('financeiro/boletos/retorno/original')}}/{{str_replace('../storage/app/private/documentos/retornos/','',$arquivo)}}" title="Clique para ver os dados originais" target="_blank">
-                {{$arquivo}} 
+              <a href="{{asset('financeiro/boletos/retorno/original')}}/{{str_replace(env('STORAGE_HOME').'/documentos/retornos/','',$arquivo)}}" title="Clique para ver os dados originais" target="_blank">
+                {{str_replace(env('STORAGE_HOME').'/documentos/retornos/','',$arquivo)}}
               </a>
             </p>
         </div>
@@ -80,10 +80,10 @@
                
                 <div class="card-block">
                     @if($processado == false)
-                    <a class="btn btn-primary" href="#" onclick="processar('{{str_replace('../storage/app/private/documentos/retornos/','',$arquivo)}}');">Processar</a>
+                    <a class="btn btn-primary" href="#" onclick="processar('{{str_replace(env('STORAGE_HOME').'/documentos/retornos/','',$arquivo)}}');">Processar</a>
                     @endif
-                    <a class="btn btn-primary" href="#" onclick="reprocessar('{{str_replace('../storage/app/private/documentos/retornos/','',$arquivo)}}');">Reprocessar</a>
-                    <a class="btn btn-primary" href="#" onclick="descartar('{{str_replace('../storage/app/private/documentos/retornos/','',$arquivo)}}');">Descartar</a>
+                    <a class="btn btn-primary" href="#" onclick="reprocessar('{{str_replace(env('STORAGE_HOME').'/documentos/retornos/','',$arquivo)}}');">Reprocessar</a>
+                    <a class="btn btn-primary" href="#" onclick="descartar('{{str_replace(env('STORAGE_HOME').'/documentos/retornos/','',$arquivo)}}');">Descartar</a>
                     <a class="btn btn-primary" href="{{asset('/financeiro/boletos/retorno/arquivos')}}">Arquivos</a>
 
 
