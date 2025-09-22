@@ -49,9 +49,20 @@
 				{{csrf_field()}}
 
 				<button type="submit" class="btn btn-primary"> Trocar senha</button> 
-				@endif
+				
 			</div>
        </div>
+	   @else
+	   	@if($dados)
+	   		<div class="alert alert-info">
+	   			<p>Dados alterados com sucesso</p>
+	   		</div>
+	   	@else
+	   	<div class="alert alert-danger">
+	   		<p>Usuário não encontrado!</p>
+	   	</div>
+		@endif
+	   @endif
 
     </div>
 </form>

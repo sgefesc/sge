@@ -18,6 +18,7 @@
                                     <a href="{{asset('secretaria/atender').'/'.session('pessoa_atendimento')}}"> <i class="fa fa-arrow-right"></i>  Atendimento (retomar)</a>
                                 </li>
                                 @endif
+                                @endif
                                 @if(in_array('18', Auth::user()->recursos))
                                 <li  >
                                     <a href="{{asset('/agendamento')}}"> <i class="fa fa-clock-o"></i> Agendamentos </a>
@@ -94,16 +95,17 @@
                                 <li  >
                                     <a href="{{asset('/secretaria')}}"> <i class="fa fa-stack-overflow"></i> Secretaria </a>
                                  </li>
-                                @endif
+                                
 
                                         
                                 <li>
                                     <a href="{{route('turmas')}}"> <i class="fa fa-arrow-right"></i> Turmas </a>
                                 </li>
+                                @endif
                                     
                                     
                                 
-                                @endif
+                                
                                 @if(in_array('28', Auth::user()->recursos))
                                 <li  >
                                     <a href="{{asset('/uso-livre')}}"> <i class="fa fa-desktop"></i> Uso Livre </a>
