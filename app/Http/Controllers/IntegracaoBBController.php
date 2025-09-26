@@ -730,6 +730,77 @@ class IntegracaoBBController extends Controller
 
     }
 
+    public function webHookCobranca(Request $request){
+
+        
+         $dados = $request->all();
+         foreach($dados as $dado){
+            $numero_boleto = $dado['numeroTituloCliente'];
+         }
+
+        return response()->json(['message' => 'Recebido com sucesso'], 200);
+
+        // 1. Verificar Bearer Token enviado pelo BB
+        /*
+        $authorizationHeader = $request->header('Authorization');
+        $expectedToken = env('BB_WEBHOOK_SECRET'); // você define no .env
+
+        if (!$authorizationHeader || $authorizationHeader !== "Bearer {$expectedToken}") {
+            Log::warning('Webhook BB - Token inválido', [
+                'enviado' => $authorizationHeader
+            ]);
+            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
+        
+        // 2. Capturar payload
+        $evento = $request->all();
+        Log::info('Webhook BB recebido', $evento);
+
+        // 3. Tratar eventos de cobrança
+        $estado = $evento['codigoEstadoTituloCobranca'] ?? null;
+        $linhaDigitavel = $evento['linhaDigitavel'] ?? null;
+
+        if ($estado && $linhaDigitavel) {
+            switch ($estado) {
+                case 'LIQ':
+                    // Exemplo: marcar como pago
+                    $this->atualizarStatusBoleto($linhaDigitavel, 'pago');
+                    break;
+
+                case 'BAI':
+                    $this->atualizarStatusBoleto($linhaDigitavel, 'baixado');
+                    break;
+
+                case 'PRO':
+                    $this->atualizarStatusBoleto($linhaDigitavel, 'protestado');
+                    break;
+
+                case 'REG':
+                    $this->atualizarStatusBoleto($linhaDigitavel, 'registrado');
+                    break;
+            }
+        }
+
+        // 4. Retornar 200 para confirmar recebimento
+        return response('OK', Response::HTTP_OK);*/
+    }
+
+    private function atualizarStatusBoleto(string $linhaDigitavel, string $status)
+    {
+        // Aqui você faria a busca do pedido pelo boleto
+        // Exemplo fictício:
+        /*
+        $pedido = Pedido::where('linha_digitavel', $linhaDigitavel)->first();
+        if ($pedido) {
+            $pedido->status = $status;
+            $pedido->save();
+        }
+        */
+        Log::info("Pedido atualizado", [
+            'linha_digitavel' => $linhaDigitavel,
+            'novo_status' => $status
+        ]);
+    }
 
     ######################################################
     ############## FIM - COBRANÇAS #######################

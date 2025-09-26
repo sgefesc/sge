@@ -126,12 +126,12 @@
 							<td>{{implode(', ',$turma->dias_semana)}}</td>				
 							<td>{{$turma->hora_inicio}}</td>
 							<td>{{$turma->hora_termino}}</td>
-							<td>{{floor($turma->carga_semanal->floatDiffinMinutes(\Carbon\Carbon::Today())/60)}}:{{str_pad($turma->carga_semanal->floatDiffinMinutes(\Carbon\Carbon::Today())%60,2,'0',STR_PAD_LEFT)}}</td>
+							<td>{{floor($turma->carga_semanal->diffInSeconds(\Carbon\Carbon::Today())/60/60)}}:{{str_pad($turma->carga_semanal->diffInSeconds(\Carbon\Carbon::Today())/60%60,2,'0',STR_PAD_LEFT)}}</td>
 						</tr>
 						@endforeach
 						<tr>
 							<th colspan="5">Carga total em aulas</th>
-							<th>{{floor($educador->carga_aula->floatDiffinMinutes(\Carbon\Carbon::Today())/60)}}:{{str_pad($educador->carga_aula->floatDiffinMinutes(\Carbon\Carbon::Today())%60,2,'0',STR_PAD_LEFT)}}</th>
+							<th>{{floor($educador->carga_aula->diffInSeconds(\Carbon\Carbon::Today())/60/60)}}:{{str_pad($educador->carga_aula->diffInSeconds(\Carbon\Carbon::Today())/60%60,2,'0',STR_PAD_LEFT)}}</th>
 						</tr>
 
 						@foreach($educador->jornadas as $jornada)
@@ -140,7 +140,7 @@
 							<td>{{implode(', ',$jornada->dias_semana)}}</td>
 							<td>{{$jornada->hora_inicio}}</td>
 							<td>{{$jornada->hora_termino}}</td>
-							<td>{{floor($jornada->carga_semanal->floatDiffinMinutes(\Carbon\Carbon::Today())/60)}}:{{str_pad($jornada->carga_semanal->floatDiffinMinutes(\Carbon\Carbon::Today())%60,2,'0',STR_PAD_LEFT)}}</td>
+							<td>{{floor($jornada->carga_semanal->diffInSeconds(\Carbon\Carbon::Today())/60/60)}}:{{str_pad($jornada->carga_semanal->diffInSeconds(\Carbon\Carbon::Today())/60%60,2,'0',STR_PAD_LEFT)}}</td>
 
 
 						</tr>
@@ -149,20 +149,20 @@
 
 						<tr>
 							<th colspan="5">
-								Jornada HTP: {{floor($educador->carga_htp->floatDiffinMinutes(\Carbon\Carbon::Today())/60)}}:{{str_pad($educador->carga_htp->floatDiffinMinutes(\Carbon\Carbon::Today())%60,2,'0',STR_PAD_LEFT)}}
-							| Jornada projeto: {{floor($educador->carga_projeto->floatDiffinMinutes(\Carbon\Carbon::Today())/60)}}:{{str_pad($educador->carga_projeto->floatDiffinMinutes(\Carbon\Carbon::Today())%60,2,'0',STR_PAD_LEFT)}}
-							| Jornada Uso Livre: {{floor($educador->carga_uso->floatDiffinMinutes(\Carbon\Carbon::Today())/60)}}:{{str_pad($educador->carga_uso->floatDiffinMinutes(\Carbon\Carbon::Today())%60,2,'0',STR_PAD_LEFT)}}
-							| Jornada Outros: {{floor($educador->carga_outros->floatDiffinMinutes(\Carbon\Carbon::Today())/60)}}:{{str_pad($educador->carga_outros->floatDiffinMinutes(\Carbon\Carbon::Today())%60,2,'0',STR_PAD_LEFT)}}
+								Jornada HTP: {{floor($educador->carga_htp->diffInSeconds(\Carbon\Carbon::Today())/60/60)}}:{{str_pad($educador->carga_htp->diffInSeconds(\Carbon\Carbon::Today())/60%60,2,'0',STR_PAD_LEFT)}}
+							| Jornada projeto: {{floor($educador->carga_projeto->diffInSeconds(\Carbon\Carbon::Today())/60/60)}}:{{str_pad($educador->carga_projeto->diffInSeconds(\Carbon\Carbon::Today())/60%60,2,'0',STR_PAD_LEFT)}}
+							| Jornada Uso Livre: {{floor($educador->carga_uso->diffInSeconds(\Carbon\Carbon::Today())/60/60)}}:{{str_pad($educador->carga_uso->diffInSeconds(\Carbon\Carbon::Today())/60%60,2,'0',STR_PAD_LEFT)}}
+							| Jornada Outros: {{floor($educador->carga_outros->diffInSeconds(\Carbon\Carbon::Today())/60/60)}}:{{str_pad($educador->carga_outros->diffInSeconds(\Carbon\Carbon::Today())/60%60,2,'0',STR_PAD_LEFT)}}
 							</th>
 							<th>
-								{{floor($educador->carga_jornada->floatDiffinMinutes(\Carbon\Carbon::Today())/60)}}:{{str_pad($educador->carga_jornada->floatDiffinMinutes(\Carbon\Carbon::Today())%60,2,'0',STR_PAD_LEFT)}}
+								{{floor($educador->carga_jornada->diffInSeconds(\Carbon\Carbon::Today())/60/60)}}:{{str_pad($educador->carga_jornada->diffInSeconds(\Carbon\Carbon::Today())/60%60,2,'0',STR_PAD_LEFT)}}
 
 							</th>
 						</tr>
 
 						<tr>
 							<th colspan="5">Carga Total</th>
-							<th>{{floor($educador->carga_ativa->floatDiffinMinutes(\Carbon\Carbon::Today())/60)}}:{{str_pad($educador->carga_ativa->floatDiffinMinutes(\Carbon\Carbon::Today())%60,2,'0',STR_PAD_LEFT)}}</th>
+							<th>{{floor(($educador->carga_ativa->diffInSeconds(\Carbon\Carbon::Today())/60)/60)}}:{{str_pad($educador->carga_ativa->diffInSeconds(\Carbon\Carbon::Today())/60%60,2,'0',STR_PAD_LEFT)}}</th>
 
 
 						</tr>

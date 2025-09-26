@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\IntegracaoBBController;
+use App\Http\Controllers\CatracaController;
+use App\Http\Controllers\TagController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -14,3 +17,4 @@ Route::group(['middleware' => []], function () {
     Route::post('catraca', [CatracaController::class, 'importData']);
 });
 route::get('tag/{tag}/{key}', [TagController::class,'tagAccess']);
+Route::post('webhook-bb', [IntegracaoBBController::class, 'webHookCobranca']);

@@ -206,7 +206,7 @@
 
 						<tr>
 							<th colspan="5">Horas efetivas totais</th>
-							<th>{{floor($educador->carga_ativa->floatDiffinMinutes(\Carbon\Carbon::Today())/60)}}:{{str_pad($educador->carga_ativa->floatDiffinMinutes(\Carbon\Carbon::Today())%60,2,'0',STR_PAD_LEFT)}}</th>
+							<th>{{floor(($educador->carga_ativa->diffInSeconds(\Carbon\Carbon::Today())/60)/60)}}:{{str_pad(($educador->carga_ativa->diffInSeconds(\Carbon\Carbon::Today())/60)%60,2,'0',STR_PAD_LEFT)}}</th>
 						</tr>
 						
                     	

@@ -307,6 +307,14 @@ class BoletoController extends Controller
 			$vencido = true;
 
 		}
+		$html = new \Adautopro\LaravelBoleto\Boleto\Render\Html();
+		$html->addBoleto($this->gerarBoleto($boleto));
+		return $html->gerarBoleto();
+
+
+
+
+		/***************************Aqui  
 		
 		$lancamentos = Lancamento::where('boleto', $boleto->id)->get();
 		$str_lancamentos ='';
@@ -339,6 +347,7 @@ class BoletoController extends Controller
 		$boleto_completo = $inst->gerar($boleto);
 		//return $boleto_completo; 
 		return view('financeiro.boletos.boleto')->with('boleto',$boleto_completo)->with('lancamentos',$lancamentos);
+		*/
 
 	}
 
@@ -767,6 +776,7 @@ class BoletoController extends Controller
 			}
 			
 			$valor_boleto = $boleto->valor;
+			
 			$valor_request = str_replace(',','.',str_replace('.','',$r->valor));
 			
 			if($boleto->vencimento != "0000-00-00 00:00:00")
@@ -815,10 +825,14 @@ class BoletoController extends Controller
 			}
 			else{
 				$msg = ['success' => 'Boleto '.$boleto->id.' atualizado com sucesso.'];
+				$boleto->status = $r->status;
 				$boleto->save();
 				BoletoLogController::alteracaoBoleto($boleto->id,'Boleto editado por '.Auth::user()->getPessoa()->nome_simples);
 				BoletoLogController::alteracaoBoleto($boleto->id,'Boleto editado: '.\Carbon\Carbon::parse($boleto->vencimento)->format('d/m/Y').'->'.$r->vencimento.' status: '.$boleto->status.' ->'.$r->status) .'por '.Auth::user()->pessoa;
 			}	
+			
+			
+			
 				
 		}	
 		return redirect(asset('secretaria/atendimento'))->with($msg);

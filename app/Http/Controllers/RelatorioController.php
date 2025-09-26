@@ -169,7 +169,7 @@ class RelatorioController extends Controller
 		return view('relatorios.turmas',compact('turmas'))->with('programas',$programas)
             ->with('professores', $professores)
             ->with('locais',$locais)
-            ->with('filtros',$_SESSION['filtro_turmas'])
+            ->with('filtros',session('filtro_turmas'))
             ->with('vagas',$total_vagas)
             ->with('periodos',\App\classes\Data::semestres())
             ->with('inscricoes',$total_inscricoes)
@@ -382,7 +382,7 @@ class RelatorioController extends Controller
             ->with('programas',$programas)
             ->with('professores', $professores)
             ->with('locais',$locais)
-            ->with('filtros',$_SESSION['filtro_turmas'])
+            ->with('filtros',session('filtro_turmas'))
             ->with('vagas',$total_vagas)
             ->with('inscricoes',$total_inscricoes)
             ->with('periodos',\App\classes\Data::semestres());

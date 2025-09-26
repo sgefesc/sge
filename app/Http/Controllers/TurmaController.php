@@ -967,6 +967,9 @@ class TurmaController extends Controller
         else{
             foreach($turmas_af as $turma){
                     $hora_fim=date("H:i",strtotime($turma->hora_termino." - 1 minutes"));
+                    /*if($turma->id == 3069){
+                        dd($hora_fim,$turma->hora_termino);
+                    }*/
                     foreach($turma->dias_semana as $turm){
                         $data = \Carbon\Carbon::createFromFormat('d/m/Y', $turma->data_termino)->format('Y-m-d');
                         //listar turmas que tenham conflito de horário
