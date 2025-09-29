@@ -42,15 +42,13 @@ class Atestado extends Model
 	 * @return bool vencido ou não
 	 */
 	public function verificaPorTurma(int $turma){
+
 		$turma = \App\Models\Turma::find($turma);
 		if($turma == null)
 			return false;
 		if($this->calcularVencimento($turma->sala) < date('Y-m-d 23:23:59')){
-			$this->status = 'vencido';
-			$this->save();
 			return false;
-		}
-			
+		}	
 		else
 			return true;
 

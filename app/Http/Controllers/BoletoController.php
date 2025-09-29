@@ -290,14 +290,36 @@ class BoletoController extends Controller
 		//return $html->gerarBoleto(false,false);
 
 	}
+
+	public function registrarPeloSite(int $boleto, Request $request){
+		$boleto = Boleto::find($boleto);
+		
+		if($boleto->vencimento < date('Y-m-d'))
+			$vencido = true;		
+		else
+			$vencido = false;
+
+		$lancamentos = Lancamento::where('boleto', $boleto->id)->get();
+		$str_lancamentos ='';
+		foreach ($lancamentos as $lancamento){
+				$str_lancamentos.= $lancamento->referencia." ".$lancamento->matricula.'<br>';
+			}
+		$pessoa = Pessoa::withTrashed()->find($boleto->pessoa);
+		$pessoa = PessoaController::formataParaMostrar($pessoa);
+		$boleto->status = 'pelosite';
+		$boleto->save();
+		BoletoLogController::alteracaoBoleto($boleto->id,'Registro do boleto pelo site BB');
+		return view('financeiro.boletos.registrar')->with('boleto',$boleto)->with('lancamentos',$str_lancamentos)->with('pessoa',$pessoa)->with('vencido',$vencido);
+
+	}
+
+
 	public function imprimir($boleto,Request $r){
 		
 		$boleto = Boleto::find($boleto);
 		if(!isset(Auth::user()->pessoa) && $r->token != hash('sha256', $boleto->pessoa))
 			//dd($boleto->pessoa.$r->pessoa->id);
 				return redirect()->back()->withErrors(['Usuário não corresponde ao boleto requerido']);
-
-
 		$vencido = false;
 
 		if(!$boleto)
@@ -307,47 +329,16 @@ class BoletoController extends Controller
 			$vencido = true;
 
 		}
+
+		if($boleto->status == 'gravado'){	
+			$boleto->status = 'impresso';
+			$boleto->save();
+		}
+		
+
 		$html = new \Adautopro\LaravelBoleto\Boleto\Render\Html();
 		$html->addBoleto($this->gerarBoleto($boleto));
 		return $html->gerarBoleto();
-
-
-
-
-		/***************************Aqui  
-		
-		$lancamentos = Lancamento::where('boleto', $boleto->id)->get();
-		$str_lancamentos ='';
-		foreach ($lancamentos as $lancamento){
-				$str_lancamentos.= $lancamento->referencia." ".$lancamento->matricula.'<br>';
-			}
-		
-		if($boleto->status == 'gravado' || $boleto->status == 'impresso'){	
-			$pessoa = Pessoa::withTrashed()->find($boleto->pessoa);
-			$pessoa = PessoaController::formataParaMostrar($pessoa);
-			//dd($pessoa);
-			//$pessoa->formataParaMostrar();
-			$boleto->status = 'pelosite';
-			$boleto->remessa=intval(date('YmdHi'));
-			$boleto->save();
-			BoletoLogController::alteracaoBoleto($boleto->id,'Registro do boleto pelo site BB');
-			return view('financeiro.boletos.registrar')->with('boleto',$boleto)->with('lancamentos',$str_lancamentos)->with('pessoa',$pessoa)->with('vencido',$vencido);
-
-		}
-			
-		else {
-			$inst = new BoletoFuncional;
-			$boleto_completo = $inst->gerar($boleto);
-			//return $boleto_completo; 
-			return view('financeiro.boletos.boleto')->with('boleto',$boleto_completo)->with('lancamentos',$lancamentos);
-
-		}
-		
-		$inst = new BoletoFuncional;
-		$boleto_completo = $inst->gerar($boleto);
-		//return $boleto_completo; 
-		return view('financeiro.boletos.boleto')->with('boleto',$boleto_completo)->with('lancamentos',$lancamentos);
-		*/
 
 	}
 

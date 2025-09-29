@@ -38,7 +38,7 @@
     <div class="card card-block">
     	<div class="row">
 			<div class="col-sm-12">
-				<h5>Boleto alterado para "emitido" no sistema.</h5>			
+				<h5>Boleto alterado para "pelosite" no sistema.</h5>			
 			</div>
 			
        </div>

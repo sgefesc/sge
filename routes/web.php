@@ -443,6 +443,7 @@ Route::middleware(['auth','login'])->group(function(){
             Route::get('editar/{id}', [BoletoController::class, 'editar']);
             Route::post('editar/{id}', [BoletoController::class, 'update']);
             Route::get('imprimir/{id}', [BoletoController::class, 'imprimir']);
+            Route::get('registrar-pelo-site/{id}', [BoletoController::class, 'registrarPeloSite']);
             Route::get('imprimir-carne/{pessoa}', [CarneController::class, 'imprimirCarne']);
             Route::get('registrar/{id}', [IntegracaoBBController::class, 'listarBoletos']);
             Route::get('divida-ativa', [DividaAtivaController::class, 'gerarDividaAtiva']);

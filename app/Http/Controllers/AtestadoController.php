@@ -289,6 +289,7 @@ class AtestadoController extends Controller
 	}
 
 	public function analiseAtestados(){
+		
 		$atestados = Atestado::where('tipo','saude')->where('status','aprovado')->get();
 
 		foreach($atestados as $atestado){
@@ -297,7 +298,7 @@ class AtestadoController extends Controller
 			//se venceu
 			if($hoje->gte($vencimento)){
 				$atestado->status = 'vencido';
-				$atestado->save();
+				//$atestado->save();
 
 			}
 			
@@ -311,6 +312,7 @@ class AtestadoController extends Controller
 	 * @return void
 	 */
 	public function verificadorDiario(){
+		dd('yrdy');		
 		$itens = array();
 		
 		//lista todas turmas que precisam de atestado médico - atividade fisica

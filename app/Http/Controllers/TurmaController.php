@@ -975,11 +975,17 @@ class TurmaController extends Controller
                         //listar turmas que tenham conflito de horário
 
                         $turmas_conflitantes = array_merge($turmas_conflitantes,
-                        Turma::where('dias_semana', 'like', '%'.$turm.'%')
+                        /*Turma::where('dias_semana', 'like', '%'.$turm.'%')
                             ->where(function($t) use ($turma,$hora_fim){
                                 $t->whereBetween('hora_inicio', [$turma->hora_inicio,$hora_fim])
                                     ->orWhere('hora_termino', '>=',$hora_fim) ;  
                             })                         
+                            ->where('data_inicio','<=',$data)
+                            ->whereIn('status',['iniciada','espera'])
+                            ->pluck('id')->toArray()); */
+                            Turma::where('dias_semana', 'like', '%'.$turm.'%')
+                            ->whereBetween('hora_inicio', [$turma->hora_inicio,$hora_fim])
+                            ->whereBetween('hora_termino', [$turma->hora_inicio,$hora_fim])
                             ->where('data_inicio','<=',$data)
                             ->whereIn('status',['iniciada','espera'])
                             ->pluck('id')->toArray());  

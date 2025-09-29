@@ -617,9 +617,14 @@
                                 </div>
                                 <div class="col-xl-2" style="line-height:40px !important;">
                                     <div >
-                                        @if($boleto->status == 'impresso' || $boleto->status == 'gravado')
+                                        @if($boleto->status == 'gravado')
                                         <a href="{{asset('financeiro/boletos/imprimir/').'/'.$boleto->id}}" title="Imprimir Boleto" ><i class=" fa fa-print "></i></a>
                                         <a href="{{asset('financeiro/boletos/editar/').'/'.$boleto->id}}"  title="Editar Boleto" ><i class=" fa fa-pencil-square-o "></i></a>
+                                        <a href="#" onclick="cancelarBoleto({{$boleto->id}});" title="Cancelar Boleto" ><i class=" fa fa-times "></i></a>
+                                        
+
+                                        @elseif($boleto->status == 'impresso')
+                                        <a href="{{asset('financeiro/boletos/registrar-pelo-site/').'/'.$boleto->id}}"  title="Registar Boleto no banco" ><i class=" fa fa-external-link"></i></a>
                                         <a href="#" onclick="cancelarBoleto({{$boleto->id}});" title="Cancelar Boleto" ><i class=" fa fa-times "></i></a>
                                         
 
@@ -646,7 +651,7 @@
 
                                         
                                         @endif
-                                        @if(in_array('25', Auth::user()->recursos))
+                                        @if(in_array('22', Auth::user()->recursos))
                                             <a href="{{asset('financeiro/boletos/editar/').'/'.$boleto->id}}"  title="Editar Boleto" ><i class=" fa fa-edit" ></i></a>
                                             @endif
                                         
