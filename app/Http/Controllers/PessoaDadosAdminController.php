@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pessoa;
 use App\Models\PessoaDadosAdministrativos;
+use App\Http\Controllers\Auth\LoginController;
 use Auth;
 
 
@@ -13,7 +14,7 @@ class PessoaDadosAdminController extends Controller
     public function relacaoInstitucional_view($id){
 		if(!in_array('3', Auth::user()->recursos))
 			return view('error-404-alt')->with(array('error'=>['id'=>'403.3','desc'=>'Você não pode editar os cadastrados.']));
-		if(!loginController::autorizarDadosPessoais($id))
+		if(!LoginController::autorizarDadosPessoais($id))
 			return view('error-404-alt')->with(array('error'=>['id'=>'403','desc'=>'Erro: pessoa a ser editada possui relação institucional ou não está acessivel. O código de pessoa também pode ser inválido']));
 
 		$nome = Pessoa::getNome($id);
@@ -30,7 +31,7 @@ class PessoaDadosAdminController extends Controller
 		
 		if(!in_array('3', Auth::user()->recursos))
 			return view('error-404-alt')->with(array('error'=>['id'=>'403.3','desc'=>'Você não pode editar os cadastrados.']));
-		if(!loginController::autorizarDadosPessoais($request->pessoa))
+		if(!LoginController::autorizarDadosPessoais($request->pessoa))
 			return view('error-404-alt')->with(array('error'=>['id'=>'403','desc'=>'Erro: pessoa a ser editada possui relação institucional, não está acessivel ou não existe.']));
 		
 		$nova_relacao=new PessoaDadosAdministrativos;
