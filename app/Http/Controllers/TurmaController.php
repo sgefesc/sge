@@ -984,8 +984,19 @@ class TurmaController extends Controller
                             ->whereIn('status',['iniciada','espera'])
                             ->pluck('id')->toArray()); */
                             Turma::where('dias_semana', 'like', '%'.$turm.'%')
-                            ->whereBetween('hora_inicio', [$turma->hora_inicio,$hora_fim])
-                            ->whereBetween('hora_termino', [$turma->hora_inicio,$hora_fim])
+                            ->where(function($q) use ($turma) {
+                            // Verifica se os horários se sobrepõem
+                            $q->where(function($subq) use ($turma) {
+                                $subq->where('hora_inicio', '>=', $turma->hora_inicio)
+                                    ->where('hora_inicio', '<', $turma->hora_termino);
+                                })->orWhere(function($subq) use ($turma) {
+                                $subq->where('hora_termino', '>', $turma->hora_inicio)
+                                    ->where('hora_termino', '<=', $turma->hora_termino);
+                                })->orWhere(function($subq) use ($turma) {
+                                $subq->where('hora_inicio', '<=', $turma->hora_inicio)
+                                    ->where('hora_termino', '>=', $turma->hora_termino);
+                                });
+                            })
                             ->where('data_inicio','<=',$data)
                             ->whereIn('status',['iniciada','espera'])
                             ->pluck('id')->toArray());  
