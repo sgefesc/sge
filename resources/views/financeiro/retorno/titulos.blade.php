@@ -36,7 +36,7 @@
                       <tbody>
                      @foreach($titulos as $titulo)
                         <tr>
-                          <th scope="row"><a href="/financeiro/boletos/informacoes/{{str_replace('2838669','',$titulo['id'])*1}}">{{$titulo['id']}}</a></th>
+                          <th scope="row"><a href="/financeiro/boletos/informacoes/{{str_replace(env('BB_CONVENIO'),'',$titulo['id'])*1}}">{{$titulo['id']}}</a></th>
                           <td>{{$titulo['data']}}</td>
                           <td>{{$titulo['valor']}}</td>
                           <td>{{$titulo['boleto_status']}}</td>

@@ -17,4 +17,5 @@ Route::group(['middleware' => []], function () {
     Route::post('catraca', [CatracaController::class, 'importData']);
 });
 route::get('tag/{tag}/{key}', [TagController::class,'tagAccess']);
-Route::get('webhook-bb', [IntegracaoBBController::class, 'webHookCobranca']);
+Route::get('webhook-bb', [IntegracaoBBController::class, 'respostaWebHookCobranca']);
+Route::post('webhook-bb', [IntegracaoBBController::class, 'webHookCobranca']);

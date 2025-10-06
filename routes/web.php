@@ -804,10 +804,11 @@ Route::middleware(['auth','login'])->group(function(){
     // Integração BB
     Route::prefix('BB')->group(function(){
         Route::get('testar', [IntegracaoBBController::class, 'testar']);
-        Route::get('boletos', [IntegracaoBBController::class, 'listarBoletos']);
-        Route::post('boletos', [IntegracaoBBController::class, 'registroBoletosLote']);
+        Route::get('lisboletos', [IntegracaoBBController::class, 'listarBoletos']);
+        Route::post('registrar-boletos', [IntegracaoBBController::class, 'registroBoletosLote']);
         Route::get('boletos/{id}', [IntegracaoBBController::class, 'detalharBoleto']);
         Route::get('boletos/{id}/registrar', [IntegracaoBBController::class, 'viewRegistrarBoleto']);
+        Route::post('boletos/{id}/registrar', [IntegracaoBBController::class, 'registrarBoleto']);
         Route::get('boletos/{id}/pix', [IntegracaoBBController::class, 'consultarPixBoleto']);
         Route::post('boletos/{id}/alterar', [IntegracaoBBController::class, 'alterarBoleto']);
         Route::get('boletos/{id}/baixar', [IntegracaoBBController::class, 'viewBaixarBoleto']);

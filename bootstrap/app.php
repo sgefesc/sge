@@ -90,4 +90,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+    ->withProviders([ // <-- ADICIONE OU EDITE ESTE MÉTODO
+        App\Providers\FortifyServiceProvider::class,
+        // Outros provedores que você queira registrar manualmente...
+    ])->create();

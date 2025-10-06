@@ -149,7 +149,7 @@ class RetornoController extends Controller
 					$titulos_baixados[$linha->nossoNumero]['id'] = $linha->nossoNumero;
 					$titulos_baixados[$linha->nossoNumero]['data'] = $linha->dataOcorrencia;
 					$titulos_baixados[$linha->nossoNumero]['valor'] = 'R$ '.number_format($linha->valorRecebido+$linha->valorTarifa+$linha->valorMulta+$linha->valorMora,2,',','.');
-					$boleto = Boleto::find(str_replace('2838669','',$linha->nossoNumero)*1);
+					$boleto = Boleto::find(str_replace(env('BB_CONVENIO'),'',$linha->nossoNumero)*1);
 					if($boleto != null){
 						$titulos_baixados[$linha->nossoNumero]['boleto_status'] = $linha->ocorrenciaTipo.') '.$linha->ocorrenciaDescricao.' '.$linha->error;
 					}
@@ -192,7 +192,7 @@ class RetornoController extends Controller
 
 			foreach($detalhes as $linha){
 				
-				$boleto= Boleto::find(str_replace('2838669','',$linha->nossoNumero)*1);//procura o boleto no banco
+				$boleto= Boleto::find(str_replace(env('BB_CONVENIO'),'',$linha->nossoNumero)*1);//procura o boleto no banco
 				if(!is_null($boleto)){
 
 					switch($linha->ocorrenciaTipo){
@@ -268,7 +268,7 @@ class RetornoController extends Controller
 
 			foreach($detalhes as $linha){
 				//dd($linha);
-				$boleto= Boleto::find(str_replace('2838669','',$linha->nossoNumero)*1);//procura o boleto no banco
+				$boleto= Boleto::find(str_replace(env('BB_CONVENIO'),'',$linha->nossoNumero)*1);//procura o boleto no banco
 				if(!is_null($boleto)){
 					switch($linha->ocorrenciaTipo){
 						case 1: //Liquidação

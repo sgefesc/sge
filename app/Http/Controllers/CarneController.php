@@ -104,10 +104,10 @@ class CarneController extends Controller
 		]);
 		$remessa = new \Adautopro\LaravelBoleto\Cnab\Remessa\Cnab240\Banco\Bb(
 		    [
-		        'agencia'      => '0295',
-		        'carteira'     => 17,
-		        'conta'        => 52822,
-		        'convenio'     => 2838669,
+		        'agencia'      => env('BB_AGENCIA'),
+		        'carteira'     => env('BB_CARTEIRA'),
+		        'conta'        => env('BB_CONTA'),
+		        'convenio'     => env('BB_CONVENIO'),
 		        'variacaoCarteira' => '019',
 		        'beneficiario' => $beneficiario,
 		    ]

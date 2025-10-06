@@ -583,9 +583,13 @@
                                     <div class="dropdown-toggle">
                                         @if($boleto->status == 'impresso' || $boleto->status == 'gravado' ||  $boleto->status == 'emitido')
                                         <input type="checkbox" id="boleto[{{$boleto->id}}]" name="{{$boleto->id}}" class="boleto">
-                                        @else
-                                        <i class=" fa fa-barcode "></i>
                                         @endif
+                                        &nbsp;
+                                        @if($boleto->getQrCode())
+                                            <i class=" fa fa-qrcode "></i>
+                                            @else
+                                            <i class=" fa fa-barcode "></i>
+                                            @endif
                                         &nbsp;<small>Documento nº <b><a href="/financeiro/boletos/informacoes/{{$boleto->id}}">{{$boleto->id}}</a></b></small></div>
                                 </div>
                                 <div class="col-xl-2" style="line-height:40px !important;">
@@ -866,31 +870,38 @@
 
   }
   function registrarBoletosSelecionados(){
-    var itens = [];
+    let itens = [];
 
     if(confirm('Confirmar registro dos boletos selecionados?')){
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "/BB/registrar-boletos",
+        form.target = '_self';
         
         boletos = $("input[id^='boleto']:checked:enabled").each(function(){
-            //console.log($(this).attr("name"));
+            field = document.createElement('input');
+            field.type = 'hidden';
+            field.name = 'boletos[]';
+            field.value = $(this).attr("name");
+            form.appendChild(field);   
             itens.push($(this).attr("name"));
         });
 
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            method: "POST",
-            url: "/BB/boletos",
-            data: { boletos: itens}
+        field = document.createElement('input');
+        field.type = 'hidden';
+        field.name = '_token';
+        field.value = '{{csrf_token()}}';
+        form.appendChild(field);    
         
-            })
-            .done(function(msg){
-               console.log(msg);
-
-            })
-            .fail(function(msg){
-                console.log(msg);
-            });
+        if(itens.length == 0){
+            alert('Nenhum boleto selecionado');
+            return false;
+        }
+        else{
+            document.body.appendChild(form);
+            form.submit();
+            setTimeout(() => form.remove(), 100);
+        }
         
     }
         

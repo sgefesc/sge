@@ -29,7 +29,7 @@
  
             <p>Olá {{$nome}},</p>
             <br>
-            <p>Gostariamos de avisar que seus boletos já estão disponíveis no <a href="https://sge.fesc.com.br/perfil" target="_blank"> perfil do aluno</a></p>
+            <p>Gostariamos de avisar que seus boletos já estão disponíveis no <a href="https://fesc.app.br/aluno" target="_blank"> perfil do aluno</a></p>
             <p>Também informamos que seu endereço de acesso às aulas é <strong>{{$username}}</strong>. A senha foi enviada através da plataforma da Microsoft. Verifique sua caixa de SPAM caso não tenha encontrado.</p>                   
             <p>Recomendamos que acesse pelo menos uma vez o site <a href="https://outlook.com">Outlook.com</a> com antecedência, para verificar que todos os dados estão corretos.</p>
             

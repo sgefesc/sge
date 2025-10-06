@@ -63,5 +63,9 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::loginView(function () {
             return view('auth.login'); // Assuming your login view is at resources/views/auth/login.blade.php
         });
+
+        Fortify::requestPasswordResetLinkView(function () {
+            return view('auth.passwords.email'); // Or your custom view
+        });
     }
 }

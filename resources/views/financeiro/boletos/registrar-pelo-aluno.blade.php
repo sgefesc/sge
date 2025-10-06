@@ -10,7 +10,7 @@
 @include('inc.errors')
 <form name="item" action="https://mpag.bb.com.br/site/mpag/" method="POST">
 	<input type="hidden" name="idConv" value="318737">
-	<input type="hidden" name="refTran" value="2838669{{str_pad($boleto->id,10,'0',STR_PAD_LEFT)}}">
+	<input type="hidden" name="refTran" value="{{env('BB_CONVENIO').str_pad($boleto->id,10,'0',STR_PAD_LEFT)}}">
 	<input type="hidden" name="valor" value="{{preg_replace( '/[^0-9]/is', '',$boleto->valor)}}">
 	<input type="hidden" name="qtdPontos" value="">
 	<input type="hidden" name="dtVenc" value="{{\Carbon\Carbon::parse($boleto->vencimento)->format('dmY')}}">

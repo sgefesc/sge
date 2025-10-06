@@ -73,11 +73,11 @@ public function gerar($boleto){
 
 
 		// DADOS DA SUA CONTA - BANCO DO BRASIL
-		$dadosboleto["agencia"] = "0295"; // Num da agencia, sem digito
-		$dadosboleto["conta"] = "52822"; 	// Num da conta, sem digito
+		$dadosboleto["agencia"] = env('BB_AGENCIA'); // Num da agencia, sem digito
+		$dadosboleto["conta"] = env('BB_CONTA'); 	// Num da conta, sem digito
 
 		// DADOS PERSONALIZADOS - BANCO DO BRASIL
-		$dadosboleto["convenio"] = "2838669";  // Num do convênio - REGRA: 6 ou 7 ou 8 dígitos
+		$dadosboleto["convenio"] = env('BB_CONVENIO');  // Num do convênio - REGRA: 6 ou 7 ou 8 dígitos
 		$dadosboleto["contrato"] = ""; // Num do seu contrato
 		$dadosboleto["carteira"] = "17";
 		$dadosboleto["variacao_carteira"] = "01-9";  // Variação da Carteira, com traço (opcional)

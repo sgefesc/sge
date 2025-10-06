@@ -40,14 +40,12 @@ class IntegracaoBBController extends Controller
         if(env('APP_ENV') == 'production'){
             $this->urls = 'https://api.bb.com.br/cobrancas/v2/boletos';
             $this->urlToken = 'https://oauth.bb.com.br/oauth/token';
-            $this->appKeyField = 'gw-dev-app-key';
             //GuzzleHttp
             $this->uriToken = 'https://oauth.bb.com.br/oauth/token';
             $this->uriCobranca = 'https://api.bb.com.br';
         }else{
-            $this->urls = 'https://api.hm.bb.com.br/cobrancas/v2/boletos';
+            $this->urls = 'https://api.sandbox.bb.com.br/cobrancas/v2/boletos';
             $this->urlToken = 'https://oauth.sandbox.bb.com.br/oauth/token';
-            $this->appKeyField = 'gw-app-key';
             //GuzzleHttp
             $this->uriToken = 'https://oauth.sandbox.bb.com.br';
             $this->uriCobranca = 'https://api.hm.bb.com.br';
@@ -142,7 +140,7 @@ class IntegracaoBBController extends Controller
         $response = json_decode($registro->getBody()->getContents());
         $boleto->status = 'emitido';
         $boleto->save();
-        BoletoLogController::alteracaoBoleto($boleto->id,'Boleto registrado via API BB');
+        BoletoLogController::alteracaoBoleto($boleto->id,'Boleto registrado via API BB',0);
 
         if(isset($response->qrCode->txId)){
             $qr_code = new QrcodeBoletos();
@@ -165,6 +163,10 @@ class IntegracaoBBController extends Controller
      * Aqui se concentra todas as ações de registro de boletos
      */
     public function registroBoletosLote(Request $request){
+        if(!$request->has('boletos')){
+            return response()->json(['message' => 'Nenhum boleto selecionado'], 400);
+        }
+
         $registros_boletos = collect();// new stdClass();
         
         $boletos = Boleto::whereIn('id',$request->boletos)->get();
@@ -180,12 +182,24 @@ class IntegracaoBBController extends Controller
             
             catch (ClientException $e) {
                 $response = $e->getResponse();
-                $responseBodyAsString = json_decode($response->getBody()->getContents());
-                if($responseBodyAsString==''){
-                    return ($response);
+                $responseBodyAsString = json_decode($response->getBody()->getContents());  
+                if(isset($responseBodyAsString->erros)){
+                    $erros = $responseBodyAsString->erros;
+                    if(isset($erros[0]->codigo) && $erros[0]->codigo == 4874915){
+                        if($boleto->status != 'emitido' && $boleto->status != 'pago' && $boleto->status != 'cancelado'){
+                            $boleto->status = 'emitido';
+                            $boleto->save();
+                            BoletoLogController::alteracaoBoleto($boleto->id,'Boleto registrado via API BB',0);
+                        }
+                        $registro->status = 'ok';
+                        $registro->msg = 'Boleto já registrado anteriormente, verifique a geração do PIX';
+                        $registros_boletos->push($registro);
+                        continue;
+                    }
+                    
                 }
                 $registro->status = 'erro';
-                $registro->msg = $responseBodyAsString->erros[0]->mensagem;
+                $registro->msg = json_encode($responseBodyAsString, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
                 $registros_boletos->push($registro);
                 continue;
 
@@ -203,15 +217,13 @@ class IntegracaoBBController extends Controller
             $registro->msg = $this->processarRegistro($req_registro,$boleto);
             $registros_boletos->push($registro);
             
-           
-
 
             
         }
 
         //dd(json_encode($boleto_BB));
 
-        return $registros_boletos;
+        return view('financeiro.boletos.registro')->with('registros', $registros_boletos);
 
     }
 
@@ -251,8 +263,8 @@ class IntegracaoBBController extends Controller
                 ),
                 'beneficiarioFinal' => array(
                     'tipoInscricao' => '2',
-                    'numeroInscricao' => 98959112000179,//'45361904000180',
-                    'nome' => 'Dirceu Borboleta'//'FUNDAÇÃO EDUCACIONAL SÃO CARLOS',
+                    'numeroInscricao' => env('BB_CLIENT'),
+                    'nome' => 'LIVRARIA CUNHA DA CUNHA'//'FUNDAÇÃO EDUCACIONAL SÃO CARLOS',
                   
                 ),
 
@@ -263,15 +275,15 @@ class IntegracaoBBController extends Controller
 
     }
 
-    public function viewRegistroBoleto(Boleto $boleto){
+    public function viewRegistrarBoleto($boleto_id){
+        $boleto = Boleto::find($boleto_id);
         $boleto_BB = $this->montarBoletoBB($boleto);
-        return view('integracao.bb.registro_boleto', compact('boleto_BB','boleto'));
+        return view('financeiro.boletos.registrar-via-api', compact('boleto_BB','boleto'));
     }
 
 
 
-    public function registrarBoleto(array $fields){
-        
+    public function registrarBoleto(array $fields){        
             $response = $this->clientCobranca->request(
                 'POST',
                 '/cobrancas/v2/boletos',
@@ -283,7 +295,7 @@ class IntegracaoBBController extends Controller
                     ],
                     'verify' => false,
                     'query' => [
-                        $this->appKeyField => env('BB_dev_app_key'),
+                        'gw-dev-app-key' => env('BB_dev_app_key'),
                     ],
                     'body' => json_encode($fields),
                 ]
@@ -293,7 +305,7 @@ class IntegracaoBBController extends Controller
     }
 
     public function registrarBoletosImpressos(){
-        $boletos = Boleto::where('status','impresso')->get();
+        $boletos = Boleto::where('status','impresso')->where('vencimento','>',date('Y-m-d'))->get();
         $registros = array();
         foreach($boletos as $boleto){
             $boleto_BB = $this->montarBoletoBB($boleto);
@@ -500,12 +512,26 @@ class IntegracaoBBController extends Controller
             );
             $statusCode = $response->getStatusCode();
             $result = json_decode($response->getBody()->getContents());
-            return array('status' => $statusCode, 'response' => $result);
+          
         } catch (ClientException $e) {
-            return ($e);
+            return view('financeiro.boletos.pix')->with('boleto',$id)->withErrors($e);
         } catch (\Exception $e) {
             $response = $e->getMessage();
-            return ['error' => "Falha ao baixar Boleto Cobranca: {$response}"];
+            return view('financeiro.boletos.pix')->with('boleto',$id)->withErrors($response);
+        }
+
+        if($statusCode == 200){
+            $qrcode = QrcodeBoletos::where('boleto_id', $id)->first();
+            if(!$qrcode){
+                $qrcode = new QrcodeBoletos();
+                $qrcode->boleto_id = $id;
+                $qrcode->txId = $txId;
+                $qrcode->emv = $result->{'qrCode.emv'};
+                $qrcode->url = $result->{'qrCode.url'};
+                $qrcode->save();
+            }
+    
+            return view('financeiro.boletos.pix')->with('boleto',$id)->with('pix',$qrcode);
         }
     }
 
@@ -584,7 +610,7 @@ class IntegracaoBBController extends Controller
         ]);
         $this->fields($fields,'json');
 
-        $curl = curl_init("https://api.sandbox.bb.com.br/cobrancas/v2/boletos/".$txId."/gerar-pix?gw-dev-app-key=d27be77909ffab001369e17d80050056b9b1a5b0");
+        $curl = curl_init("https://api.sandbox.bb.com.br/cobrancas/v2/boletos/".$txId."/gerar-pix?gw-dev-app-key=".env('BB_dev_app_key'));
         curl_setopt_array($curl,[
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_MAXREDIRS => 10,
@@ -592,8 +618,8 @@ class IntegracaoBBController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => '{
-                "numeroConvenio": 3128557
-              }',
+                "numeroConvenio":'. env("BB_CONVENIO").
+             ' }',
             CURLOPT_HTTPHEADER => ($this->headers),
             CURLOPT_SSL_VERIFYPEER => false,
             CURLINFO_HEADER_OUT => true
@@ -730,80 +756,34 @@ class IntegracaoBBController extends Controller
 
     }
 
+    public function respostaWebHookCobranca(Request $request){
+        return response()->json(['message' => 'Estamos online'], 200);
+    }
+
     public function webHookCobranca(Request $request){
+        $boletos_processados = array();
+        $erros = array();
+        $dados = $request->all();
+        foreach($dados as $dado){
+            $numero_boleto = str_replace(env('BB_CONVENIO'),'',$dado['id'])*1;
+            $boleto = Boleto::find($numero_boleto);
+            if(!$boleto){
+                $boletos_processados[] = $numero_boleto;
+                $erros[] = "Boleto {$numero_boleto} não encontrado";
+                continue;
 
-        
-         $dados = $request->all();
-         foreach($dados as $dado){
-            $numero_boleto = $dado['numeroTituloCliente'];
-         }
-
-        return response()->json(['message' => 'Recebido com sucesso'], 200);
-
-        // 1. Verificar Bearer Token enviado pelo BB
-        /*
-        $authorizationHeader = $request->header('Authorization');
-        $expectedToken = env('BB_WEBHOOK_SECRET'); // você define no .env
-
-        if (!$authorizationHeader || $authorizationHeader !== "Bearer {$expectedToken}") {
-            Log::warning('Webhook BB - Token inválido', [
-                'enviado' => $authorizationHeader
-            ]);
-            return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
-        }
-        
-        // 2. Capturar payload
-        $evento = $request->all();
-        Log::info('Webhook BB recebido', $evento);
-
-        // 3. Tratar eventos de cobrança
-        $estado = $evento['codigoEstadoTituloCobranca'] ?? null;
-        $linhaDigitavel = $evento['linhaDigitavel'] ?? null;
-
-        if ($estado && $linhaDigitavel) {
-            switch ($estado) {
-                case 'LIQ':
-                    // Exemplo: marcar como pago
-                    $this->atualizarStatusBoleto($linhaDigitavel, 'pago');
-                    break;
-
-                case 'BAI':
-                    $this->atualizarStatusBoleto($linhaDigitavel, 'baixado');
-                    break;
-
-                case 'PRO':
-                    $this->atualizarStatusBoleto($linhaDigitavel, 'protestado');
-                    break;
-
-                case 'REG':
-                    $this->atualizarStatusBoleto($linhaDigitavel, 'registrado');
-                    break;
             }
+            $boleto->status = 'pago';
+            $boleto->save();
+            BoletoLogController::alteracaoBoleto($boleto->id,'Boleto pago via WebHook BB',0);
+            $boletos_processados[] = $boleto->id;
         }
 
-        // 4. Retornar 200 para confirmar recebimento
-        return response('OK', Response::HTTP_OK);*/
+        return response()->json([
+            'message' => 'Recebido com sucesso',
+            'erros'=> $erros,
+            'boletos_processados'=>$boletos_processados]
+            , 200);
+
     }
-
-    private function atualizarStatusBoleto(string $linhaDigitavel, string $status)
-    {
-        // Aqui você faria a busca do pedido pelo boleto
-        // Exemplo fictício:
-        /*
-        $pedido = Pedido::where('linha_digitavel', $linhaDigitavel)->first();
-        if ($pedido) {
-            $pedido->status = $status;
-            $pedido->save();
-        }
-        */
-        Log::info("Pedido atualizado", [
-            'linha_digitavel' => $linhaDigitavel,
-            'novo_status' => $status
-        ]);
-    }
-
-    ######################################################
-    ############## FIM - COBRANÇAS #######################
-    ######################################################
-
 }

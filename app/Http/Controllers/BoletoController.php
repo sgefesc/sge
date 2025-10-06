@@ -589,79 +589,49 @@ class BoletoController extends Controller
 			$fatorVencimento = Carbon::parse($boleto->vencimento)->diffInDays($dataBaseNova) + 1000;
 		} else {
 			$fatorVencimento = Carbon::parse($boleto->vencimento)->diffInDays($dataBaseAntiga);
-		}
-		
+		}	
 		$convenio = env('BB_CONVENIO');
 		$conta = env('BB_CONTA');
 
-		if($boleto->pessoa == 19511){
-			$qrcode = $boleto->getQRCode();
-			if($qrcode){
-				$pix_cc = \Adautopro\LaravelBoleto\Util::gerarPixCopiaECola($qrcode->url, $boleto->valor,$qrcode->txid, $pagador, $beneficiario);
-			}
-			else{
-				$pix_cc = null;
-			}
-			 
-			$bb = new \Adautopro\LaravelBoleto\Boleto\Banco\Bb([
-
-				'id'				 => $boleto->id,
-				'logo'                => 'img/logo-small.png',
-				'dataVencimento'      => Carbon::parse($boleto->vencimento),
-				'fatorVencimento'     => $fatorVencimento, // Fator de vencimento corrigido
-				'valor'               => $boleto->valor,
-				'numero'              => $boleto->id,
-				'numeroDocumento'     => $boleto->id,
-				'pagador'             => $pagador,
-				'beneficiario'        => $beneficiario,
-				'carteira'            => 17,
-				'variacaoCarteira'    => '019',
-				'agencia'             => '0295', // Removido o "X"
-				'convenio'            => $convenio,
-				'conta'               => $conta,
-
-				'pixChaveTipo'		  =>'aleatoria',
-				'pixChave'			  => env('PIX_CHAVE'),
-				'pixQrCode' => $pix_cc,
 		
-				'descricaoDemonstrativo' => $array_lancamentos,
-				'instrucoes' => [
-					'Sr. Caixa, cobrar multa de 2% após o vencimento',
-					'Cobrar juros de 1% ao mês por atraso.',
-					'Após o vencimento, o pagamento dever ser feito no Banco do Brasil',
-					'Em caso de dúvidas ou divergências entre em contato'
-				],
-			]);
-
-		}    
-		else{
-			$bb = new \Adautopro\LaravelBoleto\Boleto\Banco\Bb([
-				'id'				 => $boleto->id,
-				'logo'                => 'img/logo-small.png',
-				'dataVencimento'      => Carbon::parse($boleto->vencimento),
-				'fatorVencimento'     => $fatorVencimento, // Fator de vencimento corrigido
-				'valor'               => $boleto->valor,
-				'numero'              => $boleto->id,
-				'numeroDocumento'     => $boleto->id,
-				'pagador'             => $pagador,
-				'beneficiario'        => $beneficiario,
-				'carteira'            => 17,
-				'variacaoCarteira'    => '019',
-				'agencia'             => '0295', // Removido o "X"
-				'convenio'            => $convenio,
-				'conta'               => $conta,
-				
-				
-		
-				'descricaoDemonstrativo' => $array_lancamentos,
-				'instrucoes' => [
-					'Sr. Caixa, cobrar multa de 2% após o vencimento',
-					'Cobrar juros de 1% ao mês por atraso.',
-					'Após o vencimento, o pagamento dever ser feito no Banco do Brasil',
-					'Em caso de dúvidas ou divergências entre em contato conosco: 3362-0580'
-				],
-			]);
+		$qrcode = $boleto->getQRCode();
+		if($qrcode){
+			$pix_cc = \Adautopro\LaravelBoleto\Util::gerarPixCopiaECola($qrcode->url, $boleto->valor,$qrcode->txid, $pagador, $beneficiario);
+			
 		}
+		else{
+			$pix_cc = null;
+		}
+			
+		$bb = new \Adautopro\LaravelBoleto\Boleto\Banco\Bb([
+
+			'id'				 => $boleto->id,
+			'logo'                => 'img/logo-small.png',
+			'dataVencimento'      => Carbon::parse($boleto->vencimento),
+			'fatorVencimento'     => $fatorVencimento, // Fator de vencimento corrigido
+			'valor'               => $boleto->valor,
+			'numero'              => $boleto->id,
+			'numeroDocumento'     => $boleto->id,
+			'pagador'             => $pagador,
+			'beneficiario'        => $beneficiario,
+			'carteira'            => 17,
+			'variacaoCarteira'    => '019',
+			'agencia'             => '0295', // Removido o "X"
+			'convenio'            => $convenio,
+			'conta'               => $conta,
+
+			'pixChaveTipo'		  =>'aleatoria',
+			'pixChave'			  => env('PIX_CHAVE'),
+			'pixQrCode' => $pix_cc,
+	
+			'descricaoDemonstrativo' => $array_lancamentos,
+			'instrucoes' => [
+				'Sr. Caixa, cobrar multa de 2% após o vencimento',
+				'Cobrar juros de 1% ao mês por atraso.',
+				'Após o vencimento, o pagamento dever ser feito no Banco do Brasil',
+				'Em caso de dúvidas ou divergências entre em contato'
+			],
+		]);
 		
 
 		return $bb;

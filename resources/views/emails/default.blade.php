@@ -30,7 +30,7 @@
             <br>
             <p>Olá {{$pessoa->nome}},</p>
             <br>
-            <p>Gostaria de avisar que os boletos dos seus cursos já estão disponíveis no <a href="https//sge.fesc.com.br/perfil" target="_blank"> perfil do aluno</a></p>
+            <p>Gostaria de avisar que os boletos dos seus cursos já estão disponíveis no <a href="https//fesc.app.br/perfil" target="_blank"> perfil do aluno</a></p>
             <p>Também informamos que os dados de acesso foram enviados para todos alunos através da plataforma da Microsoft. Verifique sua caixa de SPAM caso não tenha encontrado.</p>
             <p>Por motivo de segurança não armazenamos as senhas dos alunos, mas seu login de acesso é:</p>
             <h5>E-mail: <strong>{{$username}}</strong></h5>        

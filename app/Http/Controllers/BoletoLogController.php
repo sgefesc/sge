@@ -35,12 +35,15 @@ class BoletoLogController extends Controller
 
     }
 
-    public static function alteracaoBoleto($boleto,$motivo){
+    public static function alteracaoBoleto($boleto,$motivo,$pessoa=0){
     	$log = new BoletoLog;
     	$log->boleto = $boleto;
     	$log->evento = $motivo;
     	$log->data = date('Y-m-d H:i');
-    	$log->pessoa = Auth::user()->pessoa;
+        if(Auth::user() && $pessoa == 0)
+            $log->pessoa = Auth::user()->pessoa; 
+        else        
+    	    $log->pessoa = $pessoa;
     	$log->save();
     }
 
