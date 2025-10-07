@@ -22,10 +22,10 @@ class RemessaController extends Controller
 		$remessa = new \Adautopro\LaravelBoleto\Cnab\Remessa\Cnab240\Banco\Bb(
 		    [
 		        'agencia'      => env('BB_AGENCIA'),
-		        'carteira'     => env('BB_CARTEIRA'),
+		        'carteira'     => 17,
 		        'conta'        => env('BB_CONTA'),
 		        'convenio'     => env('BB_CONVENIO'),
-		        'variacaoCarteira' => '019',
+		        'variacaoCarteira' => env('BB_CARTEIRA'),
 		        'beneficiario' => $beneficiario,
 		    ]
 		);

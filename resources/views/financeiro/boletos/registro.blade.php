@@ -2,7 +2,7 @@
 @section('pagina')
 <div class="title-block">
 	
-    <h3 class="title"> Envio de be boletos via API de Cobrança do BB <span class="sparkline bar" data-type="bar"></span> </h3>
+    <h3 class="title"> Envio de boletos via API de Cobrança do BB <span class="sparkline bar" data-type="bar"></span> </h3>
     
 </div>
 @include('inc.errors')

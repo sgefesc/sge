@@ -446,10 +446,10 @@ class IntegracaoBBController extends Controller
             $result = json_decode($response->getBody()->getContents());
             return array('status' => $statusCode, 'response' => $result);
         } catch (ClientException $e) {
-            return ($e);
+            return ([$e,$this->token]);
         } catch (\Exception $e) {
             $response = $e->getMessage();
-            return ['error' => "Falha ao baixar Boleto Cobranca: {$response}"];
+            return ['error' => "Falha ao listar boletos: {$response}"];
         }
 
         
