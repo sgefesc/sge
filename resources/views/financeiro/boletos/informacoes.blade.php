@@ -49,13 +49,13 @@
                <br>
                <strong>Remessa: </strong>{{$boleto->remessa}} <br>
                <strong>Retorno:</strong> {{$boleto->retorno}}<br>
-               @if(in_array('22', Auth::user()->recursos))
+               
                 <strong>Informação bancária:</strong> 
-                <a href="/BB/boletos/{{ $boleto->id }}" title="Consultar dados bancários"> {{ $boleto->id }}</a> 
-                <a href="/BB/boletos/{{ $boleto->id }}/pix" title="Consultar dados do PIX"> PIX</a> 
+                <a href="/BB/boletos/{{ $boleto->id }}" title="Consultar dados bancários"> Situação de registro</a> 
+                <a href="/BB/boletos/{{ $boleto->id }}/pix" title="Consultar dados do PIX"> Situação PIX</a> 
                 <a href="/BB/boletos/{{ $boleto->id }}/gerar-pix" title="Gerar chave PIX"> Gerar PIX</a> 
                 <a href="/BB/boletos/{{ $boleto->id }}/cancelar-pix" title="Cancelar PIX do boleto"> Cancelar PIX</a> <br>
-               @endif
+               
                @if($boleto->pagamento)
                <strong>Pagamento:</strong> {{\Carbon\Carbon::parse($boleto->pagamento)->format('d/m/Y')}}<br>
                @endif

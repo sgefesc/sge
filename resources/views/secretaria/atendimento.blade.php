@@ -522,11 +522,11 @@
                                 <a class="dropdown-item" href="{{asset('financeiro/boletos/novo'.'/'.session('pessoa_atendimento'))}}" title="Cria um boleto manualmente">
                                     <label><i class="fa fa-plus icon text-success"></i> Boleto manual</label>
                                 </a>
-                                @if(in_array('22', Auth::user()->recursos)) 
+                                
                                 <a class="dropdown-item" href="#" onclick="registrarBoletosSelecionados()" title="Registrar boletos">
                                     <label><i class="fa fa-barcode icon text-info"></i> Registrar selecionados</label>
                                 </a> 
-                                @endif
+                                
                                 <a class="dropdown-item" href="/financeiro/boletos/imprimir-carne/{{$pessoa->id}}" title="Gerar PDF do carnê com todos boletos">
                                     <label><i class="fa fa-stack-overflow icon text-info"></i> Imprimir Carnê</label>
                                 </a> 

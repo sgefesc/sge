@@ -591,12 +591,24 @@ class IntegracaoBBController extends Controller
             );
             $statusCode = $response->getStatusCode();
             $result = json_decode($response->getBody()->getContents());
-            return array('status' => $statusCode, 'response' => $result);
+            //return array('status' => $statusCode, 'response' => $result);
         } catch (ClientException $e) {
             return ($e);
         } catch (\Exception $e) {
             $response = $e->getMessage();
             return ['error' => "Falha ao baixar Boleto Cobranca: {$response}"];
+        }
+        if($statusCode == 200){
+            $qrcode = QrcodeBoletos::where('boleto_id', $id)->first();
+            if(!$qrcode){
+                $qrcode = new QrcodeBoletos();
+                $qrcode->boleto_id = $id;
+                $qrcode->txId = $txId;
+                $qrcode->emv = $result->{'qrCode.emv'};
+                $qrcode->url = $result->{'qrCode.url'};
+                $qrcode->save();
+            }
+            return view('financeiro.boletos.pix')->with('boleto',$id)->with('pix',$qrcode);
         }
     }
 
