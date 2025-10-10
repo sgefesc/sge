@@ -29,13 +29,18 @@
       </div>
       <hr>
       @if($errors->any())
-            @foreach($errors->all() as $erro)
-                <div class="alert alert-warning">
-                        <button type="button" class="close" data-dismiss="alert" >×</button>       
-                        <p class="modal-title"><i class="fa fa-warning"></i> {{$erro}}</p>
-                </div>
-            @endforeach
-          @endif
+        @foreach($errors->all() as $erro)
+            <div class="alert alert-warning">
+                    <button type="button" class="close" data-dismiss="alert" >×</button>       
+                    <p class="modal-title"><i class="fa fa-warning"></i> {{$erro}}</p>
+            </div>
+        @endforeach
+      @endif
+      @foreach($pendencias as $pendencia)
+        <div class="alert alert-danger">
+          <strong><i class="fa fa-warning"></i> ATENÇÃO:</strong> {{$pendencia->valor}}
+        </div>
+      @endforeach
       
     </div>
 

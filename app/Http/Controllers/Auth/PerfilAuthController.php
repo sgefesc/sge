@@ -125,8 +125,8 @@ class PerfilAuthController extends Controller
         $nome_informado = explode(' ',$r->nome);
         if($r->senha <> $r->contrasenha)
             return redirect()->back()->withErrors(['Os dois campos de senha dever ser iguais.']);
-        if($rg->valor <> preg_replace("/[^0-9]/", "", $r->rg))
-            return redirect()->back()->withErrors(['Numero de RG não corresponde ao dado informado.']);
+        if($email->valor <> preg_replace("/[^0-9]/", "", $r->email))
+            return redirect()->back()->withErrors(['E-mail não corresponde ao dado informado.']);
         if($nome <> strtolower($nome_informado[0]))
             return redirect()->back()->withErrors(['Nome não corresponde ao dado informado.']);  
         
@@ -135,6 +135,7 @@ class PerfilAuthController extends Controller
         $dado->dado = 26;
         $dado->valor = Hash::make($r->senha);
         $dado->save();
+        
         
         if($email == null || $email->valor <> $r->email){
             $dado = new PessoaDadosContato;

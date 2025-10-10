@@ -51,7 +51,8 @@ class PerfilMatriculaController extends Controller
     }
 
     public function inscricao(Request $r){
-        if($r->turma == null)
+
+        if($r->turma == null || $r->pessoa == null)
             return redirect()->back()->withErrors(['Escolha pelo menos uma turma']);
 
         $ip='';
@@ -65,39 +66,46 @@ class PerfilMatriculaController extends Controller
         }
 
         foreach($r->turma as $turma){
-            echo 'inscrito em '.$turma.'<br>'."\n";
-            $inscricao=InscricaoController::inscreverAluno($r->pessoa->id,$turma,0,$r->pessoa->id);
-            if($inscricao){
-                        
+            $turma_obj = Turma::find($turma);
+            if($turma_obj==null)
+                continue;
+
+            $aluno = \App\Models\Pessoa::find($r->pessoa->id);
+            if($aluno->getIdade() < 18){
+                $autorizacao = \App\Models\Atestado::where('pessoa',$aluno->id)->where('tipo','autorizacao_menor')->where('status','aprovado')->first();
+                if($autorizacao==null){
+                    \App\Models\PessoaDadosAdministrativos::addPendencia($aluno->id,'Falta autorização de responsável para a realização do curso.');
+                    $status = 'pendente';
+                }	
+            }
+
+            $inscricao = InscricaoController::inscreverAluno($r->pessoa->id,$turma,0,$r->pessoa->id);
+           
+            
+            if($inscricao){        
                 $matricula = \App\Models\Matricula::find($inscricao->matricula);
+                if(isset($status)){
+                    $inscricao->status = $status;
+                    $inscricao->save();
+                    $matricula->status = $status;
+                }
                 $matricula->obs = 'Matricula online. IP: '.$ip;
                 $matricula->save();
             }
 
+            // Concede desconto de inauguração CT Gamer
+            if($turma_obj->sala == 103 && date('Y')==2025){
+                \App\Models\Bolsa::gerarDescontoInauguracaoCTGamer($r->pessoa->id,$matricula->id);
+                
+             }
+
         }
-
-        //gerar carnê
-
-        // devo cancelar todos boletos anteriores?
         
         $CC = new CarneController;
         $CC->gerarCarneIndividual($r->pessoa->id);
-        /*
-        $boletos = \App\Models\Boleto::where('pessoa',$r->pessoa->id)->where('status','gravado')->get();
-        foreach($boletos as $boleto){
-            $boleto->status = 'impresso';
-            $boleto->save();
-        }*/
-        
 
         return redirect('/perfil/matricula');
         
-        //confirmar que são essas turmas e aceitar o termo
-        //inscrever pessoa (verificar se já não inscrita antes)
-        //gerar boleto
-        //cadastrar pessoa no Outlook
-        //Inscrever pessoa nas turmas do Teams
-        //inscrever pessoa nas turmas do Moodle
     }
 
     public function cancelar(Request $r, $matricula){

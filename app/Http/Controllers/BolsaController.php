@@ -41,44 +41,33 @@ class BolsaController extends Controller
                     switch($status){
                         case 'aprovar':
                             $bolsa->status = 'ativa';
-                            $bolsa->save();
-                            $this->alterarStatusMatricula($bolsa,'ativa');
+                            $bolsa->save();                        
                             $atendimento = AtendimentoController::novoAtendimento('Bolsa '.$bolsa->id.' aprovada.',$bolsa->pessoa);
                             break;
                         case 'negar':
                             $bolsa->status = 'indeferida';
-                            $bolsa->save();
-                            $this->alterarStatusMatricula($bolsa,'cancelada');
+                            $bolsa->save();                            
                             $atendimento = AtendimentoController::novoAtendimento('Bolsa '.$bolsa->id.' indeferida.',$bolsa->pessoa);
                             break;
                         case 'analisando':
                             $bolsa->status = 'analisando';
-                            $bolsa->save();
-                            $this->alterarStatusMatricula($bolsa,'espera');
+                            $bolsa->save();                            
                             $atendimento = AtendimentoController::novoAtendimento('Bolsa '.$bolsa->id.' em análise.',$bolsa->pessoa);
                             break;
                         case 'cancelar':
                             $bolsa->status = 'cancelada';
-                            $bolsa->save();
-                            $this->alterarStatusMatricula($bolsa,'ativa');
+                            $bolsa->save();                            
                             $atendimento = AtendimentoController::novoAtendimento('Bolsa '.$bolsa->id.' cancelada.',$bolsa->pessoa);
                             break;
                         case 'apagar':
                             $atendimento = AtendimentoController::novoAtendimento('Solicitação de bolsa '.$bolsa->id.' excluída.',$bolsa->pessoa);
-                            $matriculas = $bolsa->getMatriculas();
-                            $this->alterarStatusMatricula($bolsa,'ativa');
-                            foreach($matriculas as $matricula){
-                                $matricula->delete();
-                            }
-
                             $bolsa->delete();
-                            return redirect('/')->withErrors(['Bolsa excluída com sucesso.']);
+                            return redirect('/atendimento')->withErrors(['Bolsa excluída com sucesso.']);
 
                             break;
                         case 'reativar':
                             $bolsa->status = 'analisando';
                             $bolsa->save();
-                            $this->alterarStatusMatricula($bolsa,'pendente');
                             $atendimento = AtendimentoController::novoAtendimento('Solicitação de bolsa '.$bolsa->id.' reativada.',$bolsa->pessoa);
                            
                             break;

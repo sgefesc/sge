@@ -81,4 +81,29 @@ class Bolsa extends Model
 		else
 			return null;
 	}
+
+	public static function gerarDescontoInauguracaoCTGamer($pessoa,$matricula){
+		// desconto 16 = desconto de inauguração CT Gamer (100%)
+		$bolsa = Bolsa::where('pessoa',$pessoa)->where('desconto',16)->where('status','ativa')->first();
+		if($bolsa == null){
+			$bolsa = new Bolsa();
+			$bolsa->pessoa = $pessoa;
+			$bolsa->desconto = '16';
+			$bolsa->status = 'ativa';
+			$bolsa->validade = '2025-12-31';
+			$bolsa->obs = 'Desconto concedido automaticamente para inauguração do CT Gamer em 2025.';
+			$bolsa->save();
+		}
+
+		$bm = BolsaMatricula::where('bolsa',$bolsa->id)->where('matricula',$matricula)->first();
+		if($bm == null){
+			$bm = new BolsaMatricula();
+			$bm->bolsa = $bolsa->id;
+			$bm->matricula = $matricula;
+			$bm->save();
+		}
+
+		return $bolsa;
+		
+	}
 }

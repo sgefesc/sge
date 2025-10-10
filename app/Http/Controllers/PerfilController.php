@@ -20,10 +20,16 @@ class PerfilController extends Controller
         //$r já contem pessoa do middleware
         $passport = \App\Models\Atestado::where('pessoa',$r->pessoa->id)->where('tipo','vacinacao')->where('status','aprovado')->first();
         $login = \App\Models\PessoaDadosAcademicos::where('pessoa',$r->pessoa->id)->where('dado','email_fesc')->orderbyDesc('id')->first();
+        $pendencias = \App\Models\PessoaDadosAdministrativos::where('pessoa',$r->pessoa->id)->where('dado','pendencia')->get();
+
         if($login)
             $login = $login->valor;
             
-        return view('perfil.painel')->with('pessoa',$r->pessoa)->with('login',$login)->with('vacinado',$passport);
+        return view('perfil.painel')
+            ->with('pessoa',$r->pessoa)
+            ->with('login',$login)
+            ->with('pendencias',$pendencias)
+            ->with('vacinado',$passport);
     }
 
     public function cadastrarView($cpf = null){
@@ -188,6 +194,9 @@ class PerfilController extends Controller
         return view('perfil.alterar-dados')->with('pessoa',$r->pessoa);;
     }
 
+    /**
+     * Altera dados de contato e endereço do usuário
+     */
     public function alterarDadosExec(Request $r){
         $pessoa = $r->pessoa->id;
         $mensagem = '';
@@ -254,7 +263,7 @@ class PerfilController extends Controller
         
     }
      public function atestadoIndex(Request $r){
-         $atestados = \App\Models\Atestado::where('pessoa',$r->pessoa->id)->get();
+         $atestados = \App\Models\Atestado::where('pessoa',$r->pessoa->id)->orderByDesc('id')->get();
          return view('perfil.atestados.atestados')->with('atestados',$atestados)->with('pessoa',$r->pessoa);
      }
 
@@ -262,6 +271,11 @@ class PerfilController extends Controller
         return view('perfil.atestados.cadastrar')->with('pessoa',$r->pessoa);
 
      }
+
+
+     /**
+      * Cadastra atestado de vacinação ou outro tipo
+      */
      public function cadastrarAtestadoExec(Request $r){
         $r->validate([
             
@@ -308,7 +322,8 @@ class PerfilController extends Controller
 
 
             try{
-                $arquivo->move('documentos/atestados/',$atestado->id.'.pdf');
+                //$arquivo->move('documentos/atestados/',$atestado->id.'.pdf');
+                $arquivo->storeAs('documentos/atestados',$atestado->id.'.pdf'); 
 
             }
             catch(\Exception $e){

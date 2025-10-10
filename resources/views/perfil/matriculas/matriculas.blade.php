@@ -27,7 +27,7 @@
     <div class="card-body">
       <div class="row">
         <div class="col-sm-12">
-          <h5 class="mb-0">Matriculas ativas</h5>
+          <h5 class="mb-0">Lista de Matriculas</h5>
           
           <p class="text-secondary"><small>Abaixo você encontrará a lista com suas matrículas.</small></p>
           
@@ -56,6 +56,26 @@
                 <div class="form-group row rodape" title="Inscrição {{$inscricao->status}}">
                   
                   <div class="col-sm-9">
+                    @switch($matricula->status)
+                      @case('ativa')
+                        <span class="badge badge-success">Ativa</span>
+                        @break
+                      @case('cancelada')
+                        <span class="badge badge-danger">Cancelada</span>
+                        @break
+                      @case('pendente')
+                        <span class="badge badge-warning" title="Procure a secretaria para saber mais detalhes">Pendente</span>
+                        @break
+                      @case('expirada')
+                        <span class="badge badge-secondary">Encerrada</span>
+                        @break
+                      @case('espera')
+                        <span class="badge badge-info" title="Aguardando o início das aulas">Aguardando início</span>
+                        @break
+                    
+                      @default
+                        
+                    @endswitch
                     <strong>{{$inscricao->turma->getNomeCurso()}}</strong><br>  <small>De {{$inscricao->turma->data_inicio}} a {{$inscricao->turma->data_termino}}</small>
                     <small> toda {{implode(', ',$inscricao->turma->dias_semana)}} - {{$inscricao->turma->hora_inicio}} ás {{$inscricao->turma->hora_termino}} | Prof. {{$inscricao->turma->professor->nome_simples}}</small>
                     

@@ -62,7 +62,7 @@ class InscricaoController extends Controller
     public static function verificaSeInscrito($pessoa,$turma){
         $existe=Inscricao::where('turma',$turma)->where('pessoa',$pessoa)->whereIn('status', ['regular','pendente'])->get();
         if($existe->count())
-            return $existe->first()->id;
+            return $existe->first();
         else
             return False;
 
@@ -157,6 +157,9 @@ class InscricaoController extends Controller
      * @return [type]             [description]
      */
     public static function inscreverAluno($aluno,$turma,$matricula=0,$atendente=0){
+        $inscricao = InscricaoController::verificaSeInscrito($aluno,$turma);        
+        if($inscricao != null)
+                return $inscricao;
 
         $turma=Turma::find($turma);
         //dd($turma);
@@ -205,32 +208,17 @@ class InscricaoController extends Controller
             }
             
         }
-
-        //se curso é na sala gamer, se a pessoa tem menos de 18 anos e se tem autorização dos pais
-        if($turma->sala == '')
-        
-            
-                
-        if(InscricaoController::verificaSeInscrito($aluno,$turma->id))
-                return Inscricao::find(InscricaoController::verificaSeInscrito($aluno,$turma->id));
-        
         if($matricula==0){
-
-
-            if(MatriculaController::verificaSeMatriculado($aluno,$turma->curso->id,$turma->data_inicio,$idPacote)==false){
-                
+            if(MatriculaController::verificaSeMatriculado($aluno,$turma->curso->id,$turma->data_inicio,$idPacote)==false){                
                 $matricula_obj = MatriculaController::gerarMatricula($aluno,$turma->id,$status,$atendente,$idPacote);
                 $matricula = $matricula_obj->id;
             }
             else{
                 $matricula_obj = MatriculaController::verificaSeMatriculado($aluno,$turma->curso->id,$turma->data_inicio,$idPacote);
-                $matricula = $matricula_obj->id;
-                
-                
+                $matricula = $matricula_obj->id;    
             }
         }
-        $atendimento = AtendimentoController::novoAtendimento(' ', $aluno, $atendente);
-        
+        $atendimento = AtendimentoController::novoAtendimento(' ', $aluno, $atendente); 
 
         $inscricao=new Inscricao();
         $inscricao->atendimento = $atendimento->id;
@@ -247,7 +235,6 @@ class InscricaoController extends Controller
         $atendimento->save();
 
         TurmaController::modInscritos($turma->id);
-
         
         return $inscricao;
     }
@@ -259,11 +246,15 @@ class InscricaoController extends Controller
      * @return [type]        [description]
      */
     public static function inscreverAlunoSemMatricula($aluno,$turma){
+        $inscricao = InscricaoController::verificaSeInscrito($aluno,$turma);        
+        if($inscricao != null)
+                return $inscricao;
+
+
         $turma=Turma::find($turma);
         if($turma == null)
             return false;
-        if(InscricaoController::verificaSeInscrito($aluno,$turma->id))
-                return Inscricao::find(InscricaoController::verificaSeInscrito($aluno,$turma->id));
+        
         $inscricao=new Inscricao();
         $inscricao->pessoa=$aluno;
         $inscricao->turma=$turma->id;
@@ -276,11 +267,15 @@ class InscricaoController extends Controller
     }
 
     public static function inscreverAlunoRematricula($aluno,$turma){
+        $inscricao = InscricaoController::verificaSeInscrito($aluno,$turma);        
+        if($inscricao != null)
+                return $inscricao;
+
+
         $turma=Turma::find($turma);
         if($turma == null)
             return false;
-        if(InscricaoController::verificaSeInscrito($aluno,$turma->id))
-                return Inscricao::find(InscricaoController::verificaSeInscrito($aluno,$turma->id));
+        
         $inscricao=new Inscricao();
         $inscricao->pessoa=$aluno;
         $inscricao->turma=$turma->id;
@@ -618,6 +613,7 @@ class InscricaoController extends Controller
         $turma_obj = \App\Models\Turma::find($turma);
         if($turma_obj == null) // não existe essa turma alternativa?
             return redirect()->back()->withErrors(['Turma inválida.']);
+
         $inscricao = Inscricao::find($r->inscricao);
         $inscricao_nova = $this->inscreverAluno($inscricao->pessoa->id,$turma,$inscricao->matricula);
 
@@ -667,11 +663,7 @@ class InscricaoController extends Controller
         if($turma->vagas<=$turma->matriculados)
             return 'Não há vagas para a turma '.$turma->id; 
 
-        if(!$turma->verificaRequisitos($pessoa)){
-            return "Aluno não atende aos pre requisitos da turma";
-    
-                 
-        }
+        return $turma->verificaRequisitos($pessoa,true)->msg;
 
     }
 

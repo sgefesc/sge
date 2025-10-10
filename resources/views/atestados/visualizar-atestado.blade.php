@@ -17,7 +17,25 @@
 
     <div class="card card-block">
     	<div class="subtitle-block">
-            <h3 class="subtitle"><i class=" fa fa-medkit "></i> Análise de Atestado número {{$atestado->id}}. </h3>
+            <h3 class="subtitle"><i class=" fa fa-medkit ">
+                </i> Atestado número {{$atestado->id}}.
+            @switch($atestado->status)
+                      @case('analisando')
+                        <span class="badge badge-warning">Em análise</span>
+                          @break
+                      @case('aprovado')
+                        <span class="badge badge-success">Aprovado</span>
+                          @break
+                      @case('recusado')
+                        <span class="badge badge-danger" title="Verifique seu e-mail para mais informações.">Reprovado</span>
+                          @break
+                      @case('vencido')
+                      <span class="badge badge-secondary">Vencido</span>
+                        @break
+                      @default
+                          
+                  @endswitch 
+            </h3>
         </div>
         <div class="form-group row"> 
 			<label class="col-sm-2 form-control-label text-xs-right">

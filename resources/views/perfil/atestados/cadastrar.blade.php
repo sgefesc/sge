@@ -25,6 +25,12 @@
               Art. 298 - Falsificar, no todo ou em parte, documento particular ou alterar documento particular verdadeiro<br>
               Pena - reclusão, de um a cinco anos, e multa.</small></p>
           </div>
+          <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert" >×</button>
+          <p class="modal-title"><i class="fa fa-warning"></i><small><strong>Atenção! Serão aceitos somente documentos com assinatura digital</strong><br>
+              Autorizações somente com a assinatura digital do portal GOV.BR</small></p>
+          </div>
+          
           @if($errors->any())
             @foreach($errors->all() as $erro)
                 <div class="alert alert-warning">
@@ -47,7 +53,7 @@
                     
             <select  class="form-control boxed" name="tipo" > 
                         <option value="saude">Saúde para atividades físicas</option>
-                        <option value="autorização" title="Autorização manual que autoriza o menor a se inscrever no curso desejado">Autorização para menores de idade</option>
+                        <option value="autorização" title="Autorização que autoriza o menor a se inscrever no curso desejado">Autorização para menores de idade</option>
                         <option value="medico">Médico para justificativa de ausências</option>
                         <option value="vacinacao">Vacinação contra COVID-19</option>
                     </select>

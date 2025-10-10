@@ -337,11 +337,18 @@ class PessoaController extends Controller
 
 		$pessoa->cpf = \App\classes\Strings::mask($pessoa->cpf,'###.###.###-##');
 		$pessoa->rg = \App\classes\Strings::mask($pessoa->rg,'##.###.###-##');
-		$atestados = \App\Models\Atestado::where('pessoa',$pessoa->id)->get();
+		$atestados = \App\Models\Atestado::where('pessoa',$pessoa->id)->where('tipo','<>','autorizacao')->get();
+		$documentos = \App\Models\Atestado::where('pessoa',$pessoa->id)->where('tipo','autorizacao')->get();
 		$atendimentos = \App\Models\Atendimento::where('usuario', $pessoa->id)->orderBy('created_at','desc')->get();
 		$contatos = \App\Models\Contato::where('para',$pessoa->id)->get();
 		$perfil = PessoaDadosGerais::where('dado',26)->where('pessoa',$pessoa->id)->first();
-		return view('pessoa.mostrar',compact('pessoa'))->with('atestados',$atestados)->with('atendimentos',$atendimentos)->with('contatos',$contatos)->with('perfil',$perfil);
+
+		return view('pessoa.mostrar',compact('pessoa'))
+			->with('atestados',$atestados)
+			->with('atendimentos',$atendimentos)
+			->with('contatos',$contatos)
+			->with('perfil',$perfil)
+			->with('documentos',$documentos);
 
 	}
 	public function edita($id){

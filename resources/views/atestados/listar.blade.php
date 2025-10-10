@@ -68,7 +68,7 @@
                 </div>
                 <div class="item-col item-col-sales">
                     <div class="item-heading">COD</div>
-                    <div> {{$atestado->id}}</div>
+                    <div> <a href="/pessoa/atestado/mostrar/{{ $atestado->id }}"> {{$atestado->id}}</div>
                 </div>                
                 <div class="item-col fixed item-col-title">
                     <div class="item-heading">Nome</div>

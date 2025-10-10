@@ -43,6 +43,10 @@ class Turma extends Model
 			return 0;
 		}
 
+		//******************************************* inauguraçao CT Gamer
+		if($this->sala == 103 && date('Y')==2025)
+			return 0;
+
 
 		//verifica se não é EMG, se for retorna valor 0
 		if($this->programa->id == 4)
@@ -401,7 +405,7 @@ class Turma extends Model
 		}
 
 		if($atestado ==1){
-			$atestado_m = Atestado::where('pessoa',$aluno->id)->where('tipo','saude')->where('status','aprovado')->first();
+			$atestado_m = Atestado::where('pessoa',$aluno->id)->where('tipo','saude')->where('status','aprovado')->orderbyDesc('id')->first();
 			if($atestado_m == null){
 				if($relatorio){
 					$retorno = new \stdClass;

@@ -64,7 +64,7 @@
                       @case('aprovado')
                         <span class="badge badge-success">Aprovado</span>
                           @break
-                      @case('reprovado')
+                      @case('recusado')
                         <span class="badge badge-danger" title="Verifique seu e-mail para mais informações.">Reprovado</span>
                           @break
                       @case('vencido')
@@ -75,8 +75,7 @@
                   @endswitch  <br>  
                 <small>Data de emissão: {{\Carbon\Carbon::parse($atestado->emissao)->format('d/m/Y')}}</small>
                 @if($atestado->validade)
-                <small>Data de validade: {{\Carbon\Carbon::parse($atestado->validade)->format('d/m/Y')}} </small>
-                                 
+                <small>Data de validade: {{\Carbon\Carbon::parse($atestado->validade)->format('d/m/Y')}} </small>            
                 @endif
                 
                 

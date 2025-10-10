@@ -46,7 +46,7 @@ class PessoaDadosAdministrativos extends Model
 		return PessoaDadosAdministrativos::getFuncionarios(['Educador','Educador de Parceria','Educador Temporário','Educador Terceirizado']);
 	}
 
-	public static function cadastrarUnico($pessoa,$dado,$valor){
+	public static function cadastrarUnico(int $pessoa,$dado,$valor){
 
 		$busca = PessoaDadosAdministrativos::where('pessoa',$pessoa)->where('dado',$dado)->where('valor',$valor)->first();
 		if($busca == null){

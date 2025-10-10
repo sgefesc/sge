@@ -22,8 +22,10 @@
                     <ul class="nav nav-tabs nav-tabs-bordered">
                         <li class="nav-item"> <a href="" class="nav-link active" data-target="#geral" data-toggle="tab" aria-controls="geral" role="tab">Dados Gerais</a> </li>
                         <li class="nav-item"> <a href="" class="nav-link" data-target="#academicos" aria-controls="academicos" data-toggle="tab" role="tab">Atendimentos</a> </li>
+                        
                         <li class="nav-item"> <a href="" class="nav-link" data-target="#clinicos" aria-controls="clinicos" data-toggle="tab" role="tab">Clínicos</a> </li>
                         <li class="nav-item"> <a href="" class="nav-link" data-target="#contato" aria-controls="contato" data-toggle="tab" role="tab">Contato</a> </li>
+                        <li class="nav-item"> <a href="" class="nav-link" data-target="#documentos" aria-controls="documentos" data-toggle="tab" role="tab">Documentos</a> </li>
                         <li class="nav-item"> <a href="" class="nav-link" data-target="#financeiros" aria-controls="financeiros" data-toggle="tab" role="tab">Financeiros</a> </li>
                         <li class="nav-item"> <a href="" class="nav-link" data-target="#obs" aria-controls="obs" data-toggle="tab" role="tab">Obs</a> </li>
                     </ul>
@@ -41,6 +43,9 @@
 
                         <!-- Clinicos *********************************************************************************** -->    
                         @include('pessoa.dados-clinicos.mostrar')
+
+                        <!-- Documentos ******************************************************************************** -->
+                        @include('pessoa.documentos.mostrar')
 
                         <!-- Financeiros ******************************************************************************** -->
                         @include('pessoa.dados-financeiros.mostrar')

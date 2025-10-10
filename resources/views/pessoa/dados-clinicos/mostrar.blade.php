@@ -33,6 +33,9 @@
                                 @case('negado')
                                     class="badge badge-pill badge-danger"
                                 @break;
+                                @case('vencido')
+                                    class="badge badge-pill badge-secondary"
+                                @break;
                                 @default
                                     class="badge badge-pill badge-secondary"
                                 @break;
