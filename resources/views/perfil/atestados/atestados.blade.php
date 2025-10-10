@@ -27,7 +27,7 @@
     <div class="card-body">
       <div class="row">
         <div class="col-sm-8">
-          <h5 class="mb-0">Atestados Médicos</h5>
+          <h5 class="mb-0">Atestados & Autorizações</h5>
           
           <p class="text-secondary"><small>Abaixo você encontrará a lista de atestados e a situação dos mesmos.</small></p>
           
@@ -35,7 +35,7 @@
           
         </div>
         <div class="col-sm-4">
-          <a class="btn btn-success" href="/perfil/atestado/cadastrar" title="Abre página para cadastrar seu atestado.">Cadastrar Atestado</a>
+          <a class="btn btn-success" href="/perfil/atestado/cadastrar" title="Abre página para cadastrar seu atestado.">Cadastrar Novo</a>
           
         </div>
         

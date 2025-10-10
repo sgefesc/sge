@@ -14,9 +14,9 @@
     <div class="card-body">
       <div class="row">
         <div class="col-sm-12">
-          <h5 class="mb-0">Cadastro de atestados</h5>
+          <h5 class="mb-0">Cadastro de atestados & Autorizações</h5>
           
-          <p class="text-secondary"><small>Cadastre seu atestado de saúde, atestado médico ou comprovante de vacinação.</small></p>
+          <p class="text-secondary"><small>Cadastre seu atestado de saúde, autorização, atestado médico ou comprovante de vacinação.</small></p>
           <hr>
           
           <div class="alert alert-danger">
@@ -47,6 +47,7 @@
                     
             <select  class="form-control boxed" name="tipo" > 
                         <option value="saude">Saúde para atividades físicas</option>
+                        <option value="autorização" title="Autorização manual que autoriza o menor a se inscrever no curso desejado">Autorização para menores de idade</option>
                         <option value="medico">Médico para justificativa de ausências</option>
                         <option value="vacinacao">Vacinação contra COVID-19</option>
                     </select>

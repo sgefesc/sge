@@ -205,6 +205,10 @@ class InscricaoController extends Controller
             }
             
         }
+
+        //se curso é na sala gamer, se a pessoa tem menos de 18 anos e se tem autorização dos pais
+        if($turma->sala == '')
+        
             
                 
         if(InscricaoController::verificaSeInscrito($aluno,$turma->id))

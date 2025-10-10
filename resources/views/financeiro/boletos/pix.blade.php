@@ -17,7 +17,7 @@
 				<strong>ID do boleto:</strong>
 			</div>
 			<div class="col-9">
-				{{$pix->boleto_id?$pix->boleto_id:'N/A'}}
+				{{$boleto?$boleto:'N/A'}}
 			</div>
 	   </div>
 	   <div class="row">
@@ -25,7 +25,7 @@
 				<strong>txID</strong>
 			</div>
 			<div class="col-9">
-				{{$pix->txid?$pix->txid:'N/A'}}
+				{{isset($pix)?$pix->txid:'N/A'}}
 			</div>		
 	   </div>
 	   <div class="row">
@@ -33,15 +33,15 @@
 				<strong>URL</strong>
 			</div>
 			<div class="col-9">
-				{{$pix->url?$pix->url:'N/A'}} 
+				{{isset($pix)?$pix->url:'N/A'}} 
 			</div>			
 	   </div>
 	   <div class="row">
 			<div class="col-12">
-				@if($pix->url)
-				<img src="{{asset('/img/qrcode.php?code='.$pix->eml) }}" alt="QR Code Pix">
+				@if(isset($pix) && $pix->eml)
+				<img src="/img/qrcode.php?code={{$pix->eml}}" alt="QR Code Pix">
 				@else
-				<p>Não há QR Code: erro.</p>
+				<p>Não há QR Code, pix inexistente.</p>
 				@endif
 			</div>		
 	   </div>

@@ -20,9 +20,19 @@ class LoginPerfil
         if(session('pessoa_perfil') == null)
             return redirect('/perfil/cpf');
         else{
+
+            $pessoa = Pessoa::find(session('pessoa_perfil'));
+            if($pessoa == null)
+                return redirect('/perfil/cpf')->withErrors(['Pessoa não encontrada!']);
+            else 
+                $request->pessoa = $pessoa;
             
-            $request->pessoa = Pessoa::find(session('pessoa_perfil'));
-            $request->pessoa->email = (PessoaDadosContato::where('pessoa',$request->pessoa->id)->where('dado',1)->orderbyDesc('id')->first()->valor);
+            $email = PessoaDadosContato::where('pessoa',$request->pessoa->id)->where('dado',1)->orderbyDesc('id')->first();
+            if($email != null)
+                $request->pessoa->email = $email->valor;
+            else
+                $request->pessoa->email = null;
+
             $request->pessoa->celular = $request->pessoa->getCelular();        
 
             return $next($request);

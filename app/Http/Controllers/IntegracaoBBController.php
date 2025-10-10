@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Psr7\Message;
 use Carbon\Carbon;
 use App\Models\Boleto;
@@ -178,7 +179,8 @@ class IntegracaoBBController extends Controller
             try{
                 $req_registro = $this->registrarBoleto($boleto_BB);
                 
-            } 
+            }
+             
             
             catch (ClientException $e) {
                 $response = $e->getResponse();
@@ -490,6 +492,7 @@ class IntegracaoBBController extends Controller
             $response = $e->getMessage();
             return ['error' => "Falha ao baixar Boleto Cobranca: {$response}"];
         }
+
     }
 
     public function consultarPixBoleto(string $id){
@@ -512,13 +515,39 @@ class IntegracaoBBController extends Controller
             );
             $statusCode = $response->getStatusCode();
             $result = json_decode($response->getBody()->getContents());
-          
-        } catch (ClientException $e) {
-            return view('financeiro.boletos.pix')->with('boleto',$id)->withErrors($e);
+         } 
+         catch (BadResponseException $e) {
+            $response = $e->getResponse();
+            $body = (string) $response->getBody();
+            $errorData = json_decode($body, true);
+
+             if (isset($errorData['erros'][0]['mensagem'])) {
+                
+                return view('financeiro.boletos.pix')->with('boleto',$id)->withErrors([$errorData['erros'][0]['mensagem']]);
+
+            } else {
+                // Mensagem de fallback caso a estrutura JSON mude ou não exista
+               return "Bad Response: " . $errorData . PHP_EOL;
+            }
+        } 
+        catch (ClientException $e) {
+            // Handle 4xx client errors
+            $response = $e->getResponse();
+            $statusCode = $response->getStatusCode();
+            $responseBody = $response->getBody()->getContents();
+            //return "Client Error (" . $statusCode . "): " . $responseBody . PHP_EOL;
+            return($responseBody);
+            return view('financeiro.boletos.pix')->with('boleto',$id)->withError([$responseBody]);
+
+        } catch (ConnectException $e) {
+            // Handle network connection errors
+            return "Connection Error: " . $e->getMessage() . PHP_EOL;
+
         } catch (\Exception $e) {
-            $response = $e->getMessage();
-            return view('financeiro.boletos.pix')->with('boleto',$id)->withErrors($response);
+            // Catch any other unexpected exceptions
+            return "An unexpected error occurred: " . $e->getMessage() . PHP_EOL;
         }
+       
 
         if($statusCode == 200){
             $qrcode = QrcodeBoletos::where('boleto_id', $id)->first();
@@ -559,10 +588,19 @@ class IntegracaoBBController extends Controller
             $result = json_decode($response->getBody()->getContents());
             
         } catch (ClientException $e) {
-            return ($e);
+            // Handle 4xx client errors
+            $response = $e->getResponse();
+            $statusCode = $response->getStatusCode();
+            $responseBody = $response->getBody()->getContents();
+            return "Client Error (" . $statusCode . "): " . $responseBody . PHP_EOL;
+
+        } catch (ConnectException $e) {
+            // Handle network connection errors
+            return "Connection Error: " . $e->getMessage() . PHP_EOL;
+
         } catch (\Exception $e) {
-            $response = $e->getMessage();
-            return ['error' => "Falha ao baixar Boleto Cobranca: {$response}"];
+            // Catch any other unexpected exceptions
+            return "An unexpected error occurred: " . $e->getMessage() . PHP_EOL;
         }
         QRCode::where('boleto_id', $id)->delete();
         return array('status' => $statusCode, 'response' => $result);
@@ -785,10 +823,19 @@ class IntegracaoBBController extends Controller
                 continue;
 
             }
-            $boleto->status = 'pago';
-            $boleto->save();
-            BoletoLogController::alteracaoBoleto($boleto->id,'Boleto pago via WebHook BB',0);
-            $boletos_processados[] = $boleto->id;
+            if($dado['numeroConvenio'] == env('BB_CONVENIO') && $dado['variacaoCarteiraConvenio'] == env('BB_CARTEIRA') ){
+                $boleto->status = 'pago';
+                $boleto->save();
+                BoletoLogController::alteracaoBoleto($boleto->id,'Boleto pago via WebHook BB',0);
+                $boletos_processados[] = $boleto->id;
+                    
+            }
+            else{
+                $boletos_processados[] = $numero_boleto;
+                $erros[] = "Boleto {$numero_boleto} com convênio ou carteira divergente";
+                continue;
+            }
+           
         }
 
         return response()->json([
