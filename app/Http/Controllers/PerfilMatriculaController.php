@@ -23,6 +23,15 @@ class PerfilMatriculaController extends Controller
         $devedor = \App\Models\Boleto::verificarDebitos($r->pessoa->id);
         if($devedor->count()>0)
             return redirect()->back()->withErrors(['Pendências encontradas em seu cadastro. Verifique seus boletos ou entre em contato com nossa secretaria.']);
+
+        $pendenciasMsg=\App\Models\PessoaDadosAdministrativos::where('pessoa',$r->pessoa)->where('dado','pendencia')->get();
+		foreach($pendenciasMsg as $pendencia){
+			if($pendencia->valor == 'Dívida ativa')
+				 return redirect()->back()->withErrors(['Pendência encontrada. Verifique na secretaria escolar']);
+			
+		
+        }
+
         $turmas = Turma::whereIn('status_matriculas',['aberta','online'])->get();
         foreach($turmas as &$turma){
             $turma->nomeCurso = $turma->getNomeCurso();
@@ -65,10 +74,14 @@ class PerfilMatriculaController extends Controller
 
         }
 
+        
+
         foreach($r->turma as $turma){
             $turma_obj = Turma::find($turma);
             if($turma_obj==null)
                 continue;
+
+
 
             $aluno = \App\Models\Pessoa::find($r->pessoa->id);
             if($aluno->getIdade() < 18){

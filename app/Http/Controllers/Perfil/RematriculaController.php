@@ -20,6 +20,15 @@ class RematriculaController extends Controller
         if($devedor->count()>0)
             return redirect()->back()->withErrors(['Pendências encontradas em seu cadastro. Verifique seus boletos ou entre em contato com nossa secretaria.']);
 
+
+        $pendenciasMsg=\App\Models\PessoaDadosAdministrativos::where('pessoa',$r->pessoa->id)->where('dado','pendencia')->get();
+		foreach($pendenciasMsg as $pendencia){
+			if($pendencia->valor == 'Dívida ativa')
+				 return redirect()->back()->withErrors(['Pendência encontrada. Verifique na secretaria escolar']);
+			
+		
+        }
+
         if(date('m')<8)
             $data_limite = (date('Y')-1).'-11-01';
       

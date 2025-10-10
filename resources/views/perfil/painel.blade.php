@@ -36,11 +36,7 @@
             </div>
         @endforeach
       @endif
-      @foreach($pendencias as $pendencia)
-        <div class="alert alert-danger">
-          <strong><i class="fa fa-warning"></i> ATENÇÃO:</strong> {{$pendencia->valor}}
-        </div>
-      @endforeach
+  
       
     </div>
 
