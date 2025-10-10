@@ -44,7 +44,8 @@ class Turma extends Model
 		}
 
 		//******************************************* inauguraçao CT Gamer
-		if($this->sala->id == 103 && date('Y')==2025)
+		$sala = $this->getSala();
+		if(isset($sala->id) &&  $sala->id == 103 && date('Y')==2025)
 			return 0;
 
 
