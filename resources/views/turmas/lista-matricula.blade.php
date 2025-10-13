@@ -8,14 +8,14 @@
                         </div>
                         
                         <div class="item-col item-col-header item-col-title">
-                            <div> <span>Cursos</span> </div>
+                            <div> <span>Turma, curso, datas e horários</span> </div>
                         </div>
                         <div class="item-col item-col-header item-col-sales">
-                            <div> <span>Professor/Unidade</span> </div>
+                            <div> <span>Professor e unidade</span> </div>
                         </div>
 
                         <div class="item-col item-col-header item-col-sales">
-                            <div> <span>Vagas/Ocup</span> </div>
+                            <div> <span>Vagas e Idades</span> </div>
                         </div>
                         <div class="item-col item-col-header item-col-sales">
                             <div> <span>Valor</span> </div>
@@ -65,8 +65,15 @@
                             </div>
                         </div>
                         <div class="item-col item-col-sales">
-                            <div class="item-heading">Vagas/Ocup</div>
-                            <div>{{$turma->vagas}} / {{$turma->matriculados}} </div>
+                            <div class="item-heading">Vagas/Ocup | Idades</div>
+                            <div title="Vagas / Inscritos | Idade mínima e máxima">{{$turma->vagas}} / {{$turma->matriculados}} <br> 
+                                @if($turma->idade_min && $turma->idade_min>0)
+                                   {{$turma->idade_min}}+<br>
+                                @endif
+                                @if($turma->idade_max && $turma->idade_max>0)
+                                   {{$turma->idade_max}}- 
+                                @endif
+                            </div>
                         </div>
                          
                        
@@ -138,7 +145,14 @@
                         </div>
                         <div class="item-col item-col-sales">
                             <div class="item-heading">Vagas/Ocup</div>
-                            <div>{{$turma->vagas}} / {{$turma->matriculados}} </div>
+                            <div title="Vagas / Inscritos | Idade mínima e máxima">{{$turma->vagas}} / {{$turma->matriculados}} <br> 
+                                @if($turma->idade_min && $turma->idade_min>0)
+                                   {{$turma->idade_min}}+<br>
+                                @endif
+                                @if($turma->idade_max && $turma->idade_max>0)
+                                   {{$turma->idade_max}}- 
+                                @endif
+                            </div>
                         </div>
                          
                        

@@ -339,8 +339,7 @@ class Turma extends Model
 				return false;
 
 		}		
-		$idade_minima = 0;
-		$idade_maxima = 0;
+		
 		$atestado = 0;
 		$reqs = CursoRequisito::where('para_tipo','turma')->where('curso',$this->id)->get();
 		foreach($reqs as $req){
@@ -378,6 +377,11 @@ class Turma extends Model
 					break;
 			}
 		}
+		if(isset($this->idade_min))
+			$idade_minima = $this->idade_min;
+
+		if(isset($this->idade_max))
+			$idade_maxima = $this->idade_max;
 		
 
 

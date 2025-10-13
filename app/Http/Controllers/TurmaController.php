@@ -411,6 +411,8 @@ class TurmaController extends Controller
         $turma->vagas=$request->vagas;
         $turma->carga=$request->carga;
         $turma->sala=$request->sala;
+        $turma->idade_min = $request->idade_min;
+        $turma->idade_max = $request->idade_max;
         $turma->atributos=$request->atributo;
         $turma->status='lancada';
         $turma->save();
@@ -632,6 +634,8 @@ class TurmaController extends Controller
         $turma->periodicidade=$request->periodicidade;
         $turma->parceria = $request->parceria;
         $turma->sala=$request->sala;
+        $turma->idade_min = $request->idade_min;
+        $turma->idade_max = $request->idade_max;
         
 
         

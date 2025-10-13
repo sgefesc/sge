@@ -201,6 +201,20 @@
 				</div>
 			</div>
 		</div>
+		<div class="form-group row"> 
+			<label class="col-sm-2 form-control-label text-xs-right">
+				Idade Mínima
+			</label>
+			<div class="col-sm-2"> 
+				<input type="number" class="form-control boxed" name="idade_min" title="Idade mínima permitida para matrícula" min="0" max="99" value="{{$turma->idade_min}}"> 
+			</div>
+			<label class="col-sm-2 form-control-label text-xs-right">
+				Idade Máxima
+			</label>
+			<div class="col-sm-2"> 		 
+					<input type="number" class="form-control boxed" name="idade_max" min="0" max="99" title="Idade máxima permitida para matrícula" value="{{$turma->idade_max}}">			
+			</div>
+		</div>
 	
 		
 		<div class="subtitle-block">

@@ -205,6 +205,20 @@
 				
 			</div>
 		</div>
+		<div class="form-group row"> 
+			<label class="col-sm-2 form-control-label text-xs-right">
+				Idade Mínima
+			</label>
+			<div class="col-sm-2"> 
+				<input type="number" class="form-control boxed" name="idade_min"> 
+			</div>
+			<label class="col-sm-2 form-control-label text-xs-right" min="0" max="99">
+				Idade Máxima
+			</label>
+			<div class="col-sm-2"> 		 
+					<input type="number" class="form-control boxed" name="idade_max" min="0" max="99">			
+			</div>
+		</div>
 		<div class="subtitle-block">
 			<br>
 			<br>
