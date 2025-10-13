@@ -131,4 +131,36 @@ Class Strings
 
 	}
 
+	/**
+	 * Sanitiza strings
+	 *
+	 * - Remove tags HTML
+	 * - Remove caracteres especiais não permitidos
+	 * - Normaliza espaços
+	 * - Coloca a primeira letra de cada palavra em maiúscula
+	 *
+	 * @param string $nome
+	 * @return string
+	 */
+	public static function sanitizeField(string $field): string
+	{
+		// Remove espaços no início e no fim
+		$field = trim($field);
+
+		// Remove tags HTML (protege contra XSS)
+		$field = strip_tags($field);
+
+		// Remove caracteres não permitidos
+		// Permite letras, acentos, espaços, ponto, apóstrofo e hífen
+		$field = preg_replace('/[^A-Za-zÀ-ÿ\s\.\'\-]/u', '', $field);
+
+		// Converte múltiplos espaços em um único
+		$field = preg_replace('/\s+/', ' ', $field);
+
+		// Padroniza para "Title Case"
+		$field = mb_convert_case($field, MB_CASE_TITLE, 'UTF-8');
+
+		return $field;
+	}
+
 }

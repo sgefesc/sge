@@ -118,32 +118,35 @@ class PerfilAuthController extends Controller
         $pessoa = Pessoa::find($r->pessoa);
         if($pessoa->id == null)
             return redirect()->back()->withErrors(['Problemas na identificação da pessoa']);
-        $rg = PessoaDadosGerais::where('pessoa',$pessoa->id)->where('dado',4)->orderBy('id','desc')->first();
-        $email = PessoaDadosContato::where('pessoa',$pessoa->id)->where('dado',1)->first();
+        //$rg = PessoaDadosGerais::where('pessoa',$pessoa->id)->where('dado',4)->orderBy('id','desc')->first();
+        $email = PessoaDadosContato::where('pessoa',$pessoa->id)->where('dado',1)->orderByDesc('id')->first();
+        //dd(preg_replace('/[^A-Za-z0-9À-ÿ@._\- ]/u', "", $r->email));
         $nome = explode(' ',$pessoa->nome_simples);
         $nome = strtolower($nome[0]);
         $nome_informado = explode(' ',$r->nome);
         if($r->senha <> $r->contrasenha)
             return redirect()->back()->withErrors(['Os dois campos de senha dever ser iguais.']);
-        if($email->valor <> preg_replace("/[^0-9]/", "", $r->email))
+        if($email->valor <> preg_replace('/[^A-Za-z0-9À-ÿ@._\- ]/u', "", $r->email))
             return redirect()->back()->withErrors(['E-mail não corresponde ao dado informado.']);
         if($nome <> strtolower($nome_informado[0]))
             return redirect()->back()->withErrors(['Nome não corresponde ao dado informado.']);  
         
-        $dado = new PessoaDadosGerais;
-        $dado->pessoa = $r->pessoa;
-        $dado->dado = 26;
-        $dado->valor = Hash::make($r->senha);
-        $dado->save();
         
         
         if($email == null || $email->valor <> $r->email){
             $dado = new PessoaDadosContato;
             $dado->pessoa = $r->pessoa;
             $dado->dado = 1;
-            $dado->valor = $r->email;
+            $dado->valor = preg_replace('/[^A-Za-z0-9À-ÿ@._\- ]/u', "", $r->email);
             $dado->save();
         }
+
+        $dado = new PessoaDadosGerais;
+        $dado->pessoa = $r->pessoa;
+        $dado->dado = 26;
+        $dado->valor = Hash::make($r->senha);
+        $dado->save();
+        
         session(['pessoa_perfil'=>$r->pessoa]);
         return redirect('/perfil');       
     }

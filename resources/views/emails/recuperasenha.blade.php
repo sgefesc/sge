@@ -32,7 +32,7 @@
             <p>Este email foi enviado para recuperar sua senha. Para prosseguir com a recuperação acesse o link abaixo. <br> Caso não tenha solicitado a recuperação, ignore este email.</p>
             <p>
 
-            <a href="{{asset('/perfil/recuperar-senha/').'/'.$token }}">{{asset('/perfil/recuperar-senha/').'/'.$token }}</a></p>
+            <a href="{{asset('/perfil/resetar-senha/').'/'.$token }}">{{asset('/perfil/resetar-senha/').'/'.$token }}</a></p>
 
 
 

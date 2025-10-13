@@ -57,17 +57,17 @@
               </div>
 
               <div class="form-group first">
-                <label for="username">E-mail</label>
+                <label for="email">E-mail</label>
                 <input type="email" class="form-control" name="email"  maxlength="150" max-size="150" required>
               </div>
 
               <div class="form-group last mb-3">
-                <label for="password">Nova Senha</label>
+                <label for="senha">Nova Senha</label>
                 <input type="password" class="form-control" name="senha"  minlength="6" maxlength="20" max-size="20" required >
               </div>
 
               <div class="form-group last mb-3">
-                <label for="password">Confirme sua senha</label>
+                <label for="contrasenha">Confirme sua senha</label>
                 <input type="password" class="form-control"  name="contrasenha" minlength="6" maxlength="20" max-size="20" required >
               </div>
               

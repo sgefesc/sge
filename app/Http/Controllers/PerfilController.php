@@ -11,6 +11,7 @@ use App\Models\Pessoa;
 use App\Models\Endereco;
 use App\Models\PessoaDadosGerais;
 use App\Models\PessoaDadosContato;
+use App\classes\Strings;
 
 class PerfilController extends Controller
 {
@@ -56,7 +57,7 @@ class PerfilController extends Controller
             'contrasenha' => 'same:senha'
         ]);
         $pessoa = new Pessoa;
-        $pessoa->nome = mb_convert_case($r->nome, MB_CASE_UPPER, 'UTF-8');
+        $pessoa->nome = mb_convert_case(Strings::sanitizeField($r->nome), MB_CASE_UPPER, 'UTF-8');
         $pessoa->genero = $r->genero;
         $pessoa->nascimento = $r->nascimento;
         $pessoa->por = 0;
@@ -92,18 +93,18 @@ class PerfilController extends Controller
         $email = new PessoaDadosContato;
         $email->pessoa = $pessoa->id;
         $email->dado = 1;
-        $email->valor = mb_convert_case($r->email, MB_CASE_LOWER, 'UTF-8');
+        $email->valor = mb_convert_case(preg_replace('/[^A-Za-z0-9À-ÿ@._\- ]/u', "", $r->email), MB_CASE_LOWER, 'UTF-8');
         $email->save();
 
         $endereco = new Endereco;
-        $endereco->logradouro = mb_convert_case($r->rua, MB_CASE_UPPER, 'UTF-8'); 
-        $endereco->numero = $r->numero_endereco;
-        $endereco->complemento = mb_convert_case($r->complemento_endereco, MB_CASE_UPPER, 'UTF-8'); 
+        $endereco->logradouro = mb_convert_case(Strings::sanitizeField($r->rua), MB_CASE_UPPER, 'UTF-8'); 
+        $endereco->numero = preg_replace( '/[^0-9]/is', '',$r->numero_endereco);
+        $endereco->complemento = mb_convert_case(Strings::sanitizeField($r->complemento_endereco), MB_CASE_UPPER, 'UTF-8'); 
         $endereco->cep = preg_replace( '/[^0-9]/is', '',$r->cep);
         $endereco->bairro = 0;
-        $endereco->bairro_str = mb_convert_case($r->bairro_str, MB_CASE_UPPER, 'UTF-8'); 
-        $endereco->cidade = mb_convert_case($r->cidade, MB_CASE_UPPER, 'UTF-8'); 
-        $endereco->estado = $r->estado;
+        $endereco->bairro_str = mb_convert_case(Strings::sanitizeField($r->bairro_str), MB_CASE_UPPER, 'UTF-8'); 
+        $endereco->cidade = mb_convert_case(Strings::sanitizeField($r->cidade), MB_CASE_UPPER, 'UTF-8'); 
+        $endereco->estado = Strings::sanitizeField($r->estado);
         $endereco->atualizado_por = $pessoa->id;
         $endereco->save();
 
