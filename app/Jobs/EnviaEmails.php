@@ -42,7 +42,7 @@ class EnviaEmails implements ShouldQueue
         $email = $this->email;
         
         \Illuminate\Support\Facades\Mail::send('emails.informeboletos2021', ['nome' => $nome,'username'=>$email_fesc ], function ($message) use($email){
-            $message->from('no-reply@fesc.saocarlos.sp.gov.br', 'Sistema Fesc');
+            $message->from('sge@fesc.app.br', 'Sistema Fesc');
             $message->to($email);
             $message->subject('Dados de acesso e boletos disponíveis');
             });

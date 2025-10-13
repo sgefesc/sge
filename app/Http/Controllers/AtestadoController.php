@@ -235,7 +235,7 @@ class AtestadoController extends Controller
 				if($dado_email){
 				
 						\Illuminate\Support\Facades\Mail::send('emails.atestado_recusado', ['atestado' => $atestado,'motivo' => $r->obs], function ($message) use($dado_email){
-						$message->from('no-reply@fesc.app.br', 'Sistema Fesc');
+						$message->from('sge@fesc.app.br', 'Sistema Fesc');
 						$message->to($dado_email->valor);
 						$message->subject('Atestado recusado');
 						});

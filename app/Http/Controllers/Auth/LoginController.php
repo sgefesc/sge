@@ -454,7 +454,7 @@ class LoginController extends Controller
 				LogController::registrar('pessoa',$acesso->pessoa,'Acesso ao sistema desativado', Auth::user()->pessoa);
 
 				Mail::send('emails.default', ['username' => $user->username , 'password' => $password], function ($message) use($user){
-					$message->from('no-reply@fesc.saocarlos.sp.gov.br', 'Sistema Fesc');
+					$message->from('sge@fesc.app.br', 'Sistema Fesc');
 					$message->to($user->email);
 					$message->subject('Atualização de senha');
 					});

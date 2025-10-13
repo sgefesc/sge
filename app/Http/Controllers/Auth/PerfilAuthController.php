@@ -170,7 +170,7 @@ class PerfilAuthController extends Controller
 
         
         Mail::send('emails.recuperasenha', ['token' => $hash ], function ($message) use($email){
-            $message->from('no-reply@fesc.app.br', 'Sistema Fesc');
+            $message->from('sge@fesc.app.br', 'Sistema Fesc');
             $message->to($email->valor);
             $message->subject('Redefinição de senha do perfil');
             });

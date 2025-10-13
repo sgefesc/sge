@@ -33,7 +33,7 @@ class defaultMailSender extends Mailable
     public function build()
     {
     
-        return $this->from('no-reply@fesc.saocarlos.sp.gov.br')
+        return $this->from('sge@fesc.app.br')
                     ->view('emails.default');
     }
 }
