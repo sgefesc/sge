@@ -33,6 +33,7 @@
           <div class="alert alert-warning">
             <button type="button" class="close" data-dismiss="alert" >×</button>       
             <p class="modal-title"><i class="fa fa-warning"></i> Menores de 18 anos necessitam de <a href="/perfil/atestado/cadastrar">autorização dos pais</a> para efetivação da matrícula. Em caso de dúvidas entre em contato pelo <a href="https://wa.me/551633620580">WhatsApp da FESC</a>
+            <br> A lista de jogos utilizados e as faixas etárias no Centro de Treinamento Gammer estão disponíveis no <a href="/repositorio/jogos_ct_gammer.pdf">AQUI</a>.
             <br> Antes de se matricular verifique se sua conexão e seu equipamento de acesso suportam o aplicativo Microsoft Teams</p>
           </div>
          

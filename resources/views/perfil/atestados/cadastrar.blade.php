@@ -27,8 +27,8 @@
           </div>
           <div class="alert alert-warning">
             <button type="button" class="close" data-dismiss="alert" >×</button>
-          <p class="modal-title"><i class="fa fa-warning"></i><small><strong>Atenção! Serão aceitos somente documentos com assinatura digital</strong><br>
-              Autorizações somente com a assinatura digital do portal GOV.BR</small></p>
+          <p class="modal-title"><i class="fa fa-warning"></i><small><strong>Atenção!</strong><br>
+              Acesse <a href="/repositorio/autorizacao_ct_gammer.docx">aqui</a> o modelo de autorização que deve ser enviado em caso de menor de idade.</small></p>
           </div>
           
           @if($errors->any())
