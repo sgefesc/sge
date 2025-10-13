@@ -341,6 +341,9 @@ class Turma extends Model
 		}		
 		
 		$atestado = 0;
+		$idade_minima = 0;
+		$idade_maxima = 0;
+		
 		$reqs = CursoRequisito::where('para_tipo','turma')->where('curso',$this->id)->get();
 		foreach($reqs as $req){
 			switch($req->requisito->id){
