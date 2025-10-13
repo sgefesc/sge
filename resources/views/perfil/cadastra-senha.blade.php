@@ -55,17 +55,14 @@
                 <label for="username">Primeiro nome</label>
                 <input type="text" class="form-control"  name="nome"  maxlength="11" max-size="11" required>
               </div>
-              <div class="form-group first">
-                <label for="username">RG</label>
-                <input type="text" class="form-control" name="rg"  maxlength="14" max-size="14" required>
-              </div>
+
               <div class="form-group first">
                 <label for="username">E-mail</label>
                 <input type="email" class="form-control" name="email"  maxlength="150" max-size="150" required>
               </div>
 
               <div class="form-group last mb-3">
-                <label for="password">Senha</label>
+                <label for="password">Nova Senha</label>
                 <input type="password" class="form-control" name="senha"  minlength="6" maxlength="20" max-size="20" required >
               </div>
 

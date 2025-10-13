@@ -30,6 +30,7 @@ class CatracaController extends Controller
            
         foreach($tags as $tag){
             $liberado = false;
+            $admin = false;
             $status = "Boa aula ".substr($tag->nome, 0, 10);
             $horarios = array();
 
@@ -89,7 +90,7 @@ class CatracaController extends Controller
                     "horarios" => $horarios,
                     "liberado" => $liberado,
                     "status" => $status,
-                    "admin" => isset($admin)? true : false,
+                    "admin" => $admin,
                 ];
             }
             

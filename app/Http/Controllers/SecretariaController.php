@@ -46,6 +46,7 @@ class SecretariaController extends Controller
 		else
 			Session::put('pessoa_atendimento',$id);	
 		$pessoa=PessoaController::formataParaMostrar($pessoa);
+
 		//$pessoa->getTelefones();
 		if(isset($pessoa->telefone))
 			$pessoa->telefone=Strings::formataTelefone($pessoa->telefone);
@@ -115,8 +116,9 @@ class SecretariaController extends Controller
 			 
 		}
 		
-		$vencimento = \Carbon\Carbon::today()->addDays(-5);
-		$boleto_vencido = $boletos->whereIn('status',['emitido','divida','aberto executado'])->where('vencimento','<',$vencimento->toDateString());
+		$vencimento =  date('Y-m-d 23:23:59', strtotime("-5 days",strtotime(date('Y-m-d')))); 
+		$boleto_vencido = $boletos->whereIn('status',['emitido','divida','aberto executado'])->where('vencimento','<',$vencimento);
+
 		if(count($boleto_vencido)>0)	
 			$devedor=true;
 		

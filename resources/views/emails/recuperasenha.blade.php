@@ -1,3 +1,42 @@
-<h1>Sistema de Gestão Eletrônica - SGE</h1>
-<p>Este email foi enviado para recuperar sua senha. Para prosseguir com a recuperação acesse o link abaixo. <br> Caso não tenha solicitado a recuperação, ignore este email.</p>
-<a href="{{asset('/recuperarconta/').'/'.$token }}">{{asset('/trocarminhasenha/').'/'.$token }}</a>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style type="text/css" rel="stylesheet" media="all">
+ body{
+        background-color: #edf2f7;
+        font-family:helvetica;
+        color:#3d4852;
+        font-size:10pt;
+
+    }
+    #content{
+        background-color: white;
+        width:50em;
+        margin:10%;
+        padding:1%;
+        float:both;
+    }
+    h1{
+        font-size:12pt;
+    }
+</style>
+</head>
+<body>
+    <div id="container">
+        <div id="content">
+            <h1>Sistema de Gestão Escolar - SGE</h1>
+            <p>Olá,</p>
+            <br>
+            <p>Este email foi enviado para recuperar sua senha. Para prosseguir com a recuperação acesse o link abaixo. <br> Caso não tenha solicitado a recuperação, ignore este email.</p>
+            <p>
+
+            <a href="{{asset('/perfil/recuperar-senha/').'/'.$token }}">{{asset('/perfil/recuperar-senha/').'/'.$token }}</a></p>
+
+
+
+        </div>
+    </div>
+</body>
+</html>

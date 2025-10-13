@@ -93,31 +93,23 @@ Class Data
          {
            if($data_nasc ==null || $data_nasc=='000-00-00' )
            return 0;
+           
+           $nascimento = \DateTime::createFromFormat('Y-m-d',$data_nasc);
+           if($nascimento===false)
+                $nascimento = \DateTime::createFromFormat('d/m/Y',$data_nasc);
 
-            $data_nasc=explode('-',$data_nasc);
+           if($nascimento===false)
+                return 0;
 
-            $data=date('d/m/Y');
+           $hoje = new \DateTime();
+           $idade = clone $hoje;
+           return ($idade->diff($nascimento)->y);
 
-            $data=explode('/',$data);
+          
+           
+           
 
-            $anos=$data[2]-$data_nasc[0];
-
-            if($data_nasc[1] > $data[1])
-
-            return $anos-1;
-
-            if($data_nasc[1] == $data[1])
-            if($data_nasc[2] <= $data[0]) {
-            return $anos;
-            
-            }
-            else{
-            return $anos-1;
-            
-            }
-
-            if ($data_nasc[1] < $data[1])
-            return $anos;
+           
         }
         public static function semestres(){
             //$semestres = \DB::select( \DB::raw('select CASE WHEN month(data_termino)<=7 THEN 1 else 2 end as semestre,year(data_termino)as ano FROM turmas where deleted_at is null GROUP BY semestre,ano order by ano DESC, semestre DESC'));
