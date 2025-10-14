@@ -603,6 +603,8 @@ class TurmaController extends Controller
         //verificar se a turma tem aulas executadas e matriculas ativas
 
         $turma=Turma::find($request->turmaid);
+
+        
         if($turma->status == 'iniciada'){
             
             if($turma->matriculados >0 && \Carbon\Carbon::createFromFormat('d/m/Y', $turma->data_inicio)->format('Y-m-d')!=$request->dt_inicio)               
@@ -636,6 +638,7 @@ class TurmaController extends Controller
         $turma->sala=$request->sala;
         $turma->idade_min = $request->idade_min;
         $turma->idade_max = $request->idade_max;
+
         
 
         
