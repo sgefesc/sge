@@ -18,7 +18,7 @@ class CatracaController extends Controller
      */
     public function sendData(){
 
-        dd('teste');
+        
         // https://dev.to/yasserelgammal/dive-into-laravel-sanctum-token-abilities-n8f
         // Implementation details would go here, such as fetching data from an external API
         // or database and updating the local records accordingly.
@@ -102,6 +102,8 @@ class CatracaController extends Controller
             }
             
         }
+
+        dd($dados);
 
         return response()->json($dados, 200);
     }
