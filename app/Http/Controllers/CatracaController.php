@@ -103,7 +103,7 @@ class CatracaController extends Controller
             
         }
 
-        dd($dados);
+        //dd($dados);
 
         return response()->json($dados, 200);
     }
