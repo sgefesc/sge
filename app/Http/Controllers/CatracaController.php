@@ -103,9 +103,14 @@ class CatracaController extends Controller
             
         }
 
-        //dd($dados);
+        // Verificando a codificação
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            echo "Erro ao codificar: " . json_last_error_msg() . "\n";
+        }
 
-        return response()->json($dados, 200);
+        $json = json_encode($dados, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+
+        return response($json, 200);
     }
 
 
