@@ -13,8 +13,8 @@ Route::group(['middleware' => []], function () {
     /*Route::get('catraca',function(){
         return response()->json(['message' => 'Catraca API is working'], 200);
     })->withoutMiddleware(\App\Http\Middleware\TrustHosts::class);*/
-    Route::post('catraca', [CatracaController::class, 'sendData']);
-    Route::get('catraca', [CatracaController::class, 'importData']);
+    Route::get('catraca', [CatracaController::class, 'sendData']); // catraca importa tags
+    Route::post('catraca', [CatracaController::class, 'importData']); // catraca envia dados presenças
 });
 route::get('tag/{tag}/{key}', [TagController::class,'tagAccess']);
 Route::get('webhook-bb', [IntegracaoBBController::class, 'respostaWebHookCobranca']);

@@ -13,7 +13,12 @@ use App\classes\Data;
 class CatracaController extends Controller
 {   
   
+    /**
+     * Envia os dados para catraca
+     */
     public function sendData(){
+
+        dd('teste');
         // https://dev.to/yasserelgammal/dive-into-laravel-sanctum-token-abilities-n8f
         // Implementation details would go here, such as fetching data from an external API
         // or database and updating the local records accordingly.
@@ -22,6 +27,8 @@ class CatracaController extends Controller
         if(!isset($headers['Token']) || $headers['Token'] !== env('HASH_API_CATRACA')){
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+
+
 
         $dados = array();
 
