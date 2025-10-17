@@ -256,7 +256,7 @@ class Turma extends Model
 	
 	public function getSala(){
 		$sala = Sala::find($this->sala);
-		return $sala;
+		return $sala->id;
 	}
 
 	public function atualizarInscritos($num){

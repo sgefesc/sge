@@ -23,9 +23,14 @@ class CatracaController extends Controller
         // Implementation details would go here, such as fetching data from an external API
         // or database and updating the local records accordingly.
 
+
+
         $headers = getallheaders();
-        if(!isset($headers['Token']) || $headers['Token'] !== env('HASH_API_CATRACA')){
-            return response()->json(['error' => 'Unauthorized'], 450);
+
+        //return response()->json($headers);
+
+        if(!isset($headers['token']) || $headers['token'] !== env('HASH_API_CATRACA')){
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
 
 
@@ -124,7 +129,7 @@ class CatracaController extends Controller
         // Provisory Authentication ******************************************************************
         // In a production environment, you would use a more secure method of authentication
         $headers = getallheaders();
-        if(!isset($headers['Token']) || $headers['Token'] !== env('HASH_API_CATRACA')){
+        if(!isset($headers['token']) || $headers['token'] !== env('HASH_API_CATRACA')){
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         // *****************************************************************************************

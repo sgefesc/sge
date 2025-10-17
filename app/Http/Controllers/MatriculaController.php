@@ -128,7 +128,9 @@ class MatriculaController extends Controller
             
         foreach($inscricoes as $inscricao){
             $inscricao->turmac=Turma::find($inscricao->turma->id);
-            $inscricao->turmac->getSala();
+            $sala = $inscricao->turmac->getSala();
+            if($sala)
+                $inscricao->turmac->sala = $sala;
 
         }
 

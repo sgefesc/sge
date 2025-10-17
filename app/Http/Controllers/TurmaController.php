@@ -267,7 +267,7 @@ class TurmaController extends Controller
             $pacote = TurmaDados::where('dado','pacote')->where('turma',$turma->id)->first();
             $turma->pacote = $pacote;
             $turma->parcelas = $turma->getParcelas();
-            $turma->getSala();
+            $turma->sala = $turma->getSala();
         }
         
         return $turmas;
