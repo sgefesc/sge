@@ -27,10 +27,10 @@ class CatracaController extends Controller
 
         $headers = getallheaders();
 
-        
-        return response()->json($headers);
 
-        if(!isset($headers['token']) || $headers['token'] !== env('HASH_API_CATRACA')){
+        //return response()->json($headers);
+
+        if(!isset($headers['Token']) || $headers['Token'] != env('HASH_API_CATRACA')){
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
