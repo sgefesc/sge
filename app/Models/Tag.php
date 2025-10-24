@@ -16,4 +16,12 @@ class Tag extends Model
     'data' => 'date',
 	'deleted_at' => 'date',
     ];
+
+    public function getNomePessoa(){
+        $p = \App\Models\Pessoa::find($this->pessoa);
+        if($p)
+            return $p->nome;
+        else
+            return 'Pessoa não encontrada';
+    }
 }

@@ -163,4 +163,58 @@ Class Strings
 		return $field;
 	}
 
+	/**
+	 * Normaliza uma string de moeda para um formato padrão (ex: "1000.50").
+	 * Lida com padrões BR (1.000,50) e US (1,000.50).
+	 *
+	 * @param string $valor A string de entrada do usuário.
+	 * @return string O valor normalizado.
+	 */
+	public static function valorMonetario(string $valor): string
+	{
+		// 1. Remove qualquer coisa que não seja dígito, ponto ou vírgula
+		$limpo = preg_replace('/[^\d,.]/', '', $valor);
+
+		// 2. Encontra o último separador (ponto ou vírgula)
+		$ultimoPonto = strrpos($limpo, '.');
+		$ultimaVirgula = strrpos($limpo, ',');
+
+		// 3. Verifica se ambos existem (ex: "1.000,50")
+		if ($ultimoPonto !== false && $ultimaVirgula !== false) {
+			
+			// Se a vírgula vem por último (padrão BR: 1.000,50)
+			if ($ultimaVirgula > $ultimoPonto) {
+				$limpo = str_replace('.', '', $limpo); // Remove pontos (milhar)
+				$limpo = str_replace(',', '.', $limpo); // Troca vírgula (decimal) por ponto
+			}
+			// Se o ponto vem por último (padrão US: 1,000.50)
+			else {
+				$limpo = str_replace(',', '', $limpo); // Remove vírgulas (milhar)
+			}
+		}
+		// 4. Se só tem vírgula (ex: "10,50" ou "1,000" - ambíguo)
+		elseif ($ultimaVirgula !== false) {
+			// Se a vírgula está 3 casas antes do fim, provavelmente é milhar
+			if ( (strlen($limpo) - $ultimaVirgula - 1 == 3) && substr_count($limpo, ',') == 1) {
+				$limpo = str_replace(',', '', $limpo); // "1,000" -> "1000"
+			} else {
+				$limpo = str_replace(',', '.', $limpo); // "10,50" -> "10.50"
+			}
+		}
+		// 5. Se só tem ponto (ex: "10.50" ou "1.000")
+		elseif ($ultimoPonto !== false) {
+			// Se o ponto está 3 casas antes do fim, provavelmente é milhar
+			if ( (strlen($limpo) - $ultimoPonto - 1 == 3) && substr_count($limpo, '.') == 1) {
+				$limpo = str_replace('.', '', $limpo); // "1.000" -> "1000"
+			}
+			// Se for "1.000.000", remove todos os pontos
+			elseif (substr_count($limpo, '.') > 1) {
+				$limpo = str_replace('.', '', $limpo); // "1.000.000" -> "1000000"
+			}
+			// Caso contrário (ex: "10.50"), já está correto e não faz nada.
+		}
+
+		return $limpo;
+	}
+
 }

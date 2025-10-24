@@ -11,6 +11,7 @@ class VerificarAtestados extends Command
 {
     /**
      * The name and signature of the console command.
+     * php artisan app:verificar-atestados
      *
      * @var string
      */

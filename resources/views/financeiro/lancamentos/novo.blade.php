@@ -24,15 +24,14 @@
         	</div>
                 
         </div>
-
+		
 		<div class="form-group row"> 
 			<label class="col-sm-2 form-control-label text-xs-right">
 				Parcela
 			</label>
-			<div class="col-sm-4"> 
+			<div class="col-sm-3"> 
 				<select class="c-select form-control boxed" name="parcela" required>
-					<option value="0">Desconto / pendência</option>
-					
+					<option value="0">Desconto / Pendência</option>
 					<option value="1" >Fevereiro</option>
 					<option value="2" >Março</option>
 					<option value="3" >Abril</option>
@@ -47,8 +46,41 @@
 
 				</select> 
 			</div>
-		
 		</div>
+		<div class="form-group row"> 
+			<label class="col-sm-2 form-control-label text-xs-right">
+				Boleto
+			</label>
+			<div class="col-sm-3"> 
+				<div class="input-group">
+					<input type="number" class="form-control boxed" name="boleto"> 
+				</div>
+			</div>
+		</div>
+		<div class="form-group row"> 
+			<label class="col-sm-2 form-control-label text-xs-right">
+				Refencia
+			</label>
+			<div class="col-sm-3"> 
+				<div class="input-group">
+					<input type="text" class="form-control boxed" name="referencia" maxlength="50" required> 
+				</div>
+			</div>
+		</div>
+	
+		<div class="form-group row"> 
+			<label class="col-sm-2 form-control-label text-xs-right">
+				Valor
+			</label>
+			<div class="col-sm-3"> 
+				<div class="input-group">
+					<span class="input-group-addon">R$ </span> 
+					<input type="text" class="form-control boxed" name="valor" required> 
+				</div>
+			</div>
+		</div>
+
+		
 		<div class="form-group row"> 
 			<label class="col-sm-2 form-control-label text-xs-right">
 				

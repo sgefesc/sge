@@ -665,29 +665,36 @@ class BoletoController extends Controller
 
 
 	public function create(Request $r){
+		
+		$lancamentos = collect();
+
 		if($r->valor >0){
 			$boleto = new Boleto;
 				$boleto->vencimento = $r->vencimento;
 				$boleto->pessoa = $r->pessoa;
 				$boleto->valor = $r->valor;
 				$boleto->status = 'gravado';
+				//$boleto->id = 1111;
 				$boleto->save();
-			if(isset($r->matriculas) && count($r->matriculas)){				
+			if(isset($r->matriculas) && count($r->matriculas)){	
+				dd($r->matriculas);			
 				foreach ($r->matriculas as $id_matricula){
 					$matricula = \App\Models\Matricula::find($id_matricula);
-					if($matricula){
+					if($matricula != null){
 						$lancamento = new Lancamento;
 						$lancamento->pessoa = $r->pessoa;
 						$lancamento->matricula = $matricula->id;
 						$lancamento->referencia = 'Parcela de '.$matricula->getNomeCurso();
 						$lancamento->valor = $matricula->valor->valor/$matricula->valor->parcelas;
 						$lancamento->boleto = $boleto->id;
+						//$lancamentos->push($lancamento);
 						$lancamento->save();
 					}
 				}	
 			}
 			if(isset($r->lancamentos) && count($r->lancamentos)){
-				$lancamentos = Lancamento::whereIn('id',$r->lancamentos)->update(['boleto'=>$boleto->id]);	
+				$lancamentos = Lancamento::whereIn('id',$r->lancamentos)->update(['boleto'=>$boleto->id]);
+
 			}		
 		}
 		else

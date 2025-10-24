@@ -66,8 +66,8 @@
 
                             </div>
                             <div class="form-group">
-                                <p class="text-muted text-xs-center">Boleto vencido? Retire asua segunda via no <a href="https://www63.bb.com.br/portalbb/boleto/boletos/hc21e.bbx" target="_blank" title="Clique aqui para acessar">site do Banco do Brasil.</a></p>
-                                <p><small>Atualizado em <strong>21/07/2025</strong></small></p>
+                                <p class="text-muted text-xs-center">Boleto vencido? Retire asua segunda via no <a href="https://boleto.apps.bb.com.br/" target="_blank" title="Clique aqui para acessar">site do Banco do Brasil.</a></p>
+                                <p><small>Atualizado em <strong>22/10/2025</strong></small></p>
                             </div>
                         </form>
                     </div>

@@ -866,8 +866,11 @@ Route::middleware(['auth','login'])->group(function(){
     
     // Tags
     Route::middleware('liberar.recurso:18')->prefix('tags')->group(function(){
+        Route::get('/gerenciar', [TagController::class, 'gerenciar']);
         Route::get('/{pessoa?}', [TagController::class, 'index']);
-        Route::get('/apagar/{id}/{pessoa}', [TagController::class, 'apagar']);
+        Route::get('/apagar/{id}', [TagController::class, 'apagar']);
+        Route::get('/adiciona-livre-acesso/{id}', [TagController::class, 'addLivreAcesso']);
+        Route::get('/remove-livre-acesso/{id}', [TagController::class, 'remLivreAcesso']);
         Route::post('/{pessoa}/criar', [TagController::class, 'criar']);
     });
     

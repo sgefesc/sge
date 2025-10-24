@@ -12,20 +12,30 @@ class TagController extends Controller
     public function index($pessoa=null){
         if($pessoa){
             $pessoa = \App\Models\Pessoa::find($pessoa);
-            $tag = Tag::where('pessoa',$pessoa->id)->first();
-            $logs = TagLog::where('pessoa',$pessoa->id)->paginate(100);
+            $tags = Tag::where('pessoa',$pessoa->id)->get();
+            $logs = TagLog::whereIn('tag',$tags->pluck('id')->toArray())->orderByDesc('id')->paginate(100);
         }
         else{     
-            $tag = null;
-            $logs = TagLog::paginate(100);
+            $tags = Tag::paginate(30);
+            $logs = TagLog::where('id',0)->paginate(30);
         }
-        //dd($tag);
+        //dd($tags);
 
         return view('tags.index')
             ->with('pessoa',$pessoa)
-            ->with('tag',$tag)
+            ->with('tags',$tags)
             ->with('logs',$logs);
 
+    }
+
+    public function gerenciar(Request $request){
+        if($request->has('nome')){
+            $pessoas = \App\Models\Pessoa::where('nome','like','%'.$request->nome.'%')->get();
+            $tags = Tag::whereIn('pessoa',$pessoas->pluck('id')->toArray())->paginate(30); 
+            return view('tags.admin',compact('tags'));    
+        }
+        $tags = Tag::paginate(30);
+        return view('tags.admin',compact('tags'));
     }
 
     public function criar(Request $r){
@@ -42,11 +52,8 @@ class TagController extends Controller
             $tag->responsavel = Auth::user()->pessoa;
             $tag->save();
 
-            $log = new TagLog;
-            $log->pessoa = $r->pessoa;
-            $log->evento = 'cadastro_tag';
-            $log->data = new \DateTime();
-            $log->save();
+            TagLog::cadastrar($tag->id);
+           
             return redirect()->back()->with(['success'=>'Tag cadastrada']);
         }
         else
@@ -57,18 +64,39 @@ class TagController extends Controller
     }
 
 
-    public function apagar($id,$pessoa){
+    public function apagar($id){
         $tag = Tag::destroy($id);
         $log = new TagLog;
-        $log->pessoa = $pessoa;
+        $log->tag = $id;
         $log->evento = 'exclusao_tag';
         $log->data = new \DateTime();
         $log->save();
-
-
         return response('ok',200);
 
     }
+
+    public function addLivreAcesso($id){
+        $tag = Tag::find($id);
+        if(!$tag)
+            return response('Tag inválida',500);
+        
+        $tag->livre_acesso = 1;
+        $tag->save();
+
+        return response('ok',200);
+    }
+    public function remLivreAcesso($id){
+        $tag = Tag::find($id);
+        if(!$tag)
+           return response('Tag inválida',500);
+        
+        $tag->livre_acesso = 0;
+        $tag->save();
+
+        return response('ok',200);
+    }
+
+
 
     public function tagAccess($tag,$key){
         //dd(md5($tag));
@@ -81,13 +109,13 @@ class TagController extends Controller
             return response('negado: tag invalida',403);
         
         
-        $pendencia = \App\Models\PessoaDadosAdministrativos::where('pessoa',$tag->pessoa)->where('dado','pendencia')->first();
+        $pendencia = \App\Models\PessoaDadosAdministrativos::where('pessoa',$tag->id)->where('dado','pendencia')->first();
         if($pendencia){
-            TagLogController::registrar('acesso_piscina_negado',$tag->pessoa);
+            TagLogController::registrar('acesso_piscina_negado',$tag->id);
             return response('negado: pendente',403);
         }
         else{
-            TagLogController::registrar('acesso_piscina_liberado',$tag->pessoa);
+            TagLogController::registrar('acesso_piscina_liberado',$tag->id);
             return response ('liberado',200);
         }
             

@@ -9,6 +9,7 @@ use App\Models\Boleto;
 use App\Models\Lancamento;
 use ValorController;
 use Session;
+use App\classes\Strings;
 
 ini_set('max_execution_time', 300);
 
@@ -418,7 +419,7 @@ class LancamentoController extends Controller
 		$lancamento->parcela = $r->parcela;
 		$lancamento->referencia = $r->referencia;
 		$lancamento->boleto = $r->boleto;
-		$lancamento->valor =  str_replace(',','.',$r->valor);
+		$lancamento->valor =  Strings::valorMonetario($r->valor);
 		$lancamento->save();
 		if($r->boleto>0)
 			BoletoController::atualizarValor($r->boleto);
@@ -619,25 +620,15 @@ class LancamentoController extends Controller
 	}
 	public function create(Request $r){
 		$erros=array();
-
-
-		
-
 		if(isset($r->matriculas)){
-
 			if(!empty($r->matriculas) && $r->parcela*1>=0){
-
 				foreach($r->matriculas as $matricula){
-
 					$matricula = Matricula::find($matricula);
 					//dd($matricula);
-
 					if($r->parcela>5 && $matricula->valor->parcelas<6)
 						$parcela=$r->parcela-6;
 					else
 						$parcela = $r->parcela;
-
-
 
 					if($r->retroativas > 0){
 						for($i=1;$i <= $parcela;$i++){
@@ -698,7 +689,11 @@ class LancamentoController extends Controller
 		{
 			$lancamento=new Lancamento; //gera novo lançamento
 			$lancamento->pessoa = 	$r->pessoa;
-			$lancamento->referencia = "Parcela ";
+			if($r->boleto != null)
+				$lancamento->boleto = $r->boleto;
+			$lancamento->valor = Strings::valorMonetario($r->valor);
+			$lancamento->parcela=$r->parcela;
+			$lancamento->referencia = $r->referencia;
 			$lancamento->save();
 		}
 		

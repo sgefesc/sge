@@ -14,7 +14,7 @@ class CatracaController extends Controller
 {   
   
     /**
-     * Envia os dados para catraca
+     * Envia os dados para o servidor intermediador catraca
      */
     public function sendData(){
 
@@ -130,7 +130,7 @@ class CatracaController extends Controller
         // Provisory Authentication ******************************************************************
         // In a production environment, you would use a more secure method of authentication
         $headers = getallheaders();
-        if(!isset($headers['token']) || $headers['token'] !== env('HASH_API_CATRACA')){
+        if(!isset($headers['Token']) || $headers['Token'] != env('HASH_API_CATRACA')){
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         // *****************************************************************************************
