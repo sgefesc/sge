@@ -8,6 +8,7 @@
     <!-- Place favicon.ico in the root directory -->
     <link rel="icon" href="{{ asset('img/moon.png')}}">
     <link rel="stylesheet" href="{{ asset('css/vendor-min.css')}}">
+    @livewireStyles
     <!-- Theme initialization -->
     <script>
         var themeSettings = (localStorage.getItem('themeSettings')) ? JSON.parse(localStorage.getItem('themeSettings')) :
@@ -24,5 +25,6 @@
         }
 
     </script>
+    
   
 </head>

@@ -117,11 +117,6 @@ class Pessoa extends Model
 						break;
 				}
 			}
-				
-				
-
-
-
 
 		}
 		return '-';

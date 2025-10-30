@@ -1,4 +1,4 @@
-<!doctype html>
+<!Doctype html>
 <html class="no-js" lang="pt-br">
     @include('layout.header')
     <body>
@@ -15,6 +15,7 @@
             </div>
         </div>
 
+        @livewireScripts
         @include('layout.bottom')
         @include('layout.footer')
         @yield('modal')

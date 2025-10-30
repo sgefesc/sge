@@ -877,6 +877,7 @@ Route::middleware(['auth','login'])->group(function(){
     // Inscrições
     Route::middleware('liberar.recurso:18')->prefix('inscricoes')->group(function(){
         Route::post('importar-dados', [InscricaoController::class, 'importarDados']);
+        
     });
     
     // HTP

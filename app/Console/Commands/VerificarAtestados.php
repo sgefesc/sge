@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Carbon\Carbon;
 use App\Models\Atestado;
 use App\Models\AtestadoLog;
+use App\Models\Contato;
 
 class VerificarAtestados extends Command
 {
@@ -34,9 +35,13 @@ class VerificarAtestados extends Command
         $modificados = 0;
         $atestados = \App\Models\Atestado::where('tipo','saude')->where('status','aprovado')->whereDate('emissao','<',(clone $hoje)->subMonths(12))->get();
         //dd((clone $hoje)->subMonths(12));
-		foreach($atestados as $atestado){       
+		foreach($atestados as $atestado){
+            $atestado->update([
+                'status' => 'vencido'
+            ]);       
+            /*
             $atestado->status = 'vencido';
-            $atestado->save();
+            $atestado->save();*/
 
             $log = new AtestadoLog;
             $log->atestado = $atestado->id;
@@ -44,13 +49,18 @@ class VerificarAtestados extends Command
             $log->pessoa = 0;
             $log->data = Carbon::now();
             $log->save();
-
             $modificados++;
-
-			
-			
-
 		}
+
+        //pegar atestados que vencerão em 1 mês
+         $atestados = \App\Models\Atestado::where('tipo','saude')->where('status','aprovado')->whereDate('emissao','<',(clone $hoje)->subMonths(11))->get();
+
+        
+		foreach($atestados as $atestado){
+            // enviar notificação para o usuário que o atestado vencerá em 1 mês.
+            Contato::enviarContatoVencimentoAtestado($atestado);
+
+        }
         
         $this->info($atestados->count().' atestados vencidos '.$modificados.' foram alterados.');
     }
