@@ -27,7 +27,7 @@
                     @if($aniversariante)
                         <img src="{{asset('/img/aniversario.png')}}" alt="Cartaz da tela inicial" width="100%">    
                     @else
-                        <img src="{{asset('/img/home.'.$img_ext)}}" alt="Cartaz da tela inicial" width="100%">
+                        <img src="{{asset('/img/home-'.date('m').'.jpg')}}" alt="Cartaz da tela inicial" width="100%">
                         
                     @endif</div>
  
@@ -47,7 +47,7 @@
                 <div class="card-block">
                     <ul>
                         <li>
-                           Sem eventos previstos.
+                           <strong>24/11</strong> - Início das rematrículas 
                         </li>
                      
                         
