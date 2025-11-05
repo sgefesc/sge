@@ -210,7 +210,10 @@ body{
 		<td class="presenca">
 		@if(isset($aula->presentes) && in_array($inscrito->pessoa->id,$aula->presentes))
 		    • 
-		@elseif($aula->status == 'executada' && ($inscrito->status == 'regular' || $inscrito->status == 'finalizada' ) && $inscrito->created_at < $aula->data->format('Y-m-d') ) 
+		@elseif($aula->status == 'executada' && ($inscrito->status == 'regular' || $inscrito->status == 'finalizada' ) && $inscrito->created_at < $aula->data->format('Y-m-d') && in_array($inscrito->pessoa->id,$aula->justificados))
+			<span title="Ausencia Justificada">🄵</span>
+
+		@elseif($aula->status == 'executada' && ($inscrito->status == 'regular' || $inscrito->status == 'finalizada' ) && $inscrito->created_at < $aula->data->format('Y-m-d') && !in_array($inscrito->pessoa->id,$aula->justificados)) 
 			@php ($falta++)
 			F
 		@elseif($aula->status == 'executada')
@@ -219,8 +222,7 @@ body{
 		</td>
 		@endforeach
 		
-		<td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:0px 3px 0px 3px;vertical-align:middle;text-align:center;">{{$falta}}
-		</td>
+		<td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:0px 3px 0px 3px;vertical-align:middle;text-align:center;" title="{{round(100-($falta*100/count($turma->aulas)))}}% de presença">{{$falta}}
 		<td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:0px 3px 0px 3px;vertical-align:middle;">
 			{{$inscrito->conceito}}
 		</td>

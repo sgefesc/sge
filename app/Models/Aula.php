@@ -27,8 +27,24 @@ class Aula extends Model
             $presentes[] = $frequencia->aluno;
         }
         return $presentes;
-
     }
+
+    public function getAlunosComAtestado(){
+        //dd($this->data->format('Y-m-d'));
+        $justificados = array();
+        $todos = \App\Models\Inscricao::selectRaw('pessoa as aluno')->where('turma',$this->turma)->pluck('aluno')->toArray();    
+        $atestados = Atestado::where('tipo', 'medico')->whereIn('pessoa',$todos)->where('emissao', '<=',$this->data)->where('validade','>=',$this->data)->get();
+        foreach($atestados as $atestado){
+            $justificados [] = $atestado->pessoa;
+        }
+        return $justificados;    
+    }
+
+    public function getAlunosComJustificativa(){
+        return true;
+    }
+
+
 
     public function getConteudo(){
         $conteudo = AulaDado::where('aula',$this->id)->where('dado','conteudo')->get();

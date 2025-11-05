@@ -360,9 +360,11 @@ body{
 		<td class="presenca aula-{{$aula->id}} aluno-{{$inscrito->id}}" >
 		@if(isset($aula->presentes) && in_array($inscrito->pessoa->id,$aula->presentes))
 			<input type="checkbox" pessoa="{{$inscrito->pessoa->id}}" aula="{{$aula->id}}" name="presente[{{$inscrito->pessoa->id}},{{$aula->id}}]" checked="true" style="margin: 0;padding:0;" class="aula-{{$aula->id}} insc-{{$inscrito->id}}" onclick="contarFaltas('{{$inscrito->id}}')">
-		@elseif($aula->status == 'executada' &&  ($inscrito->status == 'regular' || $inscrito->status == 'finalizada' ) && ($inscrito->created_at < $aula->data->format('Y-m-d') || $chamada_liberada) ) 
+		@elseif($aula->status == 'executada' &&  ($inscrito->status == 'regular' || $inscrito->status == 'finalizada' ) && ($inscrito->created_at < $aula->data->format('Y-m-d') || $chamada_liberada) && !in_array($inscrito->pessoa->id,$aula->justificados) ) 
 			@php ($falta++)
 			<input type="checkbox" pessoa="{{$inscrito->pessoa->id}}" aula="{{$aula->id}}" name="presente[{{$inscrito->pessoa->id}},{{$aula->id}}]"   style="margin: 0;padding:0;" class="aula-{{$aula->id}} insc-{{$inscrito->id}}" onclick="contarFaltas('{{$inscrito->id}}')">
+		@elseif($aula->status == 'executada' &&  ($inscrito->status == 'regular' || $inscrito->status == 'finalizada' ) && ($inscrito->created_at < $aula->data->format('Y-m-d') || $chamada_liberada) && in_array($inscrito->pessoa->id,$aula->justificados) ) 
+			<input type="checkbox"  name="disabled" disabled style="margin: 0;padding:0;" title="Ausencia justificada">
 		@elseif($aula->status == 'executada')
 		<input type="checkbox"  name="disabled" disabled style="margin: 0;padding:0;" title="Inscrição cancelada/transferida">
 		@elseif($aula->status == 'cancelada')
@@ -372,7 +374,7 @@ body{
 		@endforeach
 		<!-- // fim das presenças do aluno-->
 		
-		<td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:0px 3px 0px 3px;vertical-align:middle;text-align:center;" id="faltas-{{$inscrito->id}}">{{$falta}}
+		<td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:0px 3px 0px 3px;vertical-align:middle;text-align:center;" id="faltas-{{$inscrito->id}}" title="{{100-($falta*100/count($aulas))}}% de presença">{{$falta}}
 		</td>
 		<td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:0px 3px 0px 3px;vertical-align:middle;">
 			<select inscricao="{{$inscrito->id}}" name="conceito[{{$inscrito->id}}]" id="">

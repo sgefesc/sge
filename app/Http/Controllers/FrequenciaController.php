@@ -38,7 +38,8 @@ class FrequenciaController extends Controller
         $turma = Turma::find($turma);
         $aulas = Aula::where('turma',$turma->id)->orderBy('data')->get();
         foreach($aulas as $aula){
-            $aula->presentes = $aula->getAlunosPresentes();    
+            $aula->presentes = $aula->getAlunosPresentes(); 
+            $aula->justificados = $aula->getAlunosComAtestado();      
         }
         if(isset($_GET['filtrar']))
             $inscritos=\App\Models\Inscricao::where('turma',$turma->id)->get();
@@ -64,7 +65,8 @@ class FrequenciaController extends Controller
                 $turma->aulas = Aula::where('turma',$turma->id)->orderBy('data')->get();
             
             foreach($turma->aulas as &$aula){
-                $aula->presentes = $aula->getAlunosPresentes();    
+                $aula->presentes = $aula->getAlunosPresentes();
+                $aula->justificados = $aula->getAlunosComAtestado();       
             }
             if(isset($_GET['filtrar']))
                 $turma->inscritos=\App\Models\Inscricao::where('turma',$turma->id)->get();
@@ -107,8 +109,11 @@ class FrequenciaController extends Controller
 
         $aulas = Aula::where('turma',$turma->id)->orderBy('data')->get();
         foreach($aulas as $aula){
-            $aula->presentes = $aula->getAlunosPresentes();    
+            $aula->presentes = $aula->getAlunosPresentes(); 
+            $aula->justificados = $aula->getAlunosComAtestado();   
         }
+
+        
         if(isset($_GET['filtrar']))
         $inscritos=\App\Models\Inscricao::where('turma',$turma->id)->get();
         else
