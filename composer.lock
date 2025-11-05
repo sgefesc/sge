@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "adautopro/laravel-boleto",
-            "version": "0.8.9.3",
+            "version": "0.8.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/adautopro/laravel-boleto.git",
-                "reference": "c03de222ae29e47491ab1cb5449ed0edcafce357"
+                "reference": "90413413817747f1d596b7048e364c166d5d7a19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adautopro/laravel-boleto/zipball/c03de222ae29e47491ab1cb5449ed0edcafce357",
-                "reference": "c03de222ae29e47491ab1cb5449ed0edcafce357",
+                "url": "https://api.github.com/repos/adautopro/laravel-boleto/zipball/90413413817747f1d596b7048e364c166d5d7a19",
+                "reference": "90413413817747f1d596b7048e364c166d5d7a19",
                 "shasum": ""
             },
             "require": {
@@ -67,7 +67,7 @@
                 "laravel-boleto"
             ],
             "support": {
-                "source": "https://github.com/adautopro/laravel-boleto/tree/0.8.9.3"
+                "source": "https://github.com/adautopro/laravel-boleto/tree/0.8.9.4"
             },
             "funding": [
                 {
@@ -75,7 +75,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-11-05T12:51:33+00:00"
+            "time": "2025-11-05T14:07:59+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -10534,12 +10534,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }
