@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-use App\Models\AulaDado;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,7 +21,7 @@ class Aula extends Model
 
     public function getAlunosPresentes(){
         $presentes = array();
-        $frequencias = \App\Models\Frequencia::select('aluno')->where('aula',$this->id)->get();
+        $frequencias = Frequencia::select('aluno')->where('aula',$this->id)->get();
         foreach($frequencias as $frequencia){
             $presentes[] = $frequencia->aluno;
         }
@@ -32,10 +31,14 @@ class Aula extends Model
     public function getAlunosComAtestado(){
         //dd($this->data->format('Y-m-d'));
         $justificados = array();
-        $todos = \App\Models\Inscricao::selectRaw('pessoa as aluno')->where('turma',$this->turma)->pluck('aluno')->toArray();    
+        $todos = Inscricao::selectRaw('pessoa as aluno')->where('turma',$this->turma)->pluck('aluno')->toArray();    
         $atestados = Atestado::where('tipo', 'medico')->whereIn('pessoa',$todos)->where('emissao', '<=',$this->data)->where('validade','>=',$this->data)->get();
+        $justificativas = JustificativaAusencia::whereIn('pessoa',$todos)->where('inicio', '<=',$this->data)->where('termino','>=',$this->data)->get();
         foreach($atestados as $atestado){
             $justificados [] = $atestado->pessoa;
+        }
+        foreach($justificativas as $justificativa){
+            $justificados [] = $justificativa->pessoa;
         }
         return $justificados;    
     }
