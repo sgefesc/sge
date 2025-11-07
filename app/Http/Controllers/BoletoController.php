@@ -674,10 +674,8 @@ class BoletoController extends Controller
 				$boleto->pessoa = $r->pessoa;
 				$boleto->valor = $r->valor;
 				$boleto->status = 'gravado';
-				//$boleto->id = 1111;
 				$boleto->save();
-			if(isset($r->matriculas) && count($r->matriculas)){	
-				dd($r->matriculas);			
+			if(isset($r->matriculas) && count($r->matriculas)){			
 				foreach ($r->matriculas as $id_matricula){
 					$matricula = \App\Models\Matricula::find($id_matricula);
 					if($matricula != null){
@@ -687,7 +685,7 @@ class BoletoController extends Controller
 						$lancamento->referencia = 'Parcela de '.$matricula->getNomeCurso();
 						$lancamento->valor = $matricula->valor->valor/$matricula->valor->parcelas;
 						$lancamento->boleto = $boleto->id;
-						//$lancamentos->push($lancamento);
+						$lancamentos->push($lancamento);
 						$lancamento->save();
 					}
 				}	
