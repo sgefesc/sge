@@ -76,6 +76,56 @@ class Inscricao extends Model
 		}
                     
     }
+
+
+	/**
+	 * Verifica se há conflito de horários entre as turmas atuais e a nova turma
+	 *
+	 * @param array $turmas_atuais IDs das turmas atuais do aluno
+	 * @param int $nova_turma ID da nova turma a ser verificada
+	 * @return bool Retorna id da turmas conflitante ou null caso contrário
+	 */
+
+	public static function verificarConflitoTurmas(array $turmas_atuais, int $nova_turma){
+		$turmas_conflitantes = Array();
+		$turma = Turma::find($nova_turma);
+		foreach($turmas_atuais as $turma_id){
+			$hora_fim=date("H:i",strtotime($turma->hora_termino." - 1 minutes"));
+                    foreach($turma->dias_semana as $turm){
+                        $data = \Carbon\Carbon::createFromFormat('d/m/Y', $turma->data_termino)->format('Y-m-d');
+                        //listar turmas que tenham conflito de horário
+
+                        $turmas_conflitantes = array_merge($turmas_conflitantes,
+                       
+                            Turma::where('dias_semana', 'like', '%'.$turm.'%')
+                            ->where(function($q) use ($turma) {
+                            // Verifica se os horários se sobrepõem
+                            $q->where(function($subq) use ($turma) {
+                                $subq->where('hora_inicio', '>=', $turma->hora_inicio)
+                                    ->where('hora_inicio', '<', $turma->hora_termino);
+                                })->orWhere(function($subq) use ($turma) {
+                                $subq->where('hora_termino', '>', $turma->hora_inicio)
+
+                                    ->where('hora_termino', '<=', $turma->hora_termino);
+                                })->orWhere(function($subq) use ($turma) {
+                                $subq->where('hora_inicio', '<=', $turma->hora_inicio)
+                                    ->where('hora_termino', '>=', $turma->hora_termino);
+                                });
+                            })
+                            ->where('data_inicio','<=',$data)
+                            ->whereIn('status',['iniciada','espera'])
+                            ->pluck('id')->toArray());  
+                    }
+		}
+
+		foreach($turmas_conflitantes as $turma_conflitante){
+			if(in_array($turma_conflitante, $turmas_atuais))
+				return $turma_conflitante;
+		}
+
+		return null;
+		
+	}
             
         
     

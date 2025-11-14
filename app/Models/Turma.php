@@ -464,4 +464,6 @@ class Turma extends Model
 
 	}
 
+	
+
 }

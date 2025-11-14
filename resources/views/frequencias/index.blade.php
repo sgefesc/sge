@@ -92,6 +92,11 @@
                                     @default
                                     @break
                                     @endswitch
+                                    &nbsp;
+                                    @if($turma->pontualidade == false)
+                                        <i class="fa fa-circle-o text-danger" title="Aula com frequência em atraso"></i>
+                                    @endif
+                                   
                                     
                                     <br>
                                     {{$turma->status_matriculas}}

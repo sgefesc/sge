@@ -138,4 +138,6 @@ class Frequencia extends Model
                 ->count();
         return $atrasadas == 0 ? true : false;
     }
+
+   
 }

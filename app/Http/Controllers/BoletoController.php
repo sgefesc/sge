@@ -683,7 +683,7 @@ class BoletoController extends Controller
 						$lancamento->pessoa = $r->pessoa;
 						$lancamento->matricula = $matricula->id;
 						$lancamento->referencia = 'Parcela de '.$matricula->getNomeCurso();
-						$lancamento->valor = $matricula->valor->valor/$matricula->valor->parcelas;
+						$lancamento->valor = $matricula->valor->valor/$matricula->getParcelas();
 						$lancamento->boleto = $boleto->id;
 						$lancamentos->push($lancamento);
 						$lancamento->save();

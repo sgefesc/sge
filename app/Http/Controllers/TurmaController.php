@@ -1392,13 +1392,14 @@ class TurmaController extends Controller
             $turmas = Turma::where('professor', $docente)->whereIn('status',['lancada','iniciada','encerrada'])->whereBetween('data_inicio', $intervalo)->orderBy('hora_inicio')->get();
         }
         else{
-            $turmas = Turma::where('professor', $docente)->whereIn('status',['lançada','iniciada'])->orderBy('hora_inicio')->get();
+            $turmas = Turma::where('professor', $docente)->where('status','iniciada')->orderBy('hora_inicio')->get();
         }
 
         foreach($turmas as $turma){
               
             $turma->weekday = \App\Utils\WeekHandler::toNumber($turma->dias_semana[0]);
             $turma->chamada_regular = \App\Models\Frequencia::verificarPontualidadeChamada($turma->id);
+            $turma->pontualidade = \App\Models\Frequencia::verificarPontualidade($turma->id);
 
         }
     
