@@ -465,7 +465,7 @@ class Turma extends Model
 	}
 
 	public function verificarSeConceitoAtribuido(){
-		$inscricoes = Inscricao::where('turma',$this->id)->get();
+		$inscricoes = Inscricao::where('turma',$this->id)->where('status','regular')->get();
 		foreach($inscricoes as $inscricao){
 			if($inscricao->conceito == null){
 				return false;
