@@ -81,7 +81,11 @@
                                     <i class="fa fa-times-circle-o text-danger" title="Cancelada"></i>
                                     @break
                                     @case('iniciada')
-                                    <i class="fa fa-circle text-success" title="Iniciada"></i>
+                                        @if($turma->pontualidade === false && $turma->status == 'iniciada')
+                                        <i class="fa fa-circle-o text-danger" title="Aula com frequência em atraso"></i>
+                                        @else
+                                        <i class="fa fa-circle text-success" title="Iniciada"></i>
+                                        @endif
                                     @break
                                     @case('encerrada')
                                     <i class="fa fa-minus-circle" title="Encerrada"></i>
@@ -93,9 +97,11 @@
                                     @break
                                     @endswitch
                                     &nbsp;
-                                    @if($turma->pontualidade == false)
-                                        <i class="fa fa-circle-o text-danger" title="Aula com frequência em atraso"></i>
+                                    @if($turma->verificarSeConceitoAtribuido())
+                                        <i class="fa fa-check-square-o text-success" title="Todos conceitos atribuídos"></i>
                                     @endif
+
+                                    
                                    
                                     
                                     <br>
