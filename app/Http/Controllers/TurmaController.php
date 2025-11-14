@@ -1399,7 +1399,7 @@ class TurmaController extends Controller
               
             $turma->weekday = \App\Utils\WeekHandler::toNumber($turma->dias_semana[0]);
             $turma->chamada_regular = \App\Models\Frequencia::verificarPontualidadeChamada($turma->id);
-            $turma->pontualidade = \App\Models\Frequencia::verificarPontualidade($turma->id);
+            $turma->pontualidade = \App\Models\Frequencia::verificarPontualidadeChamada($turma->id);
 
         }
     
