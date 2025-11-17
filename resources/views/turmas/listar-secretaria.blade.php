@@ -513,15 +513,13 @@
                                                     <div class="item-col item-col-sales">
                                                         <div class="item-heading">Valor</div>
                                                         <div>
-                                                            @if($turma->pacote)
-                                                                Confira o valor <br> do pacote
-                                                            @else
+                                                            
                                                                 R$ {{number_format($turma->valor,2,',','.')}}<br>
                                                                 Em {{$turma->getParcelas()}}X <br>
                                                                     @if($turma->getParcelas()>0)
                                                                     R$ {{number_format($turma->valor/$turma->getParcelas(),2,',','.')}}
                                                                     @endif
-                                                            @endif   
+                                                         
                                                     </div>
                                                   
 

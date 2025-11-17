@@ -56,6 +56,16 @@ class Turma extends Model
 		//verifica se é parceria social
 		if($this->parceria)
 			return 0;
+
+		if($this->getPacote() != null){
+			$valor = Valor::where('pacote',$this->getPacote())->where('ano',substr($this->data_inicio,-4))->first();
+			if(isset($valor->valor))
+				return $valor->valor;
+			else
+				return 0;
+		}
+
+		
 		
 		// se for do curso atividades uati
 		if($this->curso->id == 307 && $this->carga<10)
@@ -65,8 +75,11 @@ class Turma extends Model
 		}
 		elseif($this->getRawOriginal('valor') == 0)
 		{	
+			//calcula carga horaria semanal em minutos
+			$carga_semanal = abs(strtotime($this->hora_termino) - strtotime($this->hora_inicio))/60 * count($this->dias_semana);
+			//dd($carga_semanal);
 			//procura curso/carga/ano.
-			$valorc= Valor::where('curso',$this->curso->id)->where('carga',$this->carga)->where('ano',substr($this->data_inicio,-4))->get();
+			$valorc= Valor::where('curso',$this->curso->id)->where('carga',$carga_semanal)->where('ano',substr($this->data_inicio,-4))->get();
 
 			if($valorc->count()!=1)
 
@@ -76,7 +89,7 @@ class Turma extends Model
 			if($valorc->count()!=1)
 
 				//programa/carga/ano
-				$valorc= Valor::where('programa',$this->programa->id)->where('carga',$this->carga)->where('ano',substr($this->data_inicio,-4))->get();
+				$valorc= Valor::where('programa',$this->programa->id)->where('carga',$carga_semanal)->where('ano',substr($this->data_inicio,-4))->get();
 
 			if($valorc->count()!=1)
 
@@ -102,6 +115,16 @@ class Turma extends Model
 	}
 
 	public function getParcelas(){
+		//se for pacote
+		if($this->getPacote() != null){
+			$valor = Valor::where('pacote',$this->getPacote())->where('ano',substr($this->data_inicio,-4))->first();
+			if(isset($valor->valor))
+				return $valor->parcelas;
+			else
+				return 0;
+		}
+
+
 		//procura curso/carga/ano.
 		$valorc= Valor::where('curso',$this->curso->id)->where('carga',$this->carga)->where('ano',substr($this->data_inicio,-4))->get();
 		if($valorc->count()!=1)
@@ -472,6 +495,14 @@ class Turma extends Model
 			}
 		}
 		return true;
+	}
+
+	public function getPacote(){
+		$pacote = \App\Models\TurmaDados::where('turma',$this->id)->where('dado','pacote')->first();
+		if($pacote)
+			return $pacote->valor;
+		else
+			return null;
 	}
 
 	

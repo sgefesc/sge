@@ -80,8 +80,13 @@ class ValorController extends Controller
             }
             $turma = \App\Models\Turma::find($inscricoes->first()->turma->id);
             if(isset($matricula->pacote)){
-        
-                $valor = Valor::where('pacote',$matricula->pacote)->where('ano',substr($turma->data_inicio,-4))->first();
+                $pessoa = \App\Models\Pessoa::find($matricula->pessoa);
+                if($pessoa->getIdade() >= 60)
+                    $valor = Valor::where('pacote',$matricula->pacote)->where('carga','60')->where('ano',substr($turma->data_inicio,-4))->first();
+                else
+                    $valor = Valor::where('pacote',$matricula->pacote)->where('ano',substr($turma->data_inicio,-4))->first();
+
+
                 if($valor){
                     $valor->valor = ($valor->valor/$valor->parcelas)*$matricula->getParcelas();
                     return $valor;

@@ -84,13 +84,21 @@ class PerfilMatriculaController extends Controller
 
 
             $aluno = \App\Models\Pessoa::find($r->pessoa->id);
-            if($aluno->getIdade() < 18){
+            $idade = $aluno->getIdade();
+            if($idade < 18){
                 $autorizacao = \App\Models\Atestado::where('pessoa',$aluno->id)->where('tipo','autorizacao_menor')->where('status','aprovado')->first();
                 if($autorizacao==null){
                     \App\Models\PessoaDadosAdministrativos::addPendencia($aluno->id,'Falta autorização de responsável para a realização do curso.');
                     $status = 'pendente';
                 }	
             }
+
+            if($idade >= 60){ 
+                \App\Models\PessoaDadosAdministrativos::addPendencia($aluno->id,'Confirmação de idade pendente');
+                $status = 'pendente';  
+            }
+
+
 
             $inscricao = InscricaoController::inscreverAluno($r->pessoa->id,$turma,0,$r->pessoa->id);
            

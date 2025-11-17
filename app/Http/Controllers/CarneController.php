@@ -331,7 +331,7 @@ class CarneController extends Controller
 				if($data_ini_curso->format('m')==7 || $data_ini_curso->format('m')==8 )
 					$primeiro_vencimento->setDate($primeiro_vencimento->format('Y'),'08',$this::vencimento);
 				else
-					$primeiro_vencimento->setDate($data_ini_curso->format('Y'),'03',$this::vencimento);
+					$primeiro_vencimento->setDate($data_ini_curso->format('Y'),'02',$this::vencimento);
 			}
 			else{
 				
