@@ -126,7 +126,8 @@ class Turma extends Model
 
 
 		//procura curso/carga/ano.
-		$valorc= Valor::where('curso',$this->curso->id)->where('carga',$this->carga)->where('ano',substr($this->data_inicio,-4))->get();
+		$carga_semanal = abs(strtotime($this->hora_termino) - strtotime($this->hora_inicio))/60 * count($this->dias_semana);
+		$valorc= Valor::where('curso',$this->curso->id)->where('carga',$carga_semanal)->where('ano',substr($this->data_inicio,-4))->get();
 		if($valorc->count()!=1)
 				$valorc = Valor::where('curso',$this->curso->id)
 							->where('ano',substr($this->data_inicio,-4))
@@ -134,7 +135,7 @@ class Turma extends Model
 
 		if($valorc->count()!=1)
 			$valorc = Valor::where('programa',$this->programa->id)
-							->where('carga',$this->carga)->where('ano',substr($this->data_inicio,-4))->get();
+							->where('carga',$carga_semanal)->where('ano',substr($this->data_inicio,-4))->get();
 
 		if($valorc->count()!=1){
 			if($this->parcelas == 0){
