@@ -597,7 +597,7 @@ class MatriculaController extends Controller
                 foreach($matricula->inscricoes as $inscricao){ 
                     //dd($inscricao->turma->data_termino);
     
-                    $inscricao->proxima_turma = \App\Models\Turma::where('professor',$inscricao->turma->professor->id)
+                    $inscricao->proxima_turma = \App\Models\Turma::where('sala',$inscricao->turma->sala->id)
                         ->where('dias_semana',implode(',', $inscricao->turma->dias_semana))
                         ->where('hora_inicio',$inscricao->turma->hora_inicio)
                         ->where('data_inicio','>',\Carbon\Carbon::createFromFormat('d/m/Y', $inscricao->turma->data_termino)->format('Y-m-d'))                                                          
