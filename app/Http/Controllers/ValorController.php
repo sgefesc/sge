@@ -162,17 +162,16 @@ class ValorController extends Controller
 
     		}
     		elseif($matricula->curso == 1780) //não é 307 (Atividades UATI) mas é pilates com aparelho?
-    		{
-                
+    		{     
                 $pessoa = \App\Models\Pessoa::find($matricula->pessoa);
-                if($pessoa->getIdade() >= 60)
+                if($pessoa->getIdade() >= 60 && $matricula->data>'2025-11-20')
                     $valor = Valor::where('curso',1780)->where('carga','60')->where('ano',substr($turma->data_inicio,-4))->first();
                 else
                     $valor = Valor::where('curso',1780)->where('ano',substr($turma->data_inicio,-4))->first();
                 if($valor)
                     return $valor;
                 else
-                    return ValorController::retornarZero("Valor de Pilates com aparelho não definido neste ano"); 
+                    return ValorController::retornarZero("Valor de Pilates com aparelho não definido neste ano em ValorController:valorMatricula    "); 
             }
             else{ // não é 307 nem 1780
         
@@ -199,7 +198,7 @@ class ValorController extends Controller
                 }
                 else
                     {
-                    return ValorController::retornarZero("Pacote não definido para turma ".$turma->id);
+                    return ValorController::retornarZero("Pacote não definido no ValorCotroller para turma ".$turma->id);
                     // o ideal é parar as matriculas dessa turma e emitir um aviso para secretaria de que a turma está dando problema. 
                     //throw new \Exception("Erro ao acessar valor da turma:".$inscricoes->first()->turma->id.' Matrricula:'.$matricula->id .'. Verifique se a turma está com seu valor devidamente atribuído ou se são foi escolhido a parceria no caso de disciplinas gratuítas.', 1);
                 }
