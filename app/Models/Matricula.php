@@ -157,7 +157,7 @@ class Matricula extends Model
 		}
 
 		//se matricula antes do início da turma
-		if($data_matricula->format('m') < $primeira_parcela_turma->format('m') || $data_matricula->format('Y') < 			$primeira_parcela_turma->format('Y')) 
+		if($data_matricula->format('m') < $primeira_parcela_turma->format('m') || $data_matricula->format('Y') < $primeira_parcela_turma->format('Y')) 
 			return $parcelas_turma;
 
 		else{

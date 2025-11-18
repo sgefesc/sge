@@ -124,9 +124,21 @@ class Turma extends Model
 				return 0;
 		}
 
+		/*
+		if($this->curso == 1780){
+			$valor = Valor::where('curso',1780)->where('ano',substr($this->data_inicio,-4))->first();
+			if(isset($valor->valor))
+					return $valor->parcelas;
+				else
+					return 0;
+		}*/
+
+		
+
 
 		//procura curso/carga/ano.
 		$carga_semanal = abs(strtotime($this->hora_termino) - strtotime($this->hora_inicio))/60 * count($this->dias_semana);
+		
 		$valorc= Valor::where('curso',$this->curso->id)->where('carga',$carga_semanal)->where('ano',substr($this->data_inicio,-4))->get();
 		if($valorc->count()!=1)
 				$valorc = Valor::where('curso',$this->curso->id)

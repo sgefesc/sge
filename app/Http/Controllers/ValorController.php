@@ -81,7 +81,7 @@ class ValorController extends Controller
             $turma = \App\Models\Turma::find($inscricoes->first()->turma->id);
             if(isset($matricula->pacote)){
                 $pessoa = \App\Models\Pessoa::find($matricula->pessoa);
-                if($pessoa->getIdade() >= 60)
+                if($pessoa->getIdade() >= 60 && $matricula->data>'2025-11-20')
                     $valor = Valor::where('pacote',$matricula->pacote)->where('carga','60')->where('ano',substr($turma->data_inicio,-4))->first();
                 else
                     $valor = Valor::where('pacote',$matricula->pacote)->where('ano',substr($turma->data_inicio,-4))->first();
@@ -161,15 +161,21 @@ class ValorController extends Controller
     			
 
     		}
-    		else //não é 307
+    		elseif($matricula->curso == 1780) //não é 307 (Atividades UATI) mas é pilates com aparelho?
     		{
-               /*
-    			$inscricao = \App\Models\Inscricao::where('matricula',$matricula->id)->first();
-                if($inscricoes->count()==0){
-                    return ValorController::retornarZero('Não há inscrições ativas');
                 
-
-                else*/
+                $pessoa = \App\Models\Pessoa::find($matricula->pessoa);
+                if($pessoa->getIdade() >= 60)
+                    $valor = Valor::where('curso',1780)->where('carga','60')->where('ano',substr($turma->data_inicio,-4))->first();
+                else
+                    $valor = Valor::where('curso',1780)->where('ano',substr($turma->data_inicio,-4))->first();
+                if($valor)
+                    return $valor;
+                else
+                    return ValorController::retornarZero("Valor de Pilates com aparelho não definido neste ano"); 
+            }
+            else{ // não é 307 nem 1780
+        
                 $valor = new Valor;
                 $valor->valor =0;
                 foreach($inscricoes as $inscricao){
@@ -179,7 +185,6 @@ class ValorController extends Controller
                     
                 }
                 
-
                 
                 if($valor->valor>0){
                     $valor->parcelas = $turma->getParcelas();
