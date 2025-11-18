@@ -595,16 +595,13 @@ class MatriculaController extends Controller
              foreach($matriculas as $matricula){
                 $matricula->inscricoes = \App\Models\Inscricao::where('matricula',$matricula->id)->where('status','regular')->where('conceito','CA')->get();
                 foreach($matricula->inscricoes as $inscricao){ 
-                    //dd($inscricao->turma->data_termino);
-    
-                    $inscricao->proxima_turma = \App\Models\Turma::where('sala',$inscricao->turma->sala->id)
+        
+                    $inscricao->proxima_turma = \App\Models\Turma::where('sala',$inscricao->turma->sala)
                         ->where('dias_semana',implode(',', $inscricao->turma->dias_semana))
                         ->where('hora_inicio',$inscricao->turma->hora_inicio)
                         ->where('data_inicio','>',\Carbon\Carbon::createFromFormat('d/m/Y', $inscricao->turma->data_termino)->format('Y-m-d'))                                                          
                         ->where('status_matriculas','rematricula')
                         ->get();
-            
-    
 
                     $alternativas = \App\Models\TurmaDados::where('turma',$inscricao->turma->id)->where('dado','proxima_turma')->first();
                     if($alternativas){
