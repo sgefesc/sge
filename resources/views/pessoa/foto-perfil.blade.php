@@ -84,9 +84,23 @@
     const btnFoto = document.getElementById("btnFoto");
     const btnSalvarFoto = document.getElementById("btnSalvarFoto");
 
-    // Ativar webcam
-    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+    navigator.mediaDevices.getUserMedia({
+        video: {
+            facingMode: { exact: "environment" } // força a câmera traseira
+        }
+    })
+    .then(stream => {
         video.srcObject = stream;
+    })
+    .catch(err => {
+        console.log("Erro ao acessar câmera traseira:", err);
+
+        // fallback automático para câmera frontal
+        navigator.mediaDevices.getUserMedia({
+            video: true
+        }).then(stream => {
+            video.srcObject = stream;
+        });
     });
 
     // Capturar foto SEM DISTORCER e em 500x500
