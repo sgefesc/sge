@@ -1108,6 +1108,37 @@ class PessoaController extends Controller
 		return 'gerado.';
 	}
 
+	public function alterarFotoPerfil($pessoa){
+		$pessoa = Pessoa::find($pessoa);
+		if(!$pessoa)
+			return redirect()->back()->withErrors(['Pessoa não encontrada no sistema.']);
+		return view('pessoa.foto-perfil')->with('pessoa',$pessoa);
+	}
+
+	public function gravarFotoPerfil(Request $request){
+		$this->validate($request, [
+			'foto'=>'required'
+		]);
+		$pessoa = Pessoa::find($request->pessoa);
+		if(!$pessoa)
+			return redirect()->back()->withErrors(['Pessoa não encontrada no sistema.']);
+
+		// Foto em base64 vinda do formulário
+		$imgBase64 = $request->foto; // ex: data:image/png;base64,iVBORw...
+
+		// Remove o prefixo da string base64
+		list($type, $imgBase64) = explode(';', $imgBase64);
+		list(, $imgBase64) = explode(',', $imgBase64);
+
+		// Decodifica base64
+		$imgData = base64_decode($imgBase64);
+		$path = '/documentos/fotos_perfil/'.$request->pessoa.'.jpg';
+
+		\Storage::put($path, $imgData);
+
+		return redirect('secretaria/atender/'.$request->pessoa)->with(['success'=>'Foto de perfil atualizada com sucesso.']);
+	}
+
 
 
 	

@@ -666,7 +666,7 @@ class MatriculaController extends Controller
         
            
         if(isset($inscricao->id))    
-            return redirect("/secretaria/atender/".$r->pessoa."?mostrar=todos")->with('dados["alert_sucess"]',['Turmas rematriculadas com sucesso']);
+            return redirect("/secretaria/atender/".$r->pessoa)->with('dados["alert_sucess"]',['Turmas rematriculadas com sucesso']);
         else
             return redirect("/secretaria/atender/");
     }

@@ -11,14 +11,31 @@
 
 <div class="title-search-block">
     <div class="title-block">
-        <h3 class="title" >{{$pessoa->nome}} 
+        
+      <div class="name-row" style="display:inline-flex !important; align-items:center; gap:12px; flex-wrap:nowrap;">
+            <a href="/pessoa/foto-perfil/{{$pessoa->id}}" title="Alterar foto do aluno" target="_self">
+                <img alt="Foto do aluno"
+                style="width:60px; height:60px; object-fit:cover; border-radius:50%; display:inline-block;"
+                @if(Storage::exists('documentos/fotos_perfil/'.$pessoa->id.'.jpg'))
+                src="/arquivo/foto/{{$pessoa->id}}">
+                 @else
+                src = "{{asset('img/default-user.png') }}">
+                @endif
+                </a>
+
+    <div style="display:inline-block;">
+        <div style="font-size:1.3rem; font-weight:600; line-height:1;">
+            {{$pessoa->nome}}
             @if(isset($pessoa->nome_resgistro))
                 ({{$pessoa->nome_resgistro}})
             @endif
-            
-           
-        </h3>
-        <p class="title-description" style="padding-top: 7px;">Cod. {{$pessoa->id}} - Tel. {{$pessoa->telefone}}</p>
+        </div>
+
+        <div class="title-description" style="margin-top:6px;">
+            Cod. {{$pessoa->id}} - Tel. {{$pessoa->telefone}}
+        </div>
+    </div>
+</div>
         <div class="items-search">
             
             <form class="form-inline" method="POST">

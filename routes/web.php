@@ -381,6 +381,11 @@ Route::middleware(['auth','login'])->group(function(){
             Route::get('observacoes/{var}', [PessoaDadosGeraisController::class, 'editarObservacoes_view']);
             Route::post('observacoes/{var}', [PessoaDadosGeraisController::class, 'editarObservacoes_exec']);
         });
+
+        Route::prefix('foto-perfil')->group(function(){
+            Route::get('{pessoa}', [PessoaController::class, 'alterarFotoPerfil']);
+            Route::post('{pessoa}', [PessoaController::class, 'gravarFotoPerfil']);
+        });
         
         // Dados Acadêmicos
         Route::get('matriculas', [MatriculaController::class, 'listarPorPessoa']);

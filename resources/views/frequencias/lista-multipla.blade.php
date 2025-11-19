@@ -222,7 +222,7 @@ body{
 		</td>
 		@endforeach
 		
-		<td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:0px 3px 0px 3px;vertical-align:middle;text-align:center;" title="{{round(100-($falta*100/count($turma->aulas)))}}% de presença">{{$falta}}
+		<td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:0px 3px 0px 3px;vertical-align:middle;text-align:center;" title="{{count($turma->aulas)>0?round(100-($falta*100/count($turma->aulas))):'0'}}% de presença">{{$falta}}
 		<td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:0px 3px 0px 3px;vertical-align:middle;">
 			{{$inscrito->conceito}}
 		</td>

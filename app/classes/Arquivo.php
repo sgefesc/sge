@@ -26,6 +26,9 @@ Class Arquivo {
                   case 'remessa':
                         return 'documentos/remessas/'.$arquivo;
                         break;
+                  case 'foto':
+                        return 'documentos/fotos_perfil/'.$arquivo.'.jpg';
+                        break;
                   default:
                         return "/".$arquivo.'.pdf';
             }         
@@ -48,7 +51,7 @@ Class Arquivo {
             $arquivo = Arquivo::getPath($tipo, $arquivo);
 
            if(!Storage::exists($arquivo)){
-                  return "Arquivo ".$arquivo. ' não encontrado.';
+                  return "Arquivo ".$arquivo.' não encontrado.';
             }
             return Storage::response($arquivo);
                 

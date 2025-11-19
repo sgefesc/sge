@@ -374,7 +374,7 @@ body{
 		@endforeach
 		<!-- // fim das presenças do aluno-->
 		
-		<td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:0px 3px 0px 3px;vertical-align:middle;text-align:center;" id="faltas-{{$inscrito->id}}" title="{{100-($falta*100/count($aulas))}}% de presença">{{$falta}}
+		<td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:0px 3px 0px 3px;vertical-align:middle;text-align:center;" id="faltas-{{$inscrito->id}}" title="{{count($aulas)>0?round(100-($falta*100/count($aulas))):'0'}}% de presença">{{$falta}}
 		</td>
 		<td style="border-right:1px solid #000000;border-bottom:1px solid #000000;overflow:hidden;padding:0px 3px 0px 3px;vertical-align:middle;">
 			<select inscricao="{{$inscrito->id}}" name="conceito[{{$inscrito->id}}]" id="">
