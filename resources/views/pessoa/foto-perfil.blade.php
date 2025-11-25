@@ -57,16 +57,29 @@
         <div class="col-md-6 center-block">
             <div class="text-center mt-3">
                 <button type="button" id="btnFoto" class="btn btn-primary">
-                    Capturar Foto
+                    <i class="fa fa-camera"></i>  Capturar Foto
                 </button>
                 <button type="submit" class="btn btn-success" id="btnSalvarFoto" style="display:none;">
             Salvar foto capturada
                 </button>
+                
             </div>
             <div class="text-center mt-3">
                 
             </div>
         </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 center-block">  
+            <input type="file" id="inputUpload" name="foto_upload" accept="image/*" class="form-control boxed">
+                
+        </div>
+        <div class="col-md-3 center-block">
+            <button type="submit" class="btn btn-primary" id="btnSalvarFoto">
+            <i class="fa fa-upload"></i> Enviar foto selecionada
+                </button>
+        </div>
+        
     </div>
     <input type="hidden" name="foto" id="fotoBase64">
     <input type="hidden" name="pessoa" value="{{$pessoa->id}}">

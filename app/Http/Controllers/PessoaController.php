@@ -1117,26 +1117,67 @@ class PessoaController extends Controller
 
 	public function gravarFotoPerfil(Request $request){
 		$this->validate($request, [
-			'foto'=>'required'
-		]);
+				'pessoa'=>'required|integer',
+				'foto'=>'nullable|string',
+				'foto_upload'=>'file|image|mimes:jpeg,jpg|max:2048'
+			]);
+		
 		$pessoa = Pessoa::find($request->pessoa);
 		if(!$pessoa)
 			return redirect()->back()->withErrors(['Pessoa não encontrada no sistema.']);
 
-		// Foto em base64 vinda do formulário
-		$imgBase64 = $request->foto; // ex: data:image/png;base64,iVBORw...
 
-		// Remove o prefixo da string base64
-		list($type, $imgBase64) = explode(';', $imgBase64);
-		list(, $imgBase64) = explode(',', $imgBase64);
+		if(!is_null($request->foto_upload) || $request->foto_upload != ''){
+			try{
+				$request->file('foto_upload')->storeAs('/documentos/fotos_perfil/',$request->pessoa.'.jpg');
+			}
+			catch(\Exception $e){
+				return redirect()->back()->withErrors(['Erro ao processar a imagem enviada: '.$e->getMessage()]);
+			}
+			 	
+		}
+		else{
+			if(isset($request->foto) || $request->foto != ''){
+			// Foto em base64 vinda do formulário
+			$imgBase64 = $request->foto; // ex: data:image/png;base64,iVBORw...
 
-		// Decodifica base64
-		$imgData = base64_decode($imgBase64);
-		$path = '/documentos/fotos_perfil/'.$request->pessoa.'.jpg';
+			// Remove o prefixo da string base64
+			list($type, $imgBase64) = explode(';', $imgBase64);
+			list(, $imgBase64) = explode(',', $imgBase64);
 
-		\Storage::put($path, $imgData);
+			// Decodifica base64
+			$imgData = base64_decode($imgBase64);
+			$path = '/documentos/fotos_perfil/'.$request->pessoa.'.jpg';
+			try{
+				\Storage::put($path, $imgData);
+			}
+			catch(\Exception $e){
+				return redirect()->back()->withErrors(['Erro ao processar a imagem capturda: '.$e->getMessage()]);
+			}
+			
+			}
+			else{
+				
+				return redirect()->back()->withErrors(['Nenhuma foto foi enviada.']);
+			}
+		}	
 
 		return redirect('secretaria/atender/'.$request->pessoa)->with(['success'=>'Foto de perfil atualizada com sucesso.']);
+	}
+	public function removerFotoPerfil($pessoa){
+		
+		$path = '/documentos/fotos_perfil/'.$pessoa.'.jpg';
+		if(\Storage::exists($path)){
+			try{
+				\Storage::delete($path);
+			}
+			catch(\Exception $e){
+				return redirect()->back()->withErrors(['Erro ao remover a foto de perfil: '.$e->getMessage()]);
+			}
+		}
+
+		return redirect('secretaria/atender/'.$pessoa)->with(['success'=>'Foto de perfil removida com sucesso.']);
+				
 	}
 
 

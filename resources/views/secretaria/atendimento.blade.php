@@ -13,15 +13,19 @@
     <div class="title-block">
         
       <div class="name-row" style="display:inline-flex !important; align-items:center; gap:12px; flex-wrap:nowrap;">
-            <a href="/pessoa/foto-perfil/{{$pessoa->id}}" title="Alterar foto do aluno" target="_self">
-                <img alt="Foto do aluno"
-                style="width:60px; height:60px; object-fit:cover; border-radius:50%; display:inline-block;"
+            
                 @if(Storage::exists('documentos/fotos_perfil/'.$pessoa->id.'.jpg'))
-                src="/arquivo/foto/{{$pessoa->id}}">
-                 @else
-                src = "{{asset('img/default-user.png') }}">
-                @endif
+                <a href="#" title="Visualizar foto" target="_self" data-toggle="modal" data-target="#modal-foto">
+                <img alt="Foto do aluno" style="width:60px; height:60px; object-fit:cover; border-radius:50%; display:inline-block;" src="/arquivo/foto/{{$pessoa->id}}">
                 </a>
+                
+                 @else
+                 <a href="/pessoa/foto-perfil/{{$pessoa->id}}" title="Alterar foto do aluno" target="_self">
+                <img alt="Foto do aluno" style="width:60px; height:60px; object-fit:cover; border-radius:50%; display:inline-block;" src="{{asset('img/default-user.png') }}">
+                </a>
+                
+                @endif
+                
 
     <div style="display:inline-block;">
         <div style="font-size:1.3rem; font-weight:600; line-height:1;">
@@ -107,6 +111,7 @@
     <!-- /.modal-dialog -->
 </div>
 @endif
+@include('secretaria.modal-foto')
 @include('inc.errors')
 @if($pessoa->trashed())
 <div class="alert alert-danger">
@@ -984,6 +989,13 @@ function excluirLancamentos(){
 
     if(confirm("Deseja excluir TODAS as parcelas em aberto")){
          $(location).attr('href','{{asset("/financeiro/lancamentos/excluir-abertos")}}/{{$pessoa->id}}');
+    }
+
+}
+function removerFotoPerfil(){
+
+    if(confirm("Deseja excluir a foto de perfil atual?")){
+         $(location).attr('href','{{asset("/pessoa/remover-foto-perfil/")}}/{{$pessoa->id}}');
     }
 
 }

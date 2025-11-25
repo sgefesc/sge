@@ -386,6 +386,7 @@ Route::middleware(['auth','login'])->group(function(){
             Route::get('{pessoa}', [PessoaController::class, 'alterarFotoPerfil']);
             Route::post('{pessoa}', [PessoaController::class, 'gravarFotoPerfil']);
         });
+        Route::get('remover-foto-perfil/{pessoa}', [PessoaController::class, 'removerFotoPerfil']);
         
         // Dados Acadêmicos
         Route::get('matriculas', [MatriculaController::class, 'listarPorPessoa']);
