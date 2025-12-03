@@ -67,6 +67,18 @@ class PessoaDadosAdministrativos extends Model
 		return PessoaDadosAdministrativos::cadastrarUnico($pessoa,'pendencia',$descricao);
 	}
 
+	public static function lancarPendencia($pessoa, $descricao){
+		$pendencia = PessoaDadosAdministrativos::where('pessoa',$pessoa)->where('dado','pendencia')->where('valor',$descricao)->first();
+		if($pendencia == null){
+			$pendencia = new PessoaDadosAdministrativos;
+			$pendencia->pessoa = $pessoa;
+			$pendencia->dado = 'pendencia';
+			$pendencia->valor = $descricao;
+			$pendencia->save();
+		}
+		return $pendencia;
+	}
+
 
 
 }

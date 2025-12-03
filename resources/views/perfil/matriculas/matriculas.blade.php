@@ -26,7 +26,7 @@
                       
     <div class="card-body">
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-8">
           <h5 class="mb-0">Lista de Matriculas</h5>
           
           <p class="text-secondary"><small>Abaixo você encontrará a lista com suas matrículas.</small></p>
@@ -34,11 +34,14 @@
           
           
         </div>
+        <div class="col-sm-4 text-right">
+          <a class="btn btn-primary" href="/perfil/matricula/inscricao" title="Abre página para escolher os cursos que deseja se matricular.">Nova Matriculas</a>
+        </div>
         
         
       </div>
       
-      <a class="btn btn-success" href="/perfil/matricula/inscricao" title="Abre página para escolher os cursos que deseja se matricular.">Nova Matricula</a>
+      
 
       <hr>
       <div class="row">
@@ -56,12 +59,12 @@
                 <div class="form-group row rodape" title="Inscrição {{$inscricao->status}}">
                   
                   <div class="col-sm-9">
-                    @switch($matricula->status)
-                      @case('ativa')
-                        <span class="badge badge-success">Ativa</span>
+                    @switch($inscricao->status)
+                      @case('regular')
+                        <span class="badge border-primary bg-white">Regular</span>
                         @break
                       @case('cancelada')
-                        <span class="badge badge-danger">Cancelada</span>
+                        <span class="badge badge-secondary">Cancelada</span>
                         @break
                       @case('pendente')
                         <span class="badge badge-warning" title="Procure a secretaria para saber mais detalhes">Pendente</span>
@@ -72,16 +75,19 @@
                       @case('espera')
                         <span class="badge badge-info" title="Aguardando o início das aulas">Aguardando início</span>
                         @break
+                       @case('transferida')
+                        <span class="badge badge-secondary" title="Aguardando o início das aulas">Transferida</span>
+                        @break
                     
                       @default
                         
                     @endswitch
-                    <strong>{{$inscricao->turma->getNomeCurso()}}</strong><br>  <small>De {{$inscricao->turma->data_inicio}} a {{$inscricao->turma->data_termino}}</small>
+                    <strong>Turma {{$inscricao->turma->id.' - '.$inscricao->turma->getNomeCurso()}}</strong><br>  <small>De {{$inscricao->turma->data_inicio}} a {{$inscricao->turma->data_termino}}</small>
                     <small> toda {{implode(', ',$inscricao->turma->dias_semana)}} - {{$inscricao->turma->hora_inicio}} ás {{$inscricao->turma->hora_termino}} | Prof. {{$inscricao->turma->professor->nome_simples}}</small>
                     
       
                   </div>
-                  <div class="col-sm-2">
+                  <div class="col-sm-2 text-right">
                     @if($inscricao->status='pendente')
                     <a href="#"  class="btn btn-outline-secondary btn-sm" onclick="alert('Pendências encontradas: aguarde a validação do seu atestado ou entre em contato com a secretaria')" title="Termo de matrícula disponível após resolução das pendências">
                       Termo</a>

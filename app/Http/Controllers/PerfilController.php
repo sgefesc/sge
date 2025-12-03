@@ -302,14 +302,7 @@ class PerfilController extends Controller
         
         else{
 
-            $existente = \App\Models\Atestado::where('pessoa',$r->pessoa->id)->where('tipo',$r->tipo)->whereIn('status',['analisando','aprovado'])->get();
-            if($existente->count()>0){
-                $atestado = $existente->first();
-                $mensagem = "Atestado já cadastrado. Sobrescrevendo arquivo.";
-
-            }
-               
-            else{
+            
                 $atestado = new \App\Models\Atestado;
                 $atestado->pessoa = $r->pessoa->id;
                 $atestado->atendente = $r->pessoa->id;
@@ -319,7 +312,7 @@ class PerfilController extends Controller
                 $atestado->save();  
                 \App\Models\AtestadoLog::registrar($atestado->id,'Atestado cadastrado pelo aluno',$r->pessoa->id);
                 $mensagem = 'Atestado cadastrado com sucesso!' ;
-            }
+            
 
 
             try{

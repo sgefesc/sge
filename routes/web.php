@@ -118,6 +118,7 @@ Route::prefix('perfil')->group(function(){
     Route::get('autentica/{cpf}', [PerfilAuthController::class, 'verificarCPF']);
     Route::post('autentica/{cpf}', [PerfilAuthController::class, 'autenticaCPF']);
     Route::get('recuperar-senha/{cpf}', [PerfilAuthController::class, 'recuperarSenhaView']);
+    Route::post('recuperar-senha/{cpf}', [PerfilAuthController::class, 'recuperarSenhaEmail']);
     Route::get('resetar-senha/{token}', [PerfilAuthController::class, 'recuperarSenhaExec']);
     Route::post('cadastrar-senha', [PerfilAuthController::class, 'cadastrarSenha']);
     

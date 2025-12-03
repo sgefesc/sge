@@ -80,7 +80,7 @@
             </tr>
          @foreach($matriculas as $matricula)
                 @foreach($matricula->inscricoes as $inscricao)
-                    @if($inscricao->proxima_turma->count()==1)
+                    @if($inscricao->proxima_turma && $inscricao->proxima_turma->count()==1)
                         <tr>
                             <td><input type="checkbox" name="turma[]" value="{{$inscricao->proxima_turma->first()->id}}"></td>
                             <td>
@@ -106,7 +106,7 @@
                                 {{$inscricao->proxima_turma->first()->local->sigla}}
                             </td>
                         </tr>
-                    @elseif($inscricao->proxima_turma->count()>1)
+                    @elseif($inscricao->proxima_turma && $inscricao->proxima_turma->count()>1)
 
                     @foreach($inscricao->proxima_turma as $next)
 
@@ -148,7 +148,7 @@
         <div class="form-group row">                
             <div class="col-md-12 form-group form"> 
                 <input type="hidden" name="pessoa" value="{{$pessoa->id}}">
-                <button type="submit" name="btn"  class="btn btn-success">Avançar</button>
+                <button type="submit" name="btn"  class="btn btn-primary">Avançar</button>
                 <button type="reset" name="btn"  class="btn btn-outline-secondary">Limpar</button>
                 <button type="cancel" name="btn" class="btn btn-outline-secondary" onclick="history.back(-2);return false;">Cancelar</button>
             </div>

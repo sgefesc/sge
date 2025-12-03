@@ -47,26 +47,31 @@ class PerfilAuthController extends Controller
     }
 
     public function verificarCPF($cpf){
+        
         if(!is_numeric($cpf))
             return redirect()->back()->withErrors(['CPF inválido']);
         elseif(!$this->validaCPF($cpf))
             return redirect()->back()->withErrors(['CPF inválido']);
         else{
+           
             $pessoa = PessoaDadosGerais::where('dado',3)->where('valor',$cpf)->first();
             if($pessoa == null)
-                return redirect('/perfil/cadastrar-pessoa/'.$cpf);
+                return redirect('/perfil/cadastrar-pessoa/'.$cpf);     
             else{
                 $senha = PessoaDadosGerais::where('dado',26)->where('pessoa',$pessoa->pessoa)->first();
-                if($senha == null)
-                    return view('perfil.cadastra-senha')->with('pessoa',$pessoa->pessoa);
+                if($senha == null){
+                    $email = PessoaDadosContato::where('pessoa',$pessoa->pessoa)->where('dado',1)->orderByDesc('id')->first();
+                    if($email != null)
+                        return view('perfil.cadastra-senha')->with('pessoa',$pessoa->pessoa);
+                    else
+                        return redirect()->back()->withErrors(['Nenhum e-mail cadastrado para esta pessoa. Entre em contato pelo Whatsapp 1633620580 para cadastrar um e-mail antes de prosseguir;']);
+                }
                 else
                     return view('perfil.senha')->with('pessoa',$senha->pessoa)->with('cpf',$cpf);
 
 
             }
         }
-
-
 
     }
     
@@ -84,8 +89,13 @@ class PerfilAuthController extends Controller
             return redirect('/perfil/cadastrar-pessoa/')->with('cpf',$numcpf);
         else{
             $senha = PessoaDadosGerais::where('dado',26)->where('pessoa',$pessoa->pessoa)->first();
-            if($senha == null)
-                return view('perfil.cadastra-senha')->with('pessoa',$pessoa->pessoa);
+            $email = PessoaDadosContato::where('pessoa',$pessoa->id)->where('dado',1)->orderByDesc('id')->first();
+            if($senha == null){
+                if($email != null || $email->valor != '')
+                    return view('perfil.cadastra-senha')->with('pessoa',$pessoa->pessoa);
+                else
+                    return redirect()->back()->withErrors(['Nenhum e-mail cadastrado para esta pessoa. Entre em contato pelo Whatsapp 1633620580 para cadastrar um e-mail antes de prosseguir.']);
+            }
             else{
                 if(Hash::check($r->senha,$senha->valor)){
                     session(['pessoa_perfil' => $senha->pessoa]);
@@ -121,6 +131,9 @@ class PerfilAuthController extends Controller
         //$rg = PessoaDadosGerais::where('pessoa',$pessoa->id)->where('dado',4)->orderBy('id','desc')->first();
         $email = PessoaDadosContato::where('pessoa',$pessoa->id)->where('dado',1)->orderByDesc('id')->first();
         //dd(preg_replace('/[^A-Za-z0-9À-ÿ@._\- ]/u', "", $r->email));
+        if($email == null)
+            return redirect()->back()->withErrors(['Nenhum e-mail cadastrado para esta pessoa. Utilize seu Whatsapp para cadastrar um e-mail antes de prosseguir.']);
+        
         $nome = explode(' ',$pessoa->nome_simples);
         $nome = strtolower($nome[0]);
         $nome_informado = explode(' ',$r->nome);
@@ -152,14 +165,20 @@ class PerfilAuthController extends Controller
     }
 
 
-    public function recuperarSenhaView($cpf){
-        if(!$this->validaCPF($cpf))
-            return redirect()->back()->withErrors(['CPF inválido']);
-        $cpf = PessoaDadosGerais::where('dado',3)->where('valor',$cpf)->first();
-        $email = PessoaDadosContato::where('dado', 1)->where('pessoa',$cpf->pessoa)->orderByDesc('id')->first();
+    public function recuperarSenhaEmail(Request $request){
 
-        if($email ==null)
+        if(!$this->validaCPF($request->cpf))
+            return redirect()->back()->withErrors(['CPF inválido']);
+        $cpf = PessoaDadosGerais::where('dado',3)->where('valor',preg_replace("/[^0-9]/", "", $request->cpf))->first();
+        if($cpf == null)
+            return redirect()->back()->withErrors(['CPF não cadastrado no sistema.']);
+        $email = PessoaDadosContato::where('dado', 1)->where('pessoa',$cpf->pessoa)->orderByDesc('id')->first();
+        if($email == null)
             return view('perfil.recovery')->withErrors(['Não foi possivel encontrar e-mail para enviar o link de redefinição de senha. Entre em contato pelo telefone 3362-0580 e solicite a redefinição. (será necessária a confirmação de diversos dados)']);
+        
+        if($email->valor != preg_replace('/[^A-Za-z0-9À-ÿ@._\- ]/u', "", $request->email))
+            return redirect()->back()->withErrors(['O e-mail '.preg_replace('/[^A-Za-z0-9À-ÿ@._\- ]/u', "", $request->email).' não corresponde ao informado no cadastro.']);
+
         $old_hash = PessoaDadosGerais::where('dado',27)->where('pessoa',$cpf->pessoa)->first();
         if($old_hash)
             $old_hash->delete();
@@ -189,6 +208,10 @@ class PerfilAuthController extends Controller
         
         
 
+    }
+
+    public function recuperarSenhaView(){
+        return view('perfil.email');
     }
 
 
