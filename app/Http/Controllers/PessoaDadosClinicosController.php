@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\classes\GerenciadorAcesso;
-use App\Http\Controllers\loginController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Models\PessoaDadosClinicos;
 use Auth;
 

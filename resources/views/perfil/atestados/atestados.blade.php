@@ -34,8 +34,8 @@
           
           
         </div>
-        <div class="col-sm-4">
-          <a class="btn btn-success" href="/perfil/atestado/cadastrar" title="Abre página para cadastrar seu atestado.">Cadastrar Novo</a>
+        <div class="col-sm-4 text-right">
+          <a class="btn btn-primary" href="/perfil/atestado/cadastrar" title="Abre página para cadastrar seu atestado.">Cadastrar Novo</a>
           
         </div>
         

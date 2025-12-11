@@ -2,7 +2,7 @@
 
 namespace App\classes;
 
-use App\ControleAcessoRecurso;
+use App\Models\ControleAcessoRecurso;
 use Auth;
 
 

@@ -74,7 +74,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //disparador de fila de trabalho
         $schedule->command('queue:work --stop-when-empty')->everyMinute()->withoutOverlapping();
 
-        $schedule->call( function(){
+        /*$schedule->call( function(){
                 dispatch(new ControleFaltas);
             })->daily()->at('21:05');
 
@@ -84,7 +84,7 @@ return Application::configure(basePath: dirname(__DIR__))
             })->daily()->at('18:07');*/
 
          //coloca atestados como vencidos 
-         $schedule->command('app:verificar-atestados')->dailyAt('06:00');
+         //$schedule->command('app:verificar-atestados')->dailyAt('06:00');
 
     })
 

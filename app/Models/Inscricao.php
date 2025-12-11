@@ -10,6 +10,8 @@ class Inscricao extends Model
 	use SoftDeletes;
 	protected $table  = 'inscricoes';
     //
+	protected $fillable = [
+		'status'];
     public function getPessoaAttribute($value){
 		$pessoa=Pessoa::withTrashed()->where('id',$value)->get(['id','nome'])->first();
 		return $pessoa;

@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Pessoa;
 
 class EnviarAvisoVencimentoAtestado extends Mailable
 {
@@ -17,8 +18,12 @@ class EnviarAvisoVencimentoAtestado extends Mailable
      * Create a new message instance.
      */
     public function __construct($dados)
+
     {
-        $this->dados = $dados;
+        //dd($dados);
+        $this->destinatario = Pessoa::find($dados->destinatario);
+        $this->email = $this->destinatario->getEmail();
+        $this->mensagem = $dados->mensagem;
     }
 
     /**
@@ -27,7 +32,7 @@ class EnviarAvisoVencimentoAtestado extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Enviar Aviso Vencimento Atestado',
+            subject: 'Aviso Vencimento Atestado',
         );
     }
 
@@ -38,7 +43,9 @@ class EnviarAvisoVencimentoAtestado extends Mailable
     {
         return new Content(
             markdown: 'emails.vencimento_atestado',
-            with:['dados' => $this->dados]
+            with:['aluno' => $this->destinatario,
+                  'mensagem' => $this->mensagem,
+                  'email' => $this->email]
         );
     }
 

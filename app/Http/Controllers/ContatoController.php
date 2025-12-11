@@ -44,8 +44,8 @@ class ContatoController extends Controller
         $contato = new Contato;
         $contato->meio = $meio;
         $contato->mensagem = $mensagem;
-        $contato->por = $por;
-        $contato->para = $para;
+        $contato->remetente = $por;
+        $contato->destinatario = $para;
         $contato->save();
 
         return $contato;

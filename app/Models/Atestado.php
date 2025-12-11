@@ -15,6 +15,10 @@ class Atestado extends Model
 	'created_at' => 'date',
 	'deleted_at' => 'date',
     ];
+
+	protected $fillable = [
+		'status',
+	];
    
 	/**
 	 * The attributes that are mass assignable.

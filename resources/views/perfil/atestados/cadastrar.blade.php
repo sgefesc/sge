@@ -77,9 +77,9 @@
     
         <div class="form-group row">
           <div class="col-sm-9 offset-sm-3">
-            <button class="btn btn-info" type="submit" name="btn" >Cadastrar</button> 
-            <button type="reset" name="btn"  class="btn btn-secondary">Limpar</button>
-            <button type="cancel" name="btn" class="btn btn-secondary" onclick="history.back(-1);return false;">Cancelar</button>
+            <button class="btn btn-primary" type="submit" name="btn" >Cadastrar</button> 
+            <button type="reset" name="btn"  class="btn btn-outline-primary">Limpar</button>
+            <button type="cancel" name="btn" class="btn btn-outline-primary" onclick="history.back(-1);return false;">Cancelar</button>
             
             @csrf
           </div>

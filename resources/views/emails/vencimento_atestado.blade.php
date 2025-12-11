@@ -1,12 +1,14 @@
 <x-mail::message>
-# Introduction
-
-The body of your message.
-
-<x-mail::button :url="''">
-Button Text
+Olá {{ $aluno->nome }},
+<br><br>
+{{ $mensagem }}
+<br>
+Você pode entregar um novo atestado diretamente na secretara ou acessando seu perfil no link abaixo:
+<x-mail::button :url="'https://fesc.app.br/perfil'">
+Perfil Fesc
 </x-mail::button>
 
-Thanks,<br>
-{{ config('app.name') }}
+Atenciosamente,<br>
+<strong>FESC</strong>
 </x-mail::message>
+
