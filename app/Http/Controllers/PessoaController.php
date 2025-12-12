@@ -340,7 +340,7 @@ class PessoaController extends Controller
 		$atestados = \App\Models\Atestado::where('pessoa',$pessoa->id)->where('tipo','<>','autorizacao')->get();
 		$documentos = \App\Models\Atestado::where('pessoa',$pessoa->id)->where('tipo','autorizacao')->get();
 		$atendimentos = \App\Models\Atendimento::where('usuario', $pessoa->id)->orderBy('created_at','desc')->get();
-		$contatos = \App\Models\Contato::where('para',$pessoa->id)->get();
+		$contatos = \App\Models\Contato::where('destinatario',$pessoa->id)->get();
 		$perfil = PessoaDadosGerais::where('dado',26)->where('pessoa',$pessoa->id)->first();
 
 		return view('pessoa.mostrar',compact('pessoa'))

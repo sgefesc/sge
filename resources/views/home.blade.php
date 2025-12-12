@@ -46,18 +46,17 @@
                 </div>
                 <div class="card-block">
                     <ul>
-                        <li>
-                           <strong>24/11</strong> - 🔖 Início das rematrículas
-                          
-                        </li>
-                        <li>
-                          
-                           <strong>26/11</strong> - 🥳 20 anos de FESC Vila Prado
-                        </li>
+                        
+    
                         <li>
                           
                            <strong>06/01</strong> - 📅 Início das novas matrículas
                         </li>
+                        <li>
+                          
+                           <strong>09/02</strong> - 📅 Início das aulas
+                        </li>
+
 
                      
                         
