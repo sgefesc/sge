@@ -10,6 +10,7 @@ class AtestadoLog extends Model
     use HasFactory;
     public $timestamps = false;
     //protected $dates = ['data'];
+    //fields: id, atestado, evento, data, pessoa
     protected $casts = [
     'data' => 'date',
     ];
@@ -20,15 +21,18 @@ class AtestadoLog extends Model
 	}
 
     public static function registrar($codigo,$evento,$autor=0){
-        if($autor == 0)
-            $autor = Auth::user()->pessoa;
-        
-        $log = new AtestadoLog;
-        $log->atestado = $codigo;
-        $log->evento = $evento;
-        $log->data = date('Y-m-d H:i');
-        $log->pessoa = $autor;
-        $log->save();
+        $log = AtestadoLog::where('atestado',$codigo)->where('evento',$evento)->where('pessoa',$autor)->first();
+        if(is_null($log)){
+            $log = new AtestadoLog;
+            $log->atestado = $codigo;
+            $log->evento = $evento;
+            $log->data = date('Y-m-d H:i');
+            $log->pessoa = $autor;
+            $log->save();
+            return;
+        }
+        else
+            return $log;
 
     }
 

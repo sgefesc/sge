@@ -55,7 +55,7 @@ class Contato extends Model
         
 
 
-        //Contato::registrar($atestado->pessoa, $msg, 'whatsapp');
+        //Contato::registrar($atestado->pessoa, $msg, 'whatsapp')
 
         // Lógica para enviar notificação ao contato sobre o vencimento do atestado
         // Pode ser um e-mail, SMS, ou outra forma de comunicação
@@ -65,13 +65,10 @@ class Contato extends Model
         $pessoa = Pessoa::withTrashed()->find($atestado->pessoa);
         if (!$pessoa) 
             return false;
-        $msg = 'Atenção: O atestado médico cod. '.$atestado->id.' está vencido. Envie um novo atestado para poder continuar realizando suas atividades.';
-        $contato = Contato::verificarSeRegistrado($atestado->pessoa, 'email', $msg);
-        if (!$contato) {     
-            $contato = Contato::registrar($atestado->pessoa, $msg, 'email',0,'aguardando' );
-            //dd($contato);
-            EnviarEmailVencimentoAtestado::dispatch($contato);
-        }
+        $msg = 'Atenção: O atestado médico cod. '.$atestado->id.' está vencido. Envie um novo atestado para poder continuar realizando suas atividades.';    
+        $contato = Contato::registrar($atestado->pessoa, $msg, 'email',0,'aguardando' );
+        EnviarEmailVencimentoAtestado::dispatch($contato);
+        
 
         
     }
@@ -86,6 +83,7 @@ class Contato extends Model
                 $contato->remetente = $por; // 0 = Sistema
                 $contato->meio = $meio;
                 $contato->mensagem = $mensagem;
+
                 $contato->data = date('Y-m-d H:i:s');
                 $contato->status = $status;
                 $contato->save();
