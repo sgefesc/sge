@@ -106,7 +106,7 @@ class PerfilMatriculaController extends Controller
                 }	
             }
 
-            if($idade >= 60){ 
+            if($idade >= 60 && $aluno->id>43868){ 
                 \App\Models\PessoaDadosAdministrativos::addPendencia($aluno->id,'Confirmação de idade pendente');
                 $status = 'pendente';  
             }

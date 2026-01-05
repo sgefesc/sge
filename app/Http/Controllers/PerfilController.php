@@ -56,6 +56,13 @@ class PerfilController extends Controller
             'senha'=> 'required|min:6|max:20',
             'contrasenha' => 'same:senha'
         ]);
+
+        $pessoanobd=Pessoa::where('nome', $r->nome)->where('nascimento',$r->nascimento)->get();
+			if($pessoanobd->count()) 
+				 return redirect('/perfil/cpf')->withErrors(['Ops, parece que essa pessoa já está cadastrada. Encontrado alguém com o mesmo nome e mesma data de nascimento. Pode confirmar isso?']);
+		// se preencheu o CPF
+
+
         $pessoa = new Pessoa;
         $pessoa->nome = mb_convert_case(Strings::sanitizeField($r->nome), MB_CASE_UPPER, 'UTF-8');
         $pessoa->genero = $r->genero;
@@ -99,7 +106,8 @@ class PerfilController extends Controller
         $endereco = new Endereco;
         $endereco->logradouro = mb_convert_case(Strings::sanitizeField($r->rua), MB_CASE_UPPER, 'UTF-8'); 
         $endereco->numero = preg_replace( '/[^0-9]/is', '',$r->numero_endereco);
-        $endereco->complemento = mb_convert_case(Strings::sanitizeField($r->complemento_endereco), MB_CASE_UPPER, 'UTF-8'); 
+        if($r->complemento_endereco != null)
+            $endereco->complemento = mb_convert_case(Strings::sanitizeField($r->complemento_endereco), MB_CASE_UPPER, 'UTF-8'); 
         $endereco->cep = preg_replace( '/[^0-9]/is', '',$r->cep);
         $endereco->bairro = 0;
         $endereco->bairro_str = mb_convert_case(Strings::sanitizeField($r->bairro_str), MB_CASE_UPPER, 'UTF-8'); 
