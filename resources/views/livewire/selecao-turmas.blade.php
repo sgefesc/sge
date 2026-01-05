@@ -17,7 +17,7 @@
                     <div><small>
                         <strong>{{ $item->id }} | {{ $item->nomeCurso }}</strong> <br>
                         
-                        Toda {{ implode(', ', $item->dias_semana) }} das {{ $item->hora_inicio }} às {{ $item->hora_termino }}
+                        Toda {{ implode(', ', $item->dias_semana) }} - {{ $item->hora_inicio }} às {{ $item->hora_termino }} | Prof. {{ $item->professor->nome_simples }}. {{ $item->local->nome }}</small>
                         <input type="hidden" name="turma[]" value="{{ $item->id }}">
 
                         </small>
@@ -41,8 +41,8 @@
                     
                     <div>
                         
-                       <small><strong>{{ $turma->id }} | {{ $turma->nomeCurso }}</strong> <small> - De {{ $turma->data_inicio }} a {{$turma->data_termino}}</small> <br>
-                        TToda {{ implode(', ', $turma->dias_semana) }} - {{ $turma->hora_inicio }} às {{ $turma->hora_termino }} | Prof. {{ $turma->professor->nome_simples }} | <strong>{{ $turma->local->nome }}</strong></small>
+                       <small><strong>{{ $turma->id }} | {{ $turma->nomeCurso }}</strong> - De {{ $turma->data_inicio }} a {{$turma->data_termino}}<br>
+                        Toda {{ implode(', ', $turma->dias_semana) }} - {{ $turma->hora_inicio }} às {{ $turma->hora_termino }} | Prof. {{ $turma->professor->nome_simples }}. {{ $turma->local->nome }}</small>
                     </div>
                     <div class="text-right">
                         <span class="d-block mb-1">{{ $turma->vagas - $turma->matriculados }} vagas</span>

@@ -59,8 +59,10 @@
           </div>
          
           <div class="alert alert-success">
-            <button type="button" class="close" data-dismiss="alert" >×</button>       
-            <p class="modal-title"><i class="fa fa-danger"></i>Para realizar atividades físicas é necessário enviar o atestados de saúde e que ele seja aprovado. <a href="/perfil/atestado/cadastrar">Clique aqui</a> para enviar seu atestado.</p>
+            <small>
+              <button type="button" class="close" data-dismiss="alert" >×</button>       
+              <p class="modal-title"><i class="fa fa-danger"></i>Para realizar atividades físicas é necessário enviar o atestados de saúde e que ele seja aprovado. <a href="/perfil/atestado/cadastrar">Clique aqui</a> para enviar seu atestado.</p>
+            </small>
             
           </div>
           <hr>
