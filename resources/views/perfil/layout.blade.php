@@ -125,7 +125,7 @@ a:link{
                   <div class="card">
                     <div class="card-body">
                       <div class="d-flex flex-column align-items-center text-center">
-                        <a href="https://www.fesc.com.br/arquivos/programacao-2025-caderno_compressed_04012441.pdf"><img src="{{asset('img/programacao_2025.jpg')}}" alt="Cartaz com os valores das atividades" width="300" title="Clique para programação completa"></a>
+                        <a href="https://www.fesc.com.br/arquivos/programacao_2026_19011924.pdf"><img src="{{asset('img/programacao_2026.jpg')}}" alt="Cartaz com os valores das atividades" width="300" title="Clique para programação completa"></a>
                        
                       </div>
                     </div>

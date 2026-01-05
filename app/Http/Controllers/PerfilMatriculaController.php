@@ -31,6 +31,20 @@ class PerfilMatriculaController extends Controller
 			
 		
         }
+        $inscricoes = Inscricao::where('pessoa', $r->pessoa->id)
+                ->whereIn('status', ['regular', 'espera'])
+                ->get() // Aqui os objetos Inscricao são criados e o Accessor fica disponível
+                ->map(function($item) {
+                    // 2. Acessamos o atributo 'turma' (que aciona seu Accessor) e pegamos o ID
+                    return $item->turma->id ?? null;
+                })
+                ->filter() // Remove nulos caso alguma turma não seja encontrada
+                ->toArray();
+        $turmasAtuais = Turma::whereIn('id',$inscricoes)->get();
+        foreach($turmasAtuais as &$turma){
+            $turma->nomeCurso = $turma->getNomeCurso();
+        }
+
 
         $turmas = Turma::whereIn('status_matriculas',['aberta','online'])->get();
         foreach($turmas as &$turma){
@@ -42,7 +56,7 @@ class PerfilMatriculaController extends Controller
         $turmas = $turmas->sortBy('nomeCurso');
         
         //dd($turmas);
-        return view('perfil.matriculas.turmas-disponiveis')->with('turmas',$turmas)->with('pessoa',$r->pessoa);
+        return view('perfil.matriculas.turmas-disponiveis')->with('turmas',$turmas)->with('pessoa',$r->pessoa)->with('turmasAtuais',$turmasAtuais);
 
     }
     public function confirmacao(Request $r){
@@ -73,8 +87,7 @@ class PerfilMatriculaController extends Controller
             $ip .='|'. $_SERVER['REMOTE_ADDR'];
 
         }
-
-        
+  
 
         foreach($r->turma as $turma){
             $turma_obj = Turma::find($turma);

@@ -18,6 +18,25 @@
       hr{
         margin-bottom: 0;
       }
+
+      .opacity-50 {
+        opacity: 0.5;
+        pointer-events: none; /* Impede cliques múltiplos enquanto carrega */
+        transition: opacity 0.3s ease;
+    }
+    
+    /* Loader flutuante discreto */
+    .spinner-border-sm {
+        width: 1rem;
+        height: 1rem;
+        border-width: 0.2em;
+    }
+
+    .codigo-turma {
+        font-family: monospace;
+        font-weight: bold;
+        width: 1rem;
+    }
     </style>
 @endsection
 @section('body')
@@ -34,7 +53,7 @@
             <button type="button" class="close" data-dismiss="alert" >×</button>       
             <p class="modal-title"><i class="fa fa-warning"></i> Menores de 18 anos necessitam de <a href="/perfil/atestado/cadastrar">autorização dos pais</a> para efetivação da matrícula. Em caso de dúvidas entre em contato pelo <a href="https://wa.me/551633620580">WhatsApp da FESC</a>
             <br> A lista de jogos utilizados e as faixas etárias no Centro de Treinamento Gammer estão disponíveis no <a href="/repositorio/jogos_ct_gammer.pdf">AQUI</a>.
-            <br> Antes de se matricular verifique se sua conexão e seu equipamento de acesso suportam o aplicativo Microsoft Teams</p>
+            <br> Antes de se matricular em disciplinas online,verifique se sua conexão e seu equipamento de acesso suportam o aplicativo Microsoft Teams</p>
           </div>
          
           <div class="alert alert-success">
@@ -43,6 +62,7 @@
             
           </div>
           <hr>
+          <br>
           @if($errors->any())
             @foreach($errors->all() as $erro)
                 <div class="alert alert-warning">
@@ -51,62 +71,22 @@
                 </div>
             @endforeach
           @endif
-          @foreach($turmas as $turma)
-          @if($turma->verificaRequisitos($pessoa->id))
-            @if($turma->matriculados<$turma->vagas)
-            <label class="form-group row rodape">
-              <div class="col-sm-1">
-                <input type="checkbox" class="checkbox" name="turma[]" value="{{$turma->id}}" >  <small>{{$turma->id}}</small> 
-              </div>
-              <div class="col-sm-8">
-                <strong>{{$turma->nomeCurso}}</strong> - <small>De {{$turma->data_inicio}} a {{$turma->data_termino}}</small>
-                <br> <small> <strong>{{$turma->local->nome}}</strong> - {{implode(', ',$turma->dias_semana)}} - {{$turma->hora_inicio}} ás {{$turma->hora_termino}} | {{$turma->professor->nome_simples}}</small>
-                
+          <p class="text-secondary"><small>Turmas atuais.</small></p>
+          <div id="lista-turmas-atuais">
+            @foreach($turmasAtuais as $turma)
+             <div class="alert alert-secondary">     
+                <p class="modal-title"><i class="fa fa-secondary"></i>
+                <strong>{{$turma->nome}}</strong>: {{implode(', ',$turma->dias_semana)}} das {{$turma->hora_inicio}} as {{$turma->hora_termino}}. Prof. {{$turma->professor->nome_simples}}. FESC {{$turma->local->nome}}
+                </p>
+                  
+             </div>
+            @endforeach
 
-              </div>
-              <div class="col-sm-2">
-                
-                R$ {{number_format($turma->valor,2,',','.')}} <br>
-              <small> {{$turma->getParcelas()}}X R$ {{number_format($turma->valor/$turma->getParcelas(),2,',','.')}}</small>
-              
-                
-              </div>
-            </label>
-            @else
-            <div class="form-group row rodape alert-danger">
-              <div class="col-sm-1">
-                <small>{{$turma->id}}</small> 
-              </div>
-              <div class="col-sm-8">
-                <strong>* SEM VAGAS</strong> | {{$turma->nomeCurso}} - <small>De {{$turma->data_inicio}} a {{$turma->data_termino}}</small>
-                <br> <small> {{implode(', ',$turma->dias_semana)}} - {{$turma->hora_inicio}} ás {{$turma->hora_termino}} | {{$turma->professor->nome_simples}}</small>
-                
-
-              </div>
-              <div class="col-sm-2">
-                R$ {{number_format($turma->valor,2,',','.')}}
-                
-              </div>
-            </div>
-            @endif
-          
-          @endif
-
-          @endforeach
-
-          
-          
-        <div class="form-group row">
-          <div class="col-sm-9">
-            <button class="btn btn-success" type="submit" name="btn" >Cadastrar</button> 
-            <button type="reset" name="btn"  class="btn btn-outline-secondary">Limpar</button>
-            <button type="cancel" name="btn" class="btn btn-outline-secondary" onclick="history.back(-1);return false;">Cancelar</button>
-            @if(isset($parceria))
-            <a href="#" class="btn btn-outline-danger" onclick="cancelar();"> Cancelar parceria</a>
-            @endif
-            @csrf
           </div>
-        </div>
+          <hr>
+          <br>
+
+        @livewire('selecao-turmas', ['pessoa' => $pessoa, 'turmasAtuais' => $turmasAtuais])
       
 
       
@@ -119,6 +99,7 @@
 
 @section('scripts')
 <script>
+  
 
  </script>   
 @endsection
