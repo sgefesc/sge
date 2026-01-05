@@ -26,8 +26,11 @@ class SelecaoTurmas extends Component
     public function render()
     {
         // 1. Pegar dados das turmas já escolhidas
-        $escolhidasAtuais = array_merge($this->turmasAtuais->pluck('id')->toArray(), $this->turmasSelecionadas);
-        $escolhidasModel = Turma::whereIn('id', $escolhidasAtuais)->get();
+        $escolhidasAtuais = Turma::whereIn('id',array_merge($this->turmasAtuais->pluck('id')->toArray(), $this->turmasSelecionadas))->get();
+
+        $escolhidasModel = Turma::whereIn('id', $this->turmasSelecionadas)->get();
+
+
         foreach($escolhidasModel as &$turma){
             $turma->nomeCurso = $turma->getNomeCurso();
         }
@@ -43,12 +46,12 @@ class SelecaoTurmas extends Component
         $todasDisponiveis = $todasDisponiveis->sortBy('nomeCurso');
 
         // 3. Filtrar conflitos
-        $turmasFiltradas = $todasDisponiveis->filter(function ($turma) use ($escolhidasModel) {
+        $turmasFiltradas = $todasDisponiveis->filter(function ($turma) use ($escolhidasAtuais) {
             // Se já está selecionada, não mostra na lista de "disponíveis"
             if (in_array($turma->id, $this->turmasSelecionadas)) return false;
 
             // Lógica de conflito: verifica se alguma escolhida bate no mesmo dia E horário
-            foreach ($escolhidasModel as $escolhida) {
+            foreach ($escolhidasAtuais as $escolhida) {
                 $diasEmComum = array_intersect($turma->dias_semana, $escolhida->dias_semana);
                 if (!empty($diasEmComum)) {
                     // Verifica sobreposição de horário

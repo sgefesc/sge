@@ -27,7 +27,10 @@
                     @if($aniversariante)
                         <img src="{{asset('/img/aniversario.png')}}" alt="Cartaz da tela inicial" width="100%">    
                     @else
+                    <a href="https://www.fesc.com.br/arquivos/programacao_2026_19011924.pdf" target="_blank">
                         <img src="{{asset('/img/home-'.date('m').'.jpg')}}" alt="Cartaz da tela inicial" width="100%">
+                    </a>
+
                         
                     @endif</div>
  

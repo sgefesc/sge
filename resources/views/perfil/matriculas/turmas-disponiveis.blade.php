@@ -50,15 +50,17 @@
           
           <p class="text-secondary"><small>Escolha as turmas que deseja se matricular.</small></p>
           <div class="alert alert-warning">
-            <button type="button" class="close" data-dismiss="alert" >×</button>       
-            <p class="modal-title"><i class="fa fa-warning"></i> Menores de 18 anos necessitam de <a href="/perfil/atestado/cadastrar">autorização dos pais</a> para efetivação da matrícula. Em caso de dúvidas entre em contato pelo <a href="https://wa.me/551633620580">WhatsApp da FESC</a>
-            <br> A lista de jogos utilizados e as faixas etárias no Centro de Treinamento Gammer estão disponíveis no <a href="/repositorio/jogos_ct_gammer.pdf">AQUI</a>.
-            <br> Antes de se matricular em disciplinas online,verifique se sua conexão e seu equipamento de acesso suportam o aplicativo Microsoft Teams</p>
+            <small>
+              <button type="button" class="close" data-dismiss="alert" >×</button>       
+              <p class="modal-title"><i class="fa fa-warning"></i> Menores de 18 anos necessitam de <a href="/perfil/atestado/cadastrar">autorização dos pais</a> para efetivação da matrícula. Em caso de dúvidas entre em contato pelo <a href="https://wa.me/551633620580">WhatsApp da FESC</a>
+              <br> A lista de jogos utilizados e as faixas etárias no Centro de Treinamento Gammer estão disponíveis no <a href="/repositorio/jogos_ct_gammer.pdf">AQUI</a>.
+              <br> Antes de se matricular em disciplinas online,verifique se sua conexão e seu equipamento de acesso suportam o aplicativo Microsoft Teams</p>
+            </small>
           </div>
          
           <div class="alert alert-success">
             <button type="button" class="close" data-dismiss="alert" >×</button>       
-            <p class="modal-title"><i class="fa fa-danger"></i>Para visualizar as atividades físicas é necessário enviar o atestados de saúde e que ele seja aprovado. <a href="/perfil/atestado/cadastrar">Clique aqui</a> para enviar seu atestado.</p>
+            <p class="modal-title"><i class="fa fa-danger"></i>Para realizar atividades físicas é necessário enviar o atestados de saúde e que ele seja aprovado. <a href="/perfil/atestado/cadastrar">Clique aqui</a> para enviar seu atestado.</p>
             
           </div>
           <hr>
@@ -76,7 +78,7 @@
             @foreach($turmasAtuais as $turma)
              <div class="alert alert-secondary">     
                 <p class="modal-title"><i class="fa fa-secondary"></i>
-                <strong>{{$turma->nome}}</strong>: {{implode(', ',$turma->dias_semana)}} das {{$turma->hora_inicio}} as {{$turma->hora_termino}}. Prof. {{$turma->professor->nome_simples}}. FESC {{$turma->local->nome}}
+                <small><strong>{{$turma->id}} | {{$turma->nomeCurso}}</strong> <br> Toda {{implode(', ',$turma->dias_semana)}} das {{$turma->hora_inicio}} às {{$turma->hora_termino}}. Prof. {{$turma->professor->nome_simples}}. {{$turma->local->nome}}</small>
                 </p>
                   
              </div>

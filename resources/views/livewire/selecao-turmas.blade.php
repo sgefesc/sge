@@ -14,10 +14,13 @@
             <div wire:loading.class="opacity-50">
             @foreach($escolhidasModel as $item)
                 <div class="alert alert-info d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>{{ $item->nomeCurso }}</strong>: 
-                        {{ implode(', ', $item->dias_semana) }} das {{ $item->hora_inicio }} às {{ $item->hora_termino }}
+                    <div><small>
+                        <strong>{{ $item->id }} | {{ $item->nomeCurso }}</strong> <br>
+                        
+                        Toda {{ implode(', ', $item->dias_semana) }} das {{ $item->hora_inicio }} às {{ $item->hora_termino }}
                         <input type="hidden" name="turma[]" value="{{ $item->id }}">
+
+                        </small>
                     </div>
                     <button type="button" wire:loading.attr="disabled" wire:click="removerTurma({{ $item->id }})" class="close">&times;</button>
                 </div>
@@ -38,8 +41,8 @@
                     
                     <div>
                         
-                       <strong>{{ $turma->id }} | {{ $turma->nomeCurso }}</strong> <small> - De {{ $turma->data_inicio }} a {{$turma->data_termino}}</small> <br>
-                        <small>{{ implode(', ', $turma->dias_semana) }} - {{ $turma->hora_inicio }} às {{ $turma->hora_termino }} | {{ $turma->professor->nome_simples }} | <strong>{{ $turma->local->nome }}</strong></small>
+                       <small><strong>{{ $turma->id }} | {{ $turma->nomeCurso }}</strong> <small> - De {{ $turma->data_inicio }} a {{$turma->data_termino}}</small> <br>
+                        TToda {{ implode(', ', $turma->dias_semana) }} - {{ $turma->hora_inicio }} às {{ $turma->hora_termino }} | Prof. {{ $turma->professor->nome_simples }} | <strong>{{ $turma->local->nome }}</strong></small>
                     </div>
                     <div class="text-right">
                         <span class="d-block mb-1">{{ $turma->vagas - $turma->matriculados }} vagas</span>
