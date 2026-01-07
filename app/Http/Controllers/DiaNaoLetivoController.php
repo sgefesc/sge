@@ -40,26 +40,96 @@ class DiaNaoLetivoController extends Controller
         return $this->addRecesso('06/07/2025','20/07/2025');
     }
 
-    public function cadastroAnual($ano = 2025){
+    public function cadastroAnual($ano = 2026){
         $feriados_nacionais = \App\classes\Data::diasFeriados($ano);
         $feriados_estaduais =  ['Revolução Constitucionalista' => $ano.'-'.'07-09'];
         $feriados_municipais = ['N.S. da Babilônia' => $ano.'-'.'08-15', 
                                 'Aniversário da cidade' => $ano.'-'.'11-04'];
                             
         $pontos_facultativos = [
-                                'Ponto facultativo IV'=>$ano.'-04-17',
-                                'Ponto facultativo V'=>$ano.'-04-19',
-                                'Ponto facultativo VII' => $ano.'-05-02',
-                                'Ponto facultativo VIII' => $ano.'-05-03',
-                                'Ponto facultativo X' => $ano.'-06-20',
-                                'Ponto facultativo XI' => $ano.'-06-21',
-                                'Ponto facultativo XVI' => $ano.'-10-27',
-                                'Dia do Funcionário Público' => $ano.'-10-28',
-                                'Dia do Professor' => $ano.'-10-15',
-                                'Ponto facultativo XIX' => $ano.'-11-03',
-                                'Ponto facultativo XXIII' => $ano.'-11-21',
-                                'Ponto facultativo XXIV' => $ano.'-11-22',
                               
+
+
+            // --- FEVEREIRO ---
+            'Carnaval (Sábado)' => '2026-02-14',
+            'Carnaval (Domingo)' => '2026-02-15',
+            'Ponto facultativo - Carnaval' => '2026-02-16',
+            'Ponto facultativo - Carnaval' => '2026-02-17',
+            'Ponto facultativo - Carnaval' => '2026-02-18',
+            'Quarta-feira de Cinzas (Retorno após 12h)' => '2026-02-18',
+            'Reunião do CEU' => '2026-02-26',
+
+            // --- ABRIL ---
+            'Ponto facultativo' => '2026-04-02',
+            'Sexta-Feira Santa - Feriado Nacional' => '2026-04-03',
+            'Ponto facultativo - Emenda Tiradentes' => '2026-04-20',
+            'Tiradentes - Feriado Nacional' => '2026-04-21',
+
+            // --- MAIO ---
+            'Dia do Trabalhador - Feriado Nacional' => '2026-05-01',
+            'Emenda de Feriado (Sábado em Amarelo)' => '2026-05-02',
+
+            // --- JUNHO ---
+            'Corpus Christi - Feriado Nacional' => '2026-06-04',
+            'Ponto facultativo - Emenda' => '2026-06-05',
+            'Emenda de Feriado' => '2026-06-06',
+            'Festa Junina (Não letivo)' => '2026-06-20',
+           
+            // --- JULHO ---
+            'Revolução Constitucionalista - Feriado Estadual' => '2026-07-09',
+            'Ponto facultativo - Emenda' => '2026-07-10',
+            'Ponto facultativo - Emenda' => '2026-07-11',
+            'Recesso Escolar' => '2026-07-13',
+            'Recesso Escolar' => '2026-07-14',
+            'Recesso Escolar' => '2026-07-15',
+            'Recesso Escolar' => '2026-07-16',
+            'Recesso Escolar' => '2026-07-17',
+            'Recesso Escolar' => '2026-07-18',
+            'Formação Pedagógica / Organização' => '2026-07-20',
+            'Formação Pedagógica / Organização' => '2026-07-21',
+            'Formação Pedagógica / Organização' => '2026-07-22',
+            'Formação Pedagógica / Organização' => '2026-07-23',
+            'Formação Pedagógica / Organização' => '2026-07-24',
+            'Formação Pedagógica / Organização' => '2026-07-25',
+
+            // --- AGOSTO ---
+            'N. Sra. da Babilônia - Feriado Municipal' => '2026-08-15',
+
+            // --- SETEMBRO ---
+            'Independência - Feriado Nacional' => '2026-09-07',
+
+            // --- OUTUBRO ---
+    
+          'Feriado para Professores' => '2026-10-12',
+            'Feriado para Professores' => '2026-10-15',
+            'Atividade Extracurricular Piscina' => '2026-10-23',
+            'Dia do Servidor Público' => '2026-10-28',
+
+            // --- NOVEMBRO ---
+            'Finados - Feriado Nacional' => '2026-11-02',
+            'Ponto facultativo - Emenda' => '2026-11-03',
+            'Aniversário da Cidade - Feriado Municipal' => '2026-11-04',
+            'Proclamação da República - Feriado Nacional' => '2026-11-15',
+            'Consciência Negra - Feriado' => '2026-11-20',
+            'Início do Período de Rematrículas (Amarelo)' => '2026-11-23',
+            // ... o período em amarelo segue até 11/12
+
+            // --- DEZEMBRO ---
+            'Mostra UATI' => '2026-12-02',
+            'Integração UATI e CEC' => '2026-12-08',
+            'Integração UATI e CEC' => '2026-12-09',
+            'Término das aulas' => '2026-12-12',
+            'Atividade Pedagógica de encerramento' => '2026-12-14',
+            'Atividade Pedagógica de encerramento' => '2026-12-15',
+            'Reunião do CEU' => '2026-12-16',
+            'Atividade Pedagógica de encerramento' => '2026-12-17',
+            'Atividade Pedagógica de encerramento' => '2026-12-18',
+            'Atividade Pedagógica de encerramento' => '2026-12-19',
+            'Véspera de Natal - Ponto Facultativo' => '2026-12-24',
+            'Natal - Feriado' => '2026-12-25',
+            'Véspera de Ano Novo - Ponto Facultativo' => '2026-12-31',
+
+                                    
 
                                 
                                 
@@ -86,7 +156,7 @@ class DiaNaoLetivoController extends Controller
             }
         }
 
-        return $feriados;
+        dd($feriados);
 
     }
 

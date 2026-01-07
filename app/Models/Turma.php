@@ -449,7 +449,7 @@ class Turma extends Model
 		}
 
 		if($atestado ==1){
-			$atestado_m = Atestado::where('pessoa',$aluno->id)->where('tipo','saude')->where('status','aprovado')->orderbyDesc('id')->first();
+			$atestado_m = Atestado::where('pessoa',$aluno->id)->where('tipo','saude')->whereIn('status',['aprovado','restrito'])->orderbyDesc('id')->first();
 			if($atestado_m == null){
 				if($relatorio){
 					$retorno = new \stdClass;

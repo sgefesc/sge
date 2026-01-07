@@ -142,7 +142,7 @@ Class Strings
 	 * @param string $nome
 	 * @return string
 	 */
-	public static function sanitizeField(string $field): string
+	public static function sanitizeField(string $field = ''): string
 	{
 		// Remove espaços no início e no fim
 		$field = trim($field);

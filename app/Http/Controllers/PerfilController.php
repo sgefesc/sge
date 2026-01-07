@@ -106,8 +106,7 @@ class PerfilController extends Controller
         $endereco = new Endereco;
         $endereco->logradouro = mb_convert_case(Strings::sanitizeField($r->rua), MB_CASE_UPPER, 'UTF-8'); 
         $endereco->numero = preg_replace( '/[^0-9]/is', '',$r->numero_endereco);
-        if($r->complemento_endereco != null)
-            $endereco->complemento = mb_convert_case(Strings::sanitizeField($r->complemento_endereco), MB_CASE_UPPER, 'UTF-8'); 
+        $endereco->complemento = mb_convert_case(Strings::sanitizeField($r->complemento_endereco), MB_CASE_UPPER, 'UTF-8'); 
         $endereco->cep = preg_replace( '/[^0-9]/is', '',$r->cep);
         $endereco->bairro = 0;
         $endereco->bairro_str = mb_convert_case(Strings::sanitizeField($r->bairro_str), MB_CASE_UPPER, 'UTF-8'); 
