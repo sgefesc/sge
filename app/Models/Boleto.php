@@ -13,6 +13,9 @@ class Boleto extends Model
     //
     use SoftDeletes;
     public $timestamps = false;
+    protected $fillable = [
+        'status'
+    ];
     //protected $dates = ['vencimento'];
     
 

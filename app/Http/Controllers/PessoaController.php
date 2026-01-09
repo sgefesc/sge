@@ -599,7 +599,19 @@ class PessoaController extends Controller
 				return redirect('/')->withErrors(['Pessoa '.$request->pessoa.' excluida com sucesso.']);
 		}
 		if($request->action == 'exclude'){
+			PessoaDadosGerais::where('pessoa',$request->pessoa)->delete();
+			$endereco = PessoaDadosContato::where('pessoa',$request->pessoa)->where('dado',6)->first()->pluck('valor');
+			if($endereco){
+				Endereco::where('id',$endereco)->delete();
+			}
+			
+			PessoaDadosContato::where('pessoa',$request->pessoa)->delete();
+			PessoaDadosClinicos::where('pessoa',$request->pessoa)->delete();
+			PessoaDadosAcesso::where('pessoa',$request->pessoa)->delete();
+			PessoaDadosAdministrativos::where('pessoa',$request->pessoa)->delete();	
+
 			Pessoa::where('id',$request->pessoa)->forceDelete();
+
 			return redirect('/')->withErrors(['Pessoa '.$request->pessoa.' excluida com sucesso.']);
 	}
 		$erros=array();

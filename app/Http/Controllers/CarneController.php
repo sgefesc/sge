@@ -14,39 +14,42 @@ class CarneController extends Controller
 	private const data_corte = 20;
 	private const dias_adicionais = 5;
 
+	
 	/**
-	 * Fase 1 - Geração de lançamentos de todas as matriculas.
-	 * @return [view]
+	 * Fase 1 - Geração dos boletos
+	 * @return [type] [description]
 	 */
-	public function carneFase1(){
-		$pessoas = array();
-		$matriculas = \App\Matricula::whereIn('status',['ativa','pendente','espera'])->where('data','>','2022-11-01')->paginate(50);
-		//$matriculas = \App\Matricula::where('status','ativa')->where('obs','like','%IP%')->paginate(50);
-		//dd($matriculas);
-		foreach($matriculas as $matricula){
-			if(!in_array($matricula->pessoa,$pessoas))
-				array_push($pessoas,$matricula->pessoa);
-				
+	public function registrarBoletos(){
+		$boletos = Boleto::where('status','gravado')->where('vencimento','>=',date('Y-m-d'))->paginate(2);
+		$integracao = new IntegracaoBBController;
+		foreach($boletos as $boleto){
+			$integracao->registrarBoletoIndividual($boleto);
+			
+			
+		}
+		if(!isset($_GET['page']))
+			$_GET['page']=1;
 
-		}
-		foreach($pessoas as $pessoa){
-			$boletos = $this->gerarCarneIndividual($pessoa);
-		}
-				
-		return view('financeiro.carne.fase1')->with('matriculas',$matriculas);
+		//!!!!!!!  IMPORTANTE o método gerarCarne da classe Pdf é uma implementação prória atraves de lib externa derivada da Laravel Boleto!!!!
+		return view('financeiro.carne.registro')->with('boletos',$boletos);
+
 
 	}
 
 	/**
+	 * Fase 2
 	 * Gerar PDF's
 	 */
-	public function carneFase4(){
-		$pessoas = Boleto::whereIn('status',['gravado','emitido','impresso'])->where('vencimento','>=',date('Y-m-d'))->groupBy('pessoa')->paginate(20);
+	public function gerarPDFs(){
+		$pessoas = Boleto::where('status','registrado')->where('vencimento','>=',date('Y-m-d'))->groupBy('pessoa')->paginate(20);
 		//dd($pessoas);
 		foreach($pessoas as $pessoa){
 			$html = new \Adautopro\LaravelBoleto\Boleto\Render\Pdf();
 			$boletos = Boleto::where('pessoa',$pessoa->pessoa)->whereIn('status',['gravado','emitido','impresso'])->where('vencimento','>=',date('Y-m-d'))->orderBy('pessoa')->orderBy('vencimento')->get();	
 			foreach($boletos as $boleto){
+				//try to register boleto
+
+
 
 				try{
 					$boleto_completo = BoletoController::gerarBoleto($boleto);
@@ -65,33 +68,19 @@ class CarneController extends Controller
 		if(!isset($_GET['page']))
 			$_GET['page']=1;
 
-		//!!!!!!!  IMPORTANTE o método gerarCarne da classe Pdf é uma implementação prória!!!!
+		//!!!!!!!  IMPORTANTE o método gerarCarne da classe Pdf é uma implementação prória atraves de lib externa derivada da Laravel Boleto!!!!
 		return view('financeiro.carne.fase4')->with('boletos',$pessoas);
 
 
 	}
 
-	/**
-	 * [Fase 5 - Muda Status dos boletos para IMPRESSO]
-	 * @return [type] [description]
-	 */
-	public function carneFase5(){
 	
-		$boletos =Boleto::where('status','gravado')->where('vencimento','>=',date('Y-m-d'))->paginate(500);
-		foreach($boletos as $boleto){
-			$boleto->status = 'impresso';
-			$boleto->save();
-		}
-
-		return view('financeiro.carne.fase5')->with('boletos',$boletos);
-
-	}
 
 	/**
-	 * [Fase 6 - Gerar arquivos de remessas]
+	 * [Em desuso - Gerar arquivos de remessas]
 	 * @return [type] [description]
 	 */
-	public function carneFase6(){
+	public function geradorRemessas(){
 
 			$beneficiario = new \Adautopro\LaravelBoleto\Pessoa([
 		    'documento' => '45.361.904/0001-80',
@@ -154,7 +143,7 @@ class CarneController extends Controller
 	 * Fase 7 - Compactar todos arquivos gerados e retornar ela com os arquivos.
 	 * @return [type] [description]
 	 */
-	public function carneFase7(){
+	public function compactadorRemessas(){
 		//gerar zip
 		
 		//dd(getcwd());
@@ -591,7 +580,7 @@ class CarneController extends Controller
 
 	}
 	public function gerarBG(){
-		$pessoas = \App\Models\Matricula::where('status','espera')->groupBy('pessoa')->pluck('pessoa')->toArray();  
+		$pessoas = \App\Models\Matricula::whereIn('status',['ativa','espera'])->groupBy('pessoa')->pluck('pessoa')->toArray();  
 		
 		foreach($pessoas as $pessoa){
 			$this->dispatch(new \App\Jobs\GeradorCarnes($pessoa));
@@ -621,10 +610,5 @@ class CarneController extends Controller
 			
 		
 	}
-
-
-
-
-
 
 }

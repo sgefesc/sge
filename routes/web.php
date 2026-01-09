@@ -433,11 +433,11 @@ Route::middleware(['auth','login'])->group(function(){
         // Carnê
         Route::middleware('liberar.recurso:19')->prefix('carne')->group(function(){
             Route::get('gerar', function(){ return view('financeiro.carne.home');});
-            Route::get('gerarBackground', [CarneController::class, 'gerarBG']);
+            Route::get('iniciar-pos-matricula', [CarneController::class, 'registrarBoletos']);
             Route::get('fase1/{pessoa?}', [CarneController::class, 'carneFase1']);
             Route::get('fase2/{pessoa?}', [CarneController::class, 'carneFase2']);
             Route::get('fase3/{pessoa?}', [CarneController::class, 'carneFase3']);
-            Route::get('fase4/{pessoa?}', [CarneController::class, 'carneFase4']);
+            Route::get('fase4/{pessoa?}', [CarneController::class, '']);
             Route::get('fase5/{pessoa?}', [CarneController::class, 'carneFase5']);
             Route::get('fase6/{pessoa?}', [CarneController::class, 'carneFase6']);
             Route::get('fase7/{pessoa?}', [CarneController::class, 'carneFase7']);

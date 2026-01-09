@@ -45,7 +45,6 @@ class EnviarEmailVencimentoAtestado implements ShouldQueue
 
             // 3. Validação da pessoa
             if (!$pessoa) {
-                dd($pessoa);
                 $this->contato->update([
                     'status' => 'falha',
                     'mensagem' => 'Pessoa não encontrada para o ID: ' . $this->contato->destinatario
@@ -56,17 +55,16 @@ class EnviarEmailVencimentoAtestado implements ShouldQueue
             $email = $pessoa->getEmail();
 
             // 4. Validação do e-mail
-            if (empty($email)) {
+            if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $this->contato->update([
                     'status' => 'falha',
-                    'mensagem' => 'E-mail não cadastrado para a pessoa.'
+                    'mensagem' => 'E-mail não cadastrado ou inválido.'
                 ]);
                 return;
             }
 
             // 5. Envio
-            Mail::to($email)->send(new EnviarAvisoVencimentoAtestado($this->contato));
-            
+            Mail::to($email)->send(new EnviarAvisoVencimentoAtestado($this->contato)); 
             $this->contato->update(['status' => 'enviado']);
 
         } catch (Exception $e) {

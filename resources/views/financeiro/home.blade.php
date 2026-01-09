@@ -16,41 +16,22 @@
             <div class="card card-primary">
                 <div class="card-header">
                     <div class="header-block">
-                        <p class="title" style="color:white">Boletos</p>
+                        <p class="title" style="color:white">Carnês</p>
                     </div>
                 </div>
                 <div class="card-block">
                     <div>
-                        <a href="/financeiro/carne/gerar" class="btn btn-primary-outline col-xs-12 text-xs-left" title="Gera os carnês, os PDF's e os arquivos de remessa">
+                        <a href="/financeiro/carne/iniciar-pos-matricula" class="btn btn-primary-outline col-xs-12 text-xs-left" title="Faz o registro de todos boletos das matrículas e gera os arqquivos PDF's para impressão">
                         <i class=" fa fa-arrow-circle-right "></i>
-                        &nbsp;&nbsp;Gerador Completo</a>
+                        &nbsp;&nbsp;Registrar boletos</a>
                     </div> 
                     <div>
-                        <a href="/financeiro/carne/gerarBackground" class="btn btn-primary-outline col-xs-12 text-xs-left" title="Gera os carnês em segundo plano, deve-se aguardar uma hora para que todos sejam gerados">
+                        <a href="/financeiro/carne/zip" class="btn btn-primary-outline col-xs-12 text-xs-left" title="Gerar os arquivos de remessa e PDF's para gráfica em um arquivo ZIP">
                         <i class=" fa fa-arrow-circle-right "></i>
-                        &nbsp;&nbsp;Gerador Offline</a>
-                    </div>  
-                    <div>
-                        <a href="/financeiro/carne/fase4" class="btn btn-primary-outline col-xs-12 text-xs-left" title="Gerar os arquivos de remessa e PDF's para gráfica em um arquivo ZIP">
-                        <i class=" fa fa-arrow-circle-right "></i>
-                        &nbsp;&nbsp;Gerar Zip para envio</a>
+                        &nbsp;&nbsp;Arquivos Zip gerados</a>
                     </div> 
-                    <!--
-                    <div>
-                        <a href="{{asset('financeiro/boletos/imprimir-lote')}}" class="btn btn-primary-outline col-xs-12 text-xs-left">
-                        <i class=" fa fa-arrow-circle-right "></i>
-                        &nbsp;&nbsp;Gerar PDF's dos carnês</a>
-                    </div>
-                     <div>
-                        <a href="{{asset('financeiro/boletos/lote-csv')}}" class="btn btn-primary-outline col-xs-12 text-xs-left">
-                        <i class=" fa fa-arrow-circle-right "></i>
-                        &nbsp;&nbsp;Gerar arquivo CSV com boletos.</a>
-                    </div>-->
-                    <div>
-                        <a href="#" onclick="gerarImpressao()" class="btn btn-warning-outline col-xs-12 text-xs-left">
-                        <i class=" fa fa-arrow-circle-right "></i>
-                        &nbsp;&nbsp;Confirmar impressão</a>
-                    </div>
+                    
+                 
                    
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" placeholder="Número do documento" id="boleto" maxlength="10" size="2">

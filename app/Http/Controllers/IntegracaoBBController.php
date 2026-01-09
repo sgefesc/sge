@@ -129,9 +129,7 @@ class IntegracaoBBController extends Controller
         $this->headers[] = "{$keys}: {$values}";
     }
     
-    public function testar(){
-        return $this->token;
-    }
+    
 
     ######################################################
     ############## COBRANÇAS #############################
@@ -139,9 +137,7 @@ class IntegracaoBBController extends Controller
     public function processarRegistro($registro, Boleto $boleto){
         //boleto,status, response
         $response = json_decode($registro->getBody()->getContents());
-        $boleto->status = 'emitido';
-        $boleto->save();
-        BoletoLogController::alteracaoBoleto($boleto->id,'Boleto registrado via API BB',0);
+        $boleto->update(['status'=>'registrado']);
 
         if(isset($response->qrCode->txId)){
             $qr_code = new QrcodeBoletos();
@@ -160,6 +156,34 @@ class IntegracaoBBController extends Controller
       
     }
 
+
+    /**
+     * Registra individual boleto 
+     */
+    public function registrarBoletoIndividual(Boleto $boleto){
+        $registro = new \stdClass();
+        $registro->boleto = $boleto->id;
+        $boleto_BB = $this->montarBoletoBB($boleto);    
+        $req_registro = $this->registrarBoleto($boleto_BB);
+        
+        if(!$req_registro->status){
+            $registro->status = 'erro';
+            $registro->msg = json_encode($req_registro->errors, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $registro->erro =  $req_registro->error;   
+        }
+        else{
+            $registro->status = 'ok';
+            $registro->msg = $this->processarRegistro($req_registro->content,$boleto);
+            if($registro->msg == 'Boleto registrado com sucesso')
+                $boleto->update(['status'=>'registrado']);
+        }
+
+        return $registro;
+
+    } 
+        
+    
+
     /**
      * Aqui se concentra todas as ações de registro de boletos
      */
@@ -172,15 +196,31 @@ class IntegracaoBBController extends Controller
         
         $boletos = Boleto::whereIn('id',$request->boletos)->get();
         foreach($boletos as $boleto){ 
+            if($boleto->status == 'emitido' || $boleto->status == 'pago' || $boleto->status == 'cancelado'|| $boleto->status == 'registrado')
+                continue;
+            
             $registro = new \stdClass();
             $registro->boleto = $boleto->id;    
 
             $boleto_BB = $this->montarBoletoBB($boleto);
-            try{
-                $req_registro = $this->registrarBoleto($boleto_BB);
-                
+            
+            $req_registro = $this->registrarBoleto($boleto_BB);
+
+            if(!$req_registro->status){
+                $registro->status = 'erro';
+                $registro->msg = json_encode($req_registro->errors, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE).$req_registro->error;
+                $registros_boletos->push($registro);
+                continue;
             }
-             
+            else{
+                $registro->status = 'ok';
+                $registro->msg = $this->processarRegistro($req_registro->content,$boleto);
+                $registros_boletos->push($registro);
+
+            }
+                
+            
+            /*
             
             catch (ClientException $e) {
                 $response = $e->getResponse();
@@ -218,6 +258,7 @@ class IntegracaoBBController extends Controller
             $registro->status = 'ok';
             $registro->msg = $this->processarRegistro($req_registro,$boleto);
             $registros_boletos->push($registro);
+            /**/ 
             
 
             
@@ -266,7 +307,7 @@ class IntegracaoBBController extends Controller
                 'beneficiarioFinal' => array(
                     'tipoInscricao' => '2',
                     'numeroInscricao' => env('BB_CLIENT'),
-                    'nome' => 'LIVRARIA CUNHA DA CUNHA'//'FUNDAÇÃO EDUCACIONAL SÃO CARLOS',
+                    'nome' => 'FUNDAÇÃO EDUCACIONAL SÃO CARLOS',
                   
                 ),
 
@@ -284,9 +325,14 @@ class IntegracaoBBController extends Controller
     }
 
 
+    /**
+     * Executa a request de registro do boleto na API do BB
+     */
+    public function registrarBoleto(array $fields){ 
+        $response = new \stdClass(); //content ,message, error, status
 
-    public function registrarBoleto(array $fields){        
-            $response = $this->clientCobranca->request(
+        try{      
+            $response->content = $this->clientCobranca->request(
                 'POST',
                 '/cobrancas/v2/boletos',
                 [
@@ -302,6 +348,28 @@ class IntegracaoBBController extends Controller
                     'body' => json_encode($fields),
                 ]
             );
+            
+        }
+        catch (ClientException $e) {
+
+            $response->message = $e->getResponse();
+            if($response->message){
+                $responseBodyAsString = json_decode($response->message->getBody()->getContents());  
+                if(isset($responseBodyAsString->erros)){
+                    $response->errors = $responseBodyAsString->erros;                
+                }
+            }
+
+            $response->status = false;
+            return $response;
+
+        } 
+        catch (\Exception $e) {
+            $response->error = $e->getMessage();
+            $response->status = false;
+        }
+
+           $response->status = true;
            return $response;
         
     }
@@ -769,19 +837,19 @@ class IntegracaoBBController extends Controller
        
 
         //Baixa Operacional (pagamentos) - OK
-        $pagamentos = $this->baixarPagamentos();
+        //$pagamentos = $this->baixarPagamentos();
 
          //Registrar boletos - OK
-        $registros = $this->registraBoletosImpressos();
+        //$registros = $this->registraBoletosImpressos();
 
         //Cancelar boletos - OK
         $cancelamento = $this->baixarCancelamentos();
 
         return array(
-            'pagamentos' => $pagamentos,
-            'registros' => $registros,
-            'cancelamento' => $cancelamento
+            'cancelamentos' => $cancelamento
         );
+
+
 
 
     }
