@@ -75,7 +75,7 @@ Gerador de carnês
       
       <div class="form-group row"> 
         <label class="col-sm-2 form-control-label text-xs-right">
-          Registrando Boletos
+          Registrando 100 Boletos de {{$boletos->count()}}
         </label>
         <div class="col-sm-5"> 
           <div class="input-group">
