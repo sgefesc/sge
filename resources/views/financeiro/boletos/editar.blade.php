@@ -16,9 +16,9 @@
 					<option >Selecione uma opção</option>
 					<option value="gravado" {{$boleto->status == 'gravado' ? "selected" : ""}} >Gravado</option>
 					<option value="impresso" {{$boleto->status == 'impresso' ? "selected" : ""}} >Impresso</option>
-					<option value="pelosite" {{$boleto->status == 'pelosite' ? "selected" : ""}} >Enviado pelo site (pelosite)</option>
+					<option value="registrado" {{$boleto->status == 'registrado' ? "selected" : ""}} >Registrado no banco</option>
 
-					<option value="emitido" {{$boleto->status == 'emitido' ? "selected" : ""}}>Enviado ao banco (Emitido)</option>
+					<option value="emitido" {{$boleto->status == 'emitido' ? "selected" : ""}}>Enviado ao cliente</option>
 					<option value="divida" {{$boleto->status == 'divida' ? "selected" : ""}}>Dívida</option>
 					<option value="cancelar" {{$boleto->status == 'cancelar' ? "selected" : ""}}>Cancelar</option>
 					<option value="cancelado" {{$boleto->status == 'cancelado' ? "selected" : ""}}>Cancelado</option>
