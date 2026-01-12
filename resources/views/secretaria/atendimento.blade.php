@@ -624,8 +624,10 @@
                                 <div class="col-xl-1" style="line-height:40px !important;">
                                     @if($boleto->status == 'pago')
                                     <div class="badge badge-pill badge-success">pago</div>
-                                    @elseif($boleto->status == 'emitido' || $boleto->status == 'registrado')
+                                    @elseif($boleto->status == 'emitido' )
                                     <div class="badge badge-pill badge-info">emitido</div>
+                                    @elseif($boleto->status == 'registrado')
+                                    <div class="badge badge-pill badge-info">registrado</div>
                                     @elseif($boleto->status == 'impresso' )
                                     <div class="badge badge-pill badge-primary">impresso</div>
                                     @elseif($boleto->status == 'cancelar')
