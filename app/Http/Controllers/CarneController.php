@@ -60,7 +60,8 @@ class CarneController extends Controller
 					continue;
 				}
 			}
-			$html->gerarCarne($dest = $html::OUTPUT_SAVE, $save_path = '../storage/app/private/documentos/carnes/'.date('Y-m').$pessoa->pessoa.'.pdf');
+			dd(getcwd());
+			$html->gerarCarne($dest = $html::OUTPUT_SAVE, $save_path = '/storage/app/private/documentos/carnes/'.date('Y-m-').$pessoa->pessoa.'.pdf');
 
 			//$html->gerarCarne($dest = $html::OUTPUT_SAVE, $save_path = 'documentos/carnes/'.date('Y-m-d_').$pessoa.'.pdf');
 		}
