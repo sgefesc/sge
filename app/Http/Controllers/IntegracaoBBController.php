@@ -170,12 +170,18 @@ class IntegracaoBBController extends Controller
             $registro->status = 'erro';
             $registro->msg = json_encode($req_registro->error, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             $registro->erro =  $req_registro->error;   
+            $boleto->update(['status'=>'erro']);
+            BoletoLogController::alteracaoBoleto($boleto->id,'Erro ao registrar boleto via API BB: '.$registro->msg,0);
+
+        
         }
         else{
             $registro->status = 'ok';
             $registro->msg = $this->processarRegistro($req_registro->content,$boleto);
-            if($registro->msg == 'Boleto registrado com sucesso')
+            if($registro->msg == 'Boleto registrado com sucesso'){
                 $boleto->update(['status'=>'registrado']);
+                BoletoLogController::alteracaoBoleto($boleto->id,'Boleto registrado via API BB',0);
+            }
         }
 
         return $registro;
