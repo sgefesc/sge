@@ -61,7 +61,7 @@ class CarneController extends Controller
 				}
 			}
 			chdir( '../sge/storage/app/private/documentos/carnes' );
-			dd(getcwd());
+			//dd(getcwd());
 			$html->gerarCarne($dest = $html::OUTPUT_SAVE, $save_path = date('Y-m-').$pessoa->pessoa.'.pdf');
 
 			//$html->gerarCarne($dest = $html::OUTPUT_SAVE, $save_path = 'documentos/carnes/'.date('Y-m-d_').$pessoa.'.pdf');
