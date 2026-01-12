@@ -169,7 +169,7 @@ class IntegracaoBBController extends Controller
         if(!$req_registro->status){
             $registro->status = 'erro';
             $registro->msg = json_encode($req_registro->errors, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-            $registro->erro =  $req_registro->error;   
+            //$registro->erro =  $req_registro->error;   
         }
         else{
             $registro->status = 'ok';
