@@ -28,12 +28,12 @@ Gerador de carnês
       function loadNext(){
        if(next){
           window.setTimeout(function(){
-            mudar('{{$boletos->nextPageUrl()}}')
+            window.location.reload();
           }, 2000);
         }
         else{
           
-                setTimeout(mudar('./fase5'), 20000);
+                setTimeout(mudar('./gerar-pdfs'), 20000);
         }
 
       }

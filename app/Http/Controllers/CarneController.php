@@ -20,12 +20,10 @@ class CarneController extends Controller
 	 * @return [type] [description]
 	 */
 	public function registrarBoletos(){
-		$boletos = Boleto::where('status','gravado')->where('vencimento','>=',date('Y-m-d'))->paginate(2);
+		$boletos = Boleto::where('status','gravado')->where('vencimento','>=',date('Y-m-d'))->paginate(100);
 		$integracao = new IntegracaoBBController;
 		foreach($boletos as $boleto){
-			$integracao->registrarBoletoIndividual($boleto);
-			
-			
+			$integracao->registrarBoletoIndividual($boleto);		
 		}
 		if(!isset($_GET['page']))
 			$_GET['page']=1;
@@ -60,7 +58,7 @@ class CarneController extends Controller
 					continue;
 				}
 			}
-			$html->gerarCarne($dest = $html::OUTPUT_SAVE, $save_path = '../storage/app/private/documentos/carnes/'.date('Y-m-d_').$pessoa->pessoa.'.pdf');
+			$html->gerarCarne($dest = $html::OUTPUT_SAVE, $save_path = '../storage/app/private/documentos/carnes/'.date('Y-m').$pessoa->pessoa.'.pdf');
 
 			//$html->gerarCarne($dest = $html::OUTPUT_SAVE, $save_path = 'documentos/carnes/'.date('Y-m-d_').$pessoa.'.pdf');
 		}
@@ -191,6 +189,47 @@ class CarneController extends Controller
 
 
 		return view('financeiro.carne.fase7')->with('remessas',$remessas)->with('carnes',$carnes);
+
+    }
+	/**
+	 * Fase 7 - Compactar todos arquivos gerados e retornar ela com os arquivos.
+	 * @return [type] [description]
+	 */
+	public function compactarPDFs(){
+		//gerar zip
+		
+		//dd(getcwd());
+		$zip = new ZipArchive();
+		$filename = '../storage/app/private/documentos/carnes/carnes_'.date('Ymd').'.zip';
+		if($zip->open( $filename , ZipArchive::CREATE ) === FALSE){
+			dd("Erro ao criar arquivo Zip.");
+		}
+
+		chdir( '../carnes' );
+		//$files = glob("{*.rem}", GLOB_BRACE);
+		$carnes= glob(date('Y-m-d')."*.pdf", GLOB_BRACE);
+
+		foreach($carnes as $carne){
+			if(file_exists($carne)){
+				$zip->addFile($carne, $carne);
+			}else
+				dd('Arquivo não encontrado: '.$file);
+			
+		}
+
+
+		$zip->close();
+
+		
+		//entrar na pasta pdf
+		//pegar todos arquivos , verificar quais começam com a data de hoje
+
+		//enrtrar na pasta remessas e fazer a mesma coisa
+
+		//retornar arquivo zip.
+
+
+		return view('financeiro.carne.fase7')->with('carnes',$carnes);
 
     }
 
@@ -490,15 +529,15 @@ class CarneController extends Controller
 	 */
     public function imprimirCarne($pessoa){
 		//dd('teste');
-		$boletos = Boleto::where('pessoa',$pessoa)->whereIn('status',['emitido','gravado','impresso','pelosite'])->get();
+		$boletos = Boleto::where('pessoa',$pessoa)->whereIn('status',['emitido','gravado','registrado','impresso'])->get();
 		
 		//$html = new \Adautopro\LaravelBoleto\Boleto\Render\Html();
 		$html = new \Adautopro\LaravelBoleto\Boleto\Render\Pdf();
 
 
 		foreach($boletos as $boleto){
-			if($boleto->status == 'gravado'){
-				$boleto->status = 'impresso';
+			if($boleto->status == 'registrado'){
+				$boleto->status = 'emitido';
 				$boleto->save();
 			}
 			$boleto_completo = BoletoController::gerarBoleto($boleto);

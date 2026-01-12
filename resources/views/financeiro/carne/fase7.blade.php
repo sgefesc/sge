@@ -62,16 +62,7 @@ Gerador de carnês
           @endforeach
         </div>
       </div>
-      <div class="form-group row"> 
-        <label class="col-sm-2 form-control-label text-xs-right">
-          Remessas
-        </label>
-        <div class="col-sm-5"> 
-          @foreach($remessas as $remessa)
-          <div class="input-group"><a href="/download/{{str_replace('/','-.-','/documentos/remessas/'.$remessa)}}">{{$remessa}}</a></div>
-          @endforeach
-        </div>
-      </div>
+      
 
 </div>
     

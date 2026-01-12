@@ -604,7 +604,7 @@
                                 
                                 <div class="col-xl-5 " style="line-height:40px !important; padding-left: 30px;">
                                     <div class="dropdown-toggle">
-                                        @if($boleto->status == 'impresso' || $boleto->status == 'gravado' ||  $boleto->status == 'emitido')
+                                        @if($boleto->status == 'impresso' || $boleto->status == 'gravado' ||  $boleto->status == 'emitido' ||  $boleto->status == 'registrado')
                                         <input type="checkbox" id="boleto[{{$boleto->id}}]" name="{{$boleto->id}}" class="boleto">
                                         @endif
                                         &nbsp;
@@ -624,9 +624,9 @@
                                 <div class="col-xl-1" style="line-height:40px !important;">
                                     @if($boleto->status == 'pago')
                                     <div class="badge badge-pill badge-success">pago</div>
-                                    @elseif($boleto->status == 'emitido')
+                                    @elseif($boleto->status == 'emitido' || $boleto->status == 'registrado')
                                     <div class="badge badge-pill badge-info">emitido</div>
-                                    @elseif($boleto->status == 'impresso')
+                                    @elseif($boleto->status == 'impresso' )
                                     <div class="badge badge-pill badge-primary">impresso</div>
                                     @elseif($boleto->status == 'cancelar')
                                     <div class="badge badge-pill badge-warning">cancelar</div>
@@ -664,7 +664,7 @@
 
 
 
-                                        @elseif($boleto->status == 'emitido' || $boleto->status == 'divida')
+                                        @elseif($boleto->status == 'emitido' || $boleto->status == 'divida' || $boleto->status == 'registrado' )
                                         <a href="{{asset('financeiro/boletos/imprimir/').'/'.$boleto->id}}" title="Imprimir Boleto" ><i class=" fa fa-print " ></i></a>
                                         <a href="#" onclick="cancelarBoleto({{$boleto->id}});" title="Cancelar Boleto" ><i class=" fa fa-times " ></i></a>
                                             

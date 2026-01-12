@@ -33,7 +33,7 @@ Gerador de carnês
         }
         else{
           
-                setTimeout(mudar('./fase5'), 20000);
+                setTimeout(mudar('./compactar-arquivos'), 20000);
         }
 
       }
@@ -67,15 +67,15 @@ Gerador de carnês
       <div class="row">
         <div class="col-md-1" style="width: 40px"><img src="{{asset('/img/loading.gif')}}" with="25px" height="25px"></div>
         <div class="col-md-11">
-            <h3 class="title">Fase 1 - Registrando os boletos</h3>
-            <p class="title-description">Obtendo os QR Codes para pagamento via pix</p>
+            <h3 class="title">Fase 2 - Gerando arquivos</h3>
+            <p class="title-description">Gerando arquivos para envio a grafica.</p>
             <br>
         </div>
       </div>
       
       <div class="form-group row"> 
         <label class="col-sm-2 form-control-label text-xs-right">
-          Registrando Boletos
+          Geração dos Arquivos de Impressão
         </label>
         <div class="col-sm-5"> 
           <div class="input-group">
@@ -85,7 +85,7 @@ Gerador de carnês
       </div>
       <div class="form-group row"> 
         <label class="col-sm-2 form-control-label text-xs-right">
-          Geração dos arquivos PDF
+          Compactando os arquivos PDF
         </label>
         <div class="col-sm-5"> 
           <div class="input-group">
