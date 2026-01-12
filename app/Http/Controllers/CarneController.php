@@ -23,7 +23,9 @@ class CarneController extends Controller
 		$boletos = Boleto::where('status','gravado')->where('vencimento','>=',date('Y-m-d'))->paginate(100);
 		$integracao = new IntegracaoBBController;
 		foreach($boletos as $boleto){
-			$integracao->registrarBoletoIndividual($boleto);		
+			
+				
+			$boleto->registro = $integracao->registrarBoletoIndividual($boleto);
 		}
 		if(!isset($_GET['page']))
 			$_GET['page']=1;
@@ -43,12 +45,12 @@ class CarneController extends Controller
 		//dd($pessoas);
 		foreach($pessoas as $pessoa){
 			$html = new \Adautopro\LaravelBoleto\Boleto\Render\Pdf();
-			$boletos = Boleto::where('pessoa',$pessoa->pessoa)->whereIn('status',['gravado','emitido','impresso'])->where('vencimento','>=',date('Y-m-d'))->orderBy('pessoa')->orderBy('vencimento')->get();	
+			$boletos = Boleto::where('pessoa',$pessoa->pessoa)->whereIn('status',['gravado','emitido','impresso','registrado'])->where('vencimento','>=',date('Y-m-d'))->orderBy('pessoa')->orderBy('vencimento')->get();
+			if($boletos->count() == 0)
+				continue;
+
 			foreach($boletos as $boleto){
 				//try to register boleto
-
-
-
 				try{
 					$boleto_completo = BoletoController::gerarBoleto($boleto);
 					$html->addBoleto($boleto_completo);
