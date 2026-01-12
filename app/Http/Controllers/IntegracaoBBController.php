@@ -356,7 +356,7 @@ class IntegracaoBBController extends Controller
             if($response->message){
                 $responseBodyAsString = json_decode($response->message->getBody()->getContents());  
                 if(isset($responseBodyAsString->erros)){
-                    $response->errors = $responseBodyAsString->erros;                
+                    $response->error = $responseBodyAsString->erros;                
                 }
             }
 
@@ -367,9 +367,11 @@ class IntegracaoBBController extends Controller
         catch (\Exception $e) {
             $response->error = $e->getMessage();
             $response->status = false;
+            return $response;
         }
 
            $response->status = true;
+           $response->error = null;
            return $response;
         
     }
