@@ -54,6 +54,7 @@ class CarneController extends Controller
 				try{
 					$boleto_completo = BoletoController::gerarBoleto($boleto);
 					$html->addBoleto($boleto_completo);
+					$boleto->update(['status'=>'emitido']);
 				}
 				catch(\Exception $e){
 					NotificacaoController::notificarErro($boleto->pessoa,'Erro ao gerar Boleto');
@@ -203,15 +204,17 @@ class CarneController extends Controller
 		//gerar zip
 		
 		//dd(getcwd());
+		chdir( '../sge/storage/app/private/documentos/carnes/' );
+
 		$zip = new ZipArchive();
-		$filename = '../storage/app/private/documentos/carnes/carnes_'.date('Ymd').'.zip';
+		$filename = 'carnes_'.date('Ymd').'.zip';
 		if($zip->open( $filename , ZipArchive::CREATE ) === FALSE){
 			dd("Erro ao criar arquivo Zip.");
 		}
 
-		chdir( '../carnes' );
-		//$files = glob("{*.rem}", GLOB_BRACE);
-		$carnes= glob(date('Y-m-d')."*.pdf", GLOB_BRACE);
+		
+		//$carnes = glob("{*.rem}", GLOB_BRACE);
+		$carnes= glob(date('Y-m-')."*.pdf", GLOB_BRACE);
 
 		foreach($carnes as $carne){
 			if(file_exists($carne)){
