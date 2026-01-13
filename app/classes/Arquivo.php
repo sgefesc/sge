@@ -29,6 +29,12 @@ Class Arquivo {
                   case 'foto':
                         return 'documentos/fotos_perfil/'.$arquivo.'.jpg';
                         break;
+                  case 'carne':
+                        return 'documentos/carnes/'.$arquivo.'.pdf';
+                        break;
+                  case 'lote-carnes':
+                        return 'documentos/carnes/'.$arquivo.'.zip';
+                        break;
                   default:
                         return "/".$arquivo.'.pdf';
             }         

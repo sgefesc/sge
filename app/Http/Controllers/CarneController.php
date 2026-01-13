@@ -206,27 +206,31 @@ class CarneController extends Controller
 		//dd(getcwd());
 		chdir( '../sge/storage/app/private/documentos/carnes/' );
 
-		$zip = new ZipArchive();
-		$filename = 'carnes_'.date('Ymd').'.zip';
-		if($zip->open( $filename , ZipArchive::CREATE ) === FALSE){
-			dd("Erro ao criar arquivo Zip.");
-		}
+		if(!file_exists('carnes_'.date('Ymd').'.zip')){	
 
-		
-		//$carnes = glob("{*.rem}", GLOB_BRACE);
-		$carnes= glob(date('Y-m-')."*.pdf", GLOB_BRACE);
+			$zip = new ZipArchive();
+			$filename = 'carnes_'.date('Ymd').'.zip';
+			if($zip->open( $filename , ZipArchive::CREATE ) === FALSE){
+				dd("Erro ao criar arquivo Zip.");
+			}
 
-		foreach($carnes as $carne){
-			if(file_exists($carne)){
-				$zip->addFile($carne, $carne);
-			}else
-				dd('Arquivo não encontrado: '.$file);
 			
-		}
+			//$carnes = glob("{*.rem}", GLOB_BRACE);
+			$carnes= glob(date('Y-m-')."*.pdf", GLOB_BRACE);
+
+			foreach($carnes as $carne){
+				if(file_exists($carne)){
+					$zip->addFile($carne, $carne);
+				}else
+					dd('Arquivo não encontrado: '.$file);
+				
+			}
 
 
-		$zip->close();
-
+			$zip->close();
+	}
+	else
+		$carnes = null;
 		
 		//entrar na pasta pdf
 		//pegar todos arquivos , verificar quais começam com a data de hoje

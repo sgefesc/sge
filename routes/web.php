@@ -205,6 +205,7 @@ Route::middleware(['auth','login'])->group(function(){
         return App\classes\Arquivo::download($tipo, $arquivo);
     });
     
+    
     Route::get('arquivo/{tipo}/{arquivo}', function ($tipo, $arquivo){
         return App\classes\Arquivo::show($tipo, $arquivo);
     });
