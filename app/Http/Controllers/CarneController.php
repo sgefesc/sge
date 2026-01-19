@@ -63,7 +63,7 @@ class CarneController extends Controller
 			}
 			//chdir( '../sge/storage/app/private/documentos/carnes' );
 			//dd(getcwd());
-			$html->gerarCarne($dest = $html::OUTPUT_SAVE, $save_path = '../sge/storage/app/private/documentos/carnes/'.date('Y-m-').$pessoa->pessoa.'.pdf');
+			$html->gerarCarne($dest = $html::OUTPUT_SAVE, $save_path = '../sge/storage/app/private/documentos/carnes/'.date('Y-m-d-').$pessoa->pessoa.'.pdf');
 
 			//$html->gerarCarne($dest = $html::OUTPUT_SAVE, $save_path = 'documentos/carnes/'.date('Y-m-d_').$pessoa.'.pdf');
 		}
@@ -165,7 +165,7 @@ class CarneController extends Controller
 			if(file_exists($remessa)){
 				$zip->addFile($remessa, $remessa);
 			}else
-				dd('Arquivo não encontrado: '.$file);
+				dd('Arquivo não encontrado: '.$remessa);
 			
 		}
 
@@ -177,7 +177,7 @@ class CarneController extends Controller
 			if(file_exists($carne)){
 				$zip->addFile($carne, $carne);
 			}else
-				dd('Arquivo não encontrado: '.$file);
+				dd('Arquivo não encontrado: '.$carne);
 			
 		}
 
@@ -216,13 +216,13 @@ class CarneController extends Controller
 
 			
 			//$carnes = glob("{*.rem}", GLOB_BRACE);
-			$carnes= glob(date('Y-m-')."*.pdf", GLOB_BRACE);
+			$carnes= glob(date('Y-m-d')."*.pdf", GLOB_BRACE);
 
 			foreach($carnes as $carne){
 				if(file_exists($carne)){
 					$zip->addFile($carne, $carne);
 				}else
-					dd('Arquivo não encontrado: '.$file);
+					dd('Arquivo não encontrado: '.$carne);
 				
 			}
 

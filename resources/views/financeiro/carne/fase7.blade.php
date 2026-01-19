@@ -58,7 +58,7 @@ Gerador de carnês
         </label>
         <div class="col-sm-5"> 
           @foreach($carnes as $carne)
-          <div class="input-group"><a href="/download/carne/{{str_replace('.pdf',,$carne}}">{{$carne}}</a></div>
+          <div class="input-group"><a href="/download/carne/{{str_replace('.pdf', '', $carne)}}">{{$carne}}</a></div>
           @endforeach
         </div>
       </div>
